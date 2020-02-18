@@ -1,0 +1,5 @@
+{
+    "port":8080,
+    "host":"localhost",
+    "model_init_mode":"json"
+}

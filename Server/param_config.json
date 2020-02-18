@@ -1,0 +1,11 @@
+{
+    "init_model_dir": "E:\\PythonProjects\\Mxnet_FederatedLearning\\Server\\random_init_model_MnistMlp.params",
+    "learning_rate":0.01,
+    "SSGD":{
+        "SSGD_act":"False",
+        "theta_u":0.8,
+        "theta_d":0.8,
+        "lambda":0,
+        "tao":0
+    }
+}

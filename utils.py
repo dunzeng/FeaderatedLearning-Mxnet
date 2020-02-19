@@ -8,24 +8,23 @@ def network_layers_filter(network):
     """
     输入：神经网络
     功能：提取神经网络内部结构和参数
-    输出：神经网络结构字典
-    
+    输出：神经网络权值矩阵列表
+          Todo 解析可权值网络层数列表 traverse_list
     当处于卷积神经网络卷积层时会报错，待修改。
     """
-    params = {}
+    weight = []
+    bias = []
     depth = 0
     while True:
         try:
-            layer_weight = "layer"+str(depth)+"_weight"
-            params[layer_weight] = network[depth].weight.data()
-            layer_bias = "layer"+str(depth)+"_bias"
-            params[layer_bias] = network[depth].bias.data()
+            weight.append(network[depth].weight.data()[:])
+            bias.append(network[depth].bias.data()[:])
             print(('Successfully parse layer %d')%depth)
             depth+=1
         except:
             print(('Ended in layer%d')%depth)
             break
-    return params,depth
+    return (weight,bias),depth
 
 
 def network_grad_fileter(network):
@@ -44,19 +43,21 @@ def network_grad_fileter(network):
 
 # 返回梯度字典 
 # 待更新为梯度列表 方便梯度更新的统一化2.18
-def direct_gradient(network_old,network_new,learning_rate):
-    gradient = {}
+# traverse_list表示带有权值的网络参数
+def direct_gradient(network_old,network_new,learning_rate,traverse_list=[]):
+    gradient_w = []
+    gradient_b = []
     depth = 0
     while True:
         try:
             gradient_weight = network_old[depth].weight.data()[:]-network_new[depth].weight.data()[:]
-            gradient['weight'+str(depth)] = gradient_weight/learning_rate
+            gradient_w.append(gradient_weight/learning_rate)
             gradient_bias = network_old[depth].bias.data()[:]-network_new[depth].bias.data()[:]
-            gradient['bias'+str(depth)] = gradient_bias/learning_rate
+            gradient_b.append(gradient_bias/learning_rate)
         except:
             break
         depth+=1
-    return gradient
+    return (gradient_w,gradient_b)
 
 # 将data切割为大小为block_size每块的列表
 def cut_bytes(data,block_size):

@@ -17,22 +17,24 @@ path_server = "E:\PythonProjects\Mxnet_FederatedLearning\Server"
 管理服务器端内部参数处理
 """
 class Server_data_handler():
-    def __init__(self):
+    def __init__(self,update_model_path=""):
+        #初始化系统参数
         with open(path_server+"\param_config.json",'r') as f:
             json_data = json.load(f)
-        
-        self.net = None
-        self.params = None
-        self.depth = None
-        self.__ctx = [mx.gpu()]
         self.learning_rate = json_data['learning_rate']
-        params_file = json_data['init_model_dir']
+        self.init_model_path = json_data['init_model_path'] 
+        self.update_model_path = update_model_path
 
-        if(params_file!=None):
-            self.net,self.params,self.depth = self.__get_MLP(params_file)
-        else:
-            pass
+        # 初始化模型
+        self.__net = None
+        self.input_shape = None
+        self.__ctx = [mx.gpu()]
+        self.init_model(save_path=self.update_model_path)
 
+        # 模型解析
+        self.params,self.depth = network_layers_filter(self.__net)
+        
+        """
         # Selective SGD
         # paper： Privacy-Preserving Deep Learning
         # 参数解释
@@ -46,8 +48,8 @@ class Server_data_handler():
             self.theta_download = SSGD['theta_d']
             self.lambda_ = SSGD['lambda']
             self.tao = SSGD['tao']
-
-
+        """
+    
     def custom_model(self):
         # 用户重写该函数用于生成自定义模型
         # 应返回一个结构被完全定义的nn.Sequential类
@@ -62,9 +64,27 @@ class Server_data_handler():
     
     def init_model(self,save_path=""):
         # 初始化用户自定义的模型
-        input_shape,self.__net = self.custom_model()
+        self.input_shape,self.__net = self.custom_model()
         self.__net.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)
-        self.__net(nd.random.uniform(shape=input_shape,ctx=self.__ctx[0]))
+        # Mxnet特性：神经网络在第一次前向传播时初始化
+        # 因此初始化神经网络时需要做一次随机前向传播
+        self.__net(nd.random.uniform(shape=self.input_shape,ctx=self.__ctx[0]))
+        # 保存初始化模型 用户发送至Client训练
+        self.__net.save_parameters(save_path)
+    
+    # 评估当前模型准确率
+    def validate_current_model(self):
+        mnist = mx.test_utils.get_mnist()
+        val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100)
+        for batch in val_data:
+            data = gluon.utils.split_and_load(batch.data[0],ctx_list=self.__ctx,batch_axis=0)
+            label = gluon.utils.split_and_load(batch.label[0],ctx_list=self.__ctx,batch_axis=0)
+            outputs = []
+            metric = mx.metric.Accuracy()
+            for x in data:
+                outputs.append(self.__net(x))
+            metric.update(label,outputs)
+        print('验证集准确率 validation acc:%s=%f'%metric.get())
     
     """
     #模型初始化
@@ -103,59 +123,38 @@ class Server_data_handler():
         return net,params,depth
     """
 
-    # 用户重写该方法用于服务端初始化模型
-    def get_model(self):
-        pass
-
-    # 梯度信息
-    # 梯度信息更新
-    def update_gradient(self,gradient_info=None):
+    def update_gradient(self,gradient_info=None,traverse_list=[]):
+        # 更新本地梯度信息
         cur_dep = 0
+        gradient_w = gradient_info[0]
+        gradient_b = gradient_info[1]
         while cur_dep != self.depth:
             try:
-                # SSGD算法下 更新参数stat
-                # gradient_info为梯度列表
-                if self.SSGD_activated:
-                    self.net[cur_dep].weight.data()[:] = self.net[cur_dep].weight.data()[:] - self.learning_rate*gradient_info[cur_dep]
-                    self.net[cur_dep].bias.data()[:] = self.net[cur_dep].bias.data()[:] - self.learning_rate*gradient_info[cur_dep]
-                    self.__update_stat_mat(gradient_info)
-                else:
-                    #朴素算法下 梯度信息为梯度字典
-                    self.net[cur_dep].weight.data()[:] = self.net[cur_dep].weight.data()[:] - self.learning_rate*gradient_info["weight"+str(cur_dep)]
-                    self.net[cur_dep].bias.data()[:] = self.net[cur_dep].bias.data()[:] - self.learning_rate*gradient_info["bias"+str(cur_dep)]
+                #朴素算法下 梯度信息为梯度列表 顺序遍历更新
+                self.__net[cur_dep].weight.data()[:] = self.__net[cur_dep].weight.data()[:] - self.learning_rate*gradient_w[cur_dep]
+                self.__net[cur_dep].bias.data()[:] = self.__net[cur_dep].bias.data()[:] - self.learning_rate*gradient_b[cur_dep]
             except:
                 break
             cur_dep += 1
         print('weight updated!')
-    
-    def get_layer_param(self,layer=0):
-        try:
-            weight = self.params['layer'+str(layer)+'_weight']
-        except:
-            weight = None
-        try:
-            bias = self.params['layer'+str(layer)+'_bias']
-        except:
-            bias = None
-        return weight,bias
-
-    # 评估当前模型准确率
-    def validate_current_model(self):
-        mnist = mx.test_utils.get_mnist()
-        val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100)
-        for batch in val_data:
-            data = gluon.utils.split_and_load(batch.data[0],ctx_list=self.ctx,batch_axis=0)
-            label = gluon.utils.split_and_load(batch.label[0],ctx_list=self.ctx,batch_axis=0)
-            outputs = []
-            metric = mx.metric.Accuracy()
-            for x in data:
-                outputs.append(self.net(x))
-            metric.update(label,outputs)
-        print('验证集准确率 validation acc:%s=%f'%metric.get())
 
     def current_model_accepted(self,save_dir=''):
-        print("本地模型更新",save_dir)
-        self.net.save_parameters(save_dir)
+        print("本地模型更新",self.update_model_path)
+        self.__net.save_parameters(self.update_model_path)
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 
     # SSGD 
     # 根据stat分片当前模型参数
@@ -165,7 +164,7 @@ class Server_data_handler():
     def get_selected_model(self, save_model_dir='selected_model.params',threshold=0):
         if self.SSGD_activated is not True:
             raise('SSGD is not ACTIVATED')
-        tmp_net = copy.deepcopy(self.net)
+        tmp_net = copy.deepcopy(self.__net)
         for i in range(self.depth):
             print("Selecting layer %d"%(i))
             #numpy version
@@ -193,3 +192,5 @@ class Server_data_handler():
             mat_np[mat_np!=0] = 1
             self.stat[idx] = self.stat[idx] + nd.array(mat_np)
             idx+=1
+
+"""

@@ -7,22 +7,23 @@ import numpy as np
 import copy
 from utils import network_layers_filter
 from utils import direct_gradient
+import json 
 
 class data_handler:
-    def __init__(self):
-        self.__net = None
+    def __init__(self,init_model_path=""):
+        # 模型初始化
         self.__ctx = [mx.gpu()]
+        self.__net = None
+        self.input_shape = None
+        self.init_model()
 
+        # 初始化存储路径
+        with open("E:\PythonProjects\Mxnet_FederatedLearning\Client\data_handler_config.json",'r') as f:
+            json_data = json.load(f)
         self.model_save_path = ""
         self.model_load_path = ""
         self.init_model_path = ""
-        self.local_data_file = ("","")
-        self.learning_rate = None
-
-        #SSGD
-        self.SSGD_activated = False
-        self.theta = None
-        self.tao = None
+        self.local_data_file = (json_data['local_data_path'],json_data['local_label_path'])
 
     def custom_model(self):
         # 用户重写该函数用于生成自定义模型
@@ -50,9 +51,9 @@ class data_handler:
     
     def init_model(self,save_path=""):
         # 初始化用户自定义的模型
-        input_shape,self.__net = self.custom_model()
+        self.input_shape,self.__net = self.custom_model()
         self.__net.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)
-        self.__net(nd.random.uniform(shape=input_shape,ctx=self.__ctx[0]))
+        self.__net(nd.random.uniform(shape=self.input_shape,ctx=self.__ctx[0]))
     
     def load_model(self,model_path=""):
         # 将model_path指向的模型文件
@@ -88,6 +89,7 @@ class data_handler:
             print('training acc at epoch %d/%d: %s=%f'%(i+1,epoch, name, acc))
         return direct_gradient(old_net,self.__net,learning_rate)
 
+    """
     # Selected SGD
     def load_selected_model(self,model_dir='recv_selected_model.params'):
         _,tmp_net = self.custom_model()
@@ -100,4 +102,5 @@ class data_handler:
             layer_np += data_np
             layer_nd = nd.array(layer_np)
             self.__net[dep].weight.data()[:] = layer_nd
+    """
         

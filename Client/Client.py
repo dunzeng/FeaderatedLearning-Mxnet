@@ -32,12 +32,13 @@ class Client:
     def __init__(self):
         # 网络通信类
         self.sock = socket.socket()
-        with open("server_config.json",'r') as f:
+        with open("client_config.json",'r') as f:
             json_data = json.load(f)
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
-
+        self.recv_model_savepath = json_data['default_path']
         # 模型处理类
         self.data_handler = data_handler()
+
         # Selective SSGD
         # initalized by the Server
         self.SSGD_activated = False
@@ -45,24 +46,28 @@ class Client:
         self.learning_rate = None
         self.Tao_ = None
     
-    # 从Json文件中初始化部分变量
     def __initialize_from_json(self):
+        # 从Json文件中初始化部分变量
         with open("server_config.json",'r') as f:
             json_data = json.load(f)
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
 
-        
-    #创建socket连接，发送控制码，socket连接保存
+    
     def __send_code(self,msg_code=""):
+        # 创建socket连接，发送控制码
+        # socket连接将被保存在self.sock中
         self.sock = socket.socket()
         self.sock.connect(self.server_addr)
         self.sock.send(msg_code.encode('utf-8'))
 
-    #从socket中获得控制码信息
+    
     def __recv_code(self):
-        msg_code = self.sock.recv(1024).decode()
+        # 从socket中获得控制码信息
+        # 控制码大小为4bit
+        msg_code = self.sock.recv(4).decode()
         return msg_code
     
+    """
     def __init_system_meta_param(self):
         message = '1001'
         self.__send_code(message)
@@ -73,6 +78,7 @@ class Client:
             self.theta = param_list[1]
             self.learning_rate = param_list[2]
             self.Tao_ = param_list[3]
+    """
 
     def __check_model_type(self):
         message = '1003'
@@ -81,25 +87,30 @@ class Client:
     
     def __upload_gradient(self, gradient_info):
         message = '1004'
+        #获得socket连接
         self.__send_code(message)
         send_class(self.sock,gradient_info)
+        self.sock.close()
     
     """
     请求服务器端模型用于本地训练
     """
-    def __ask_for_model(self):
+    def __ask_for_model(self,save_path=""):
+        """
         if self.SSGD_activated is True:
             model_name = "\\recv_selected_model.params"
         else:
             model_name = "\\recv_model.params"
         print(model_name)
+        """
         message = '1002'
+        # 获得socket连接
         self.__send_code(message)
         # 接收模型
         # 下载模型并写入文件
         file_size = int(self.sock.recv(1024).decode())
         has_recv = 0
-        f = open(path_client+model_name,'wb')
+        f = open(save_path,'wb')
         while has_recv != file_size:
             data = self.sock.recv(1024)
             f.write(data)
@@ -110,9 +121,9 @@ class Client:
     # Client端流程 
     # 初始化参数->请求模型->加载模型->训练->梯度回传
     def process(self):
-        self.__init_system_meta_param()
-        self.__ask_for_model()
-        self.data_handler.load_model()
+        #self.__init_system_meta_param()
+        self.__ask_for_model(self.recv_model_savepath)
+        self.data_handler.load_model(self.recv_model_savepath)
         gradient_ = self.data_handler.local_train(50,10,0.02)
         self.__upload_gradient(gradient_)
 

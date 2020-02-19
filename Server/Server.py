@@ -25,34 +25,37 @@ from utils import recv_class
 维护网络通信，与Client交流
 与后台数据处理类进行信息交换
 """
-
 class Sever():
     def __init__(self):
-        #从Json文件中读取系统配置
+        # 从Json文件中读取系统配置
         with open(path_server+"\server_config.json",'r') as f:
             json_data = json.load(f)
         self.port = json_data['port']
         self.host = json_data['host']
-        self.__params = Server_data_handler()
+        # 存储更新的模型
+        self.update_model_path = json_data['update_model_path']
+
+        # 初始化Server端模型
+        # data_handler自动初始化模型 并将模型储存至update_model_path指向的文件
+        self.__params = Server_data_handler(update_model_path=self.update_model_path)
         self.sock = socket.socket()
-        self.current_model_dir = path_server+"\current_model.params"
-    
+
     """
     Private Method
     """        
-
     #将最新的global model发送至参与者
-    def __send_model(self,connection):
+    def __send_model(self,connection,model_path=""):
+        """
         #SSGD选择参数更新
         if self.__params.SSGD_activated is True:
-            SSGD_path = path_server+"\selected_model.params"
+            SSGD_path = model_path
             self.__params.get_selected_model(save_model_dir=SSGD_path,threshold=0)
             file_size = self.__get_model_size(SSGD_path)
             file_dir = SSGD_path
+        """
         # 从文件中读取发送模型
-        else:
-            file_size = self.__get_model_size(self.current_model_dir)
-            file_dir = self.current_model_dir
+        file_size = self.__get_model_size(self.update_model_path)
+        file_dir = self.update_model_path
         print("发送模型大小：",file_size)
         connection.send(str(file_size).encode('utf-8'))
         sent_size = 0
@@ -63,19 +66,14 @@ class Sever():
             sent_size += len(data)
         f.close()
 
-    """
-    # 发送模型确认码
-    def __send_model_check(self,connection):
-        message = self.model_status
-        connection.send(str(message).encode('utf-8'))
-    """
-
     # 接收参与者回传梯度
     def __recv_gradient(self,connection):
         gradient_dict = recv_class(connection)
         return gradient_dict
-
+    
+    """
     # 初始化参与者参数
+    # SSGD
     def __init_paticipant(self,connection):
         if self.__params.SSGD_activated is True:
             data_list = [True,self.__params.theta_upload,self.__params.learning_rate,self.__params.tao]
@@ -83,14 +81,15 @@ class Sever():
         else:
             data_list = [False]
             send_class(connection,data_list)
-    
-    # 创建socket连接，发送控制码，socket连接保存
+    """
+
+    # 创建socket连接，发送控制信息，socket连接保存
     def __send_code(self,connection,msg_code=""):
         connection.send(msg_code.encode('utf-8'))
 
     # 从socket中获得控制码信息
     def __recv_code(self,connection):
-        msg_code = connection.recv(1024).decode()
+        msg_code = connection.recv(4).decode()
         return msg_code
 
     # 获得模型路径对应的文件大小
@@ -116,7 +115,7 @@ class Sever():
             #根据请求码处理请求
             if message=='1001':
                 print('请求连接')
-                self.__init_paticipant(connect)
+                #self.__init_paticipant(connect)
             elif message=='1002':
                 print('请求模型参数')
                 self.__send_model(connect)
@@ -127,11 +126,10 @@ class Sever():
                 #print('回复确认',self.model_status)
             elif message=='1004':
                 print('回传梯度')
-                #bug?
                 gradient_info = self.__recv_gradient(connect)
                 self.__params.update_gradient(gradient_info)
                 self.__params.validate_current_model()
-                self.__params.current_model_accepted(save_dir=self.current_model_dir)
+                self.__params.current_model_accepted()
                 print('模型更新成功')
             else:
                 print("控制码错误",message)
@@ -139,6 +137,4 @@ class Sever():
 
 if __name__ == '__main__':
     server = Sever()
-    #server = SocketSever(path_server+'\Trained_Mnist_Mlp.params')
-    #server = SocketSever(path_server+'\\random_init_model_MnistMlp.params')
     server.listen()

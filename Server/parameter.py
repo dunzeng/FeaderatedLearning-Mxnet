@@ -12,11 +12,11 @@ from utils import network_layers_filter
 import json
 path_server = "E:\PythonProjects\Mxnet_FederatedLearning\Server"
 
-"""
-模型管理类
-管理服务器端内部参数处理
-"""
 class Server_data_handler():
+    """
+    模型管理类
+    管理服务器端内部参数处理
+    """
     def __init__(self,update_model_path=""):
         #初始化系统参数
         with open(path_server+"\param_config.json",'r') as f:
@@ -24,31 +24,13 @@ class Server_data_handler():
         self.learning_rate = json_data['learning_rate']
         self.init_model_path = json_data['init_model_path'] 
         self.update_model_path = update_model_path
-
         # 初始化模型
         self.__net = None
         self.input_shape = None
         self.__ctx = [mx.gpu()]
         self.init_model(save_path=self.update_model_path)
-
         # 模型解析
         self.params,self.depth = network_layers_filter(self.__net)
-        
-        """
-        # Selective SGD
-        # paper： Privacy-Preserving Deep Learning
-        # 参数解释
-        SSGD = json_data['SSGD']
-        self.SSGD_activated = bool(SSGD['SSGD_act']=='True')
-        if self.SSGD_activated:
-            self.stat = []
-            self.max_stat = 0
-            self.__init_stat()
-            self.theta_upload = SSGD['theta_u']
-            self.theta_download = SSGD['theta_d']
-            self.lambda_ = SSGD['lambda']
-            self.tao = SSGD['tao']
-        """
     
     def custom_model(self):
         # 用户重写该函数用于生成自定义模型
@@ -85,43 +67,6 @@ class Server_data_handler():
                 outputs.append(self.__net(x))
             metric.update(label,outputs)
         print('验证集准确率 validation acc:%s=%f'%metric.get())
-    
-    """
-    #模型初始化
-    def get_LeNet(self,net_dir):
-        net = nn.Sequential()
-        #LeNet-5 in CIFAR-10
-        net.add(nn.Conv2D(channels=6,kernel_size=5,activation='relu'),
-                nn.MaxPool2D(pool_size=(2,2),strides=(2,2)),
-                nn.Conv2D(channels=16,kernel_size=(5,5),strides=(1,1),padding=(0,0),activation='relu'),
-                nn.Dense(units=120,activation='relu'),
-                nn.Dense(units=84,activation='relu'),
-                nn.Dense(units=10)
-                )
-        try:
-            net.load_parameters(net_dir,ctx=self.ctx)
-        except:
-            print("初始化模型失败：",net_dir)
-            raise
-        return net,network_layers_filter(net)
-    
-    # Mnist MLP 
-    # Mxnet更新 网络第一层结构由输入数据时自定义
-    def __get_MLP(self,net_dir):
-        net = nn.Sequential()
-        #net.add(nn.Dense(784))
-        net.add(nn.Dense(128,activation='relu'))
-        net.add(nn.Dense(64,activation='relu'))
-        net.add(nn.Dense(10))
-        #net.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.ctx)
-        try:
-            net.load_parameters(net_dir,ctx=self.ctx)
-        except:
-            print("初始化模型失败：",net_dir)
-            raise
-        params,depth = network_layers_filter(net)
-        return net,params,depth
-    """
 
     def update_gradient(self,gradient_info=None,traverse_list=[]):
         # 更新本地梯度信息
@@ -141,56 +86,3 @@ class Server_data_handler():
     def current_model_accepted(self,save_dir=''):
         print("本地模型更新",self.update_model_path)
         self.__net.save_parameters(self.update_model_path)
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-
-    # SSGD 
-    # 根据stat分片当前模型参数
-    # 将最近更新的参数取出
-    # 新算法:采用网络将权值矩阵列表传出×
-    # 存入模型中 将模型传出
-    def get_selected_model(self, save_model_dir='selected_model.params',threshold=0):
-        if self.SSGD_activated is not True:
-            raise('SSGD is not ACTIVATED')
-        tmp_net = copy.deepcopy(self.__net)
-        for i in range(self.depth):
-            print("Selecting layer %d"%(i))
-            #numpy version
-            data_np = tmp_net[i].weight.data().asnumpy()
-
-            # 将最近更新的权值矩阵选出
-            # 置零更新频率低的参数
-            data_np[self.stat[i]<=self.max_stat-threshold] = 0
-
-            data_nd = nd.array(data_np)
-            tmp_net[i].weight.data()[:] = data_nd
-        tmp_net.save_parameters(save_model_dir)
-
-    # stat维护 stat数组记录对应权值参数被更新的次数
-    def __init_stat(self):
-        for i in range(self.depth):
-            this_shape = self.params["layer"+str(i)+"_weight"].shape
-            self.stat.append(np.zeros(shape=this_shape))
-            
-    # 更新stat参数 在收到回传梯度时调用
-    def __update_stat_mat(self, grad_mat):
-        idx = 0
-        for _ ,value in grad_mat.items():
-            mat_np = value.asnumpy()
-            mat_np[mat_np!=0] = 1
-            self.stat[idx] = self.stat[idx] + nd.array(mat_np)
-            idx+=1
-
-"""

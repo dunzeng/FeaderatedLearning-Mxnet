@@ -13,7 +13,7 @@ from mxnet import gluon
 import socket
 import os
 import pickle
-from parameter import Server_data_handler
+from Server_data_handler import Server_data_handler
 import json
 
 from utils import network_layers_filter
@@ -45,14 +45,6 @@ class Sever():
     """        
     #将最新的global model发送至参与者
     def __send_model(self,connection,model_path=""):
-        """
-        #SSGD选择参数更新
-        if self.__params.SSGD_activated is True:
-            SSGD_path = model_path
-            self.__params.get_selected_model(save_model_dir=SSGD_path,threshold=0)
-            file_size = self.__get_model_size(SSGD_path)
-            file_dir = SSGD_path
-        """
         # 从文件中读取发送模型
         file_size = self.__get_model_size(self.update_model_path)
         file_dir = self.update_model_path
@@ -70,18 +62,6 @@ class Sever():
     def __recv_gradient(self,connection):
         gradient_dict = recv_class(connection)
         return gradient_dict
-    
-    """
-    # 初始化参与者参数
-    # SSGD
-    def __init_paticipant(self,connection):
-        if self.__params.SSGD_activated is True:
-            data_list = [True,self.__params.theta_upload,self.__params.learning_rate,self.__params.tao]
-            send_class(connection,data_list)
-        else:
-            data_list = [False]
-            send_class(connection,data_list)
-    """
 
     # 创建socket连接，发送控制信息，socket连接保存
     def __send_code(self,connection,msg_code=""):

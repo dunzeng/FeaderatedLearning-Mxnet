@@ -22,7 +22,7 @@ from utils import direct_gradient
 from utils import max_parse_gradient_matrix_list
 from utils import network_layers_filter
 import json
-from data_handler import data_handler
+from Client_data_handler import Client_data_handler
 
 # 参与者类
 # 维护与服务器端的通信和执行联邦学习协议
@@ -37,7 +37,7 @@ class Client:
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
         self.recv_model_savepath = json_data['default_path']
         # 模型处理类
-        self.data_handler = data_handler()
+        self.data_handler = Client_data_handler()
 
         # Selective SSGD
         # initalized by the Server
@@ -99,6 +99,7 @@ class Client:
         self.data_handler.load_model(self.recv_model_savepath)
         gradient_ = self.data_handler.local_train(50,10,0.02)
         self.__upload_gradient(gradient_)
+
 
 if __name__ == "__main__":
     client = Client()

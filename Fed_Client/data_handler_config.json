@@ -1,0 +1,8 @@
+{
+    "base_path":"E:\\PythonProjects\\Mxnet_FederatedLearning\\Client",
+    "local_data_path":"E:\\PythonProjects\\Mxnet_FederatedLearning\\Client\\local_data\\train_data_600_0.npy",
+    "local_label_path":"E:\\PythonProjects\\Mxnet_FederatedLearning\\Client\\local_data\\train_label_600_0.npy",
+    "model_save_path":"",
+    "model_load_path":"",
+    "init_model_path":""
+}

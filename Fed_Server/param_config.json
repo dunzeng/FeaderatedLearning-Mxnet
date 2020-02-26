@@ -1,0 +1,4 @@
+{
+    "init_model_path": "E:\\PythonProjects\\Mxnet_FederatedLearning\\Server\\random_init_model_MnistMlp.params",
+    "learning_rate":0.01
+}

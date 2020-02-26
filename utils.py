@@ -3,6 +3,7 @@ import mxnet.ndarray as nd
 import pickle
 from tqdm import tqdm
 import numpy as np
+import random
 
 def network_layers_filter(network):
     """
@@ -133,3 +134,63 @@ def max_parse_gradient_matrix_list(theta, matrix_set):
                 x[...] = 0
     return mat_np
     
+
+def try_all_gpus():
+    """Return all available GPUs, or [mx.cpu()] if there is no GPU."""
+    ctxes = []
+    try:
+        for i in range(16):
+            ctx = mx.gpu(i)
+            _ = nd.array([0], ctx=ctx)
+            ctxes.append(ctx)
+    except mx.base.MXNetError:
+        pass
+    if not ctxes:
+        ctxes = [mx.cpu()]
+    return ctxes
+
+
+def try_gpu():
+    """If GPU is available, return mx.gpu(0); else return mx.cpu()."""
+    try:
+        ctx = mx.gpu()
+        _ = nd.array([0], ctx=ctx)
+    except mx.base.MXNetError:
+        ctx = mx.cpu()
+    return ctx
+
+def data_iter_random(corpus_indices, batch_size, num_steps, ctx=None):
+    #随机采样
+    # 减1是因为输出的索引是相应输入的索引加1
+    num_examples = (len(corpus_indices) - 1) // num_steps
+    epoch_size = num_examples // batch_size
+    example_indices = list(range(num_examples))
+    random.shuffle(example_indices)
+
+    # 返回从pos开始的长为num_steps的序列
+    def _data(pos):
+        return corpus_indices[pos: pos + num_steps]
+
+    for i in range(epoch_size):
+        # 每次读取batch_size个随机样本
+        i = i * batch_size
+        batch_indices = example_indices[i: i + batch_size]
+        X = [_data(j * num_steps) for j in batch_indices]
+        Y = [_data(j * num_steps + 1) for j in batch_indices]
+        # yield语法
+        # 将函数构造为一个generator 节约内存
+        yield nd.array(X, ctx), nd.array(Y, ctx)
+
+def data_iter_consecutive(corpus_indices, batch_size, num_steps, ctx=None):
+    #相邻采样
+    corpus_indices = nd.array(corpus_indices, ctx=ctx)
+    data_len = len(corpus_indices)
+    batch_len = data_len // batch_size
+    indices = corpus_indices[0: batch_size*batch_len].reshape((
+        batch_size, batch_len))
+    epoch_size = (batch_len - 1) // num_steps
+    for i in range(epoch_size):
+        i = i * num_steps
+        X = indices[:, i: i + num_steps]
+        Y = indices[:, i + 1: i + num_steps + 1]
+        yield X, Y

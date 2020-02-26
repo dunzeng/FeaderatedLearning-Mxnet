@@ -1,0 +1,6 @@
+{
+    "port":8080,
+    "host":"localhost",
+    "model_init_mode":"json",
+    "update_model_path":"E:\\PythonProjects\\Mxnet_FederatedLearning\\Server\\current_model.params"
+}

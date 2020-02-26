@@ -1,5 +1,0 @@
-{
-    "server_ip":"localhost",
-    "server_port":8080,
-    "default_path":"E:\\PythonProjects\\Mxnet_FederatedLearning\\Client\\recv_model.params"
-}

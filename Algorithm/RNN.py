@@ -17,7 +17,7 @@ import math
 context = [mx.gpu()]
 num_epochs, batch_size, lr, clipping_theta = 250, 32, 1e2, 1e-2
 
-class RNNModel(gluon.Block):
+class RNN_Model(gluon.Block):
     # 循环神经网络库
     def __init__(self, mode, vocab_size, embed_dim, hidden_dim, num_layers, dropout=0.5, **kwargs):
         """
@@ -31,7 +31,7 @@ class RNNModel(gluon.Block):
         stata shape: (隐藏层个数, 批量大小, 隐藏单元个数)
         input shape: (时间步数, 批量大小, 输入个数)
         """
-        super(RNNModel,self).__init__(**kwargs)
+        super(RNN_Model,self).__init__(**kwargs)
         with self.name_scope():
             self.drop = nn.Dropout(dropout)
             self.encoder = nn.Embedding(vocab_size, embed_dim, weight_initializer=mx.init.Uniform(0.1))
@@ -61,6 +61,7 @@ class RNNModel(gluon.Block):
         # 初始状态shape (隐藏层个数, 批量大小, 隐藏单元个数)
         return self.rnn.begin_state(batch_size=batch_size,ctx=context)
     
+    """
     def grad_clipping(self, params, theta, ctx):
         """Clip the gradient."""
         if theta is not None:
@@ -71,6 +72,7 @@ class RNNModel(gluon.Block):
             if norm > theta:
                 for param in params:
                     param.grad[:] *= theta / norm
+    
     
     def train(self, train_data, num_epochs, num_steps, clipping_norm, pred_period):
         #input:
@@ -146,7 +148,7 @@ if __name__ == "__main__":
     dropout_rate = 0.2
     eval_period = 500
     model = RNNModel(model_name, vocab_size, embed_dim, hidden_dim, num_layers, dropout_rate)
-
+"""
 """
 def batchify(data, batch_size):
     # 数据形状 (num_batches, batch_size)

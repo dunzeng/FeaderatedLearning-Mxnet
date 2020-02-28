@@ -1,10 +1,6 @@
 import sys
 path_base = "E:\\PythonProjects\\Mxnet_FederatedLearning"
-path_server = "E:\\PythonProjects\\Mxnet_FederatedLearning\\Server_"
-path_client = "E:\\PythonProjects\\Mxnet_FederatedLearning\\Client_"
 sys.path.append(path_base)
-sys.path.append(path_server)
-sys.path.append(path_client)
 
 import socket
 import numpy as np
@@ -24,7 +20,7 @@ import Tools
 # 维护本地模型，包括参数更新、模型训练
 # 
 class Client:
-    def __init__(self):
+    def __init__(self,data_handler):
         # 网络通信类
         self.sock = socket.socket()
         with open("client_config.json",'r') as f:
@@ -32,7 +28,7 @@ class Client:
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
         self.recv_model_savepath = json_data['default_path']
         # 模型处理类
-        self.data_handler = Client_data_handler()
+        self.data_handler = data_handler
     
     def __initialize_from_json(self):
         # 从Json文件中初始化部分变量
@@ -87,8 +83,3 @@ class Client:
         gradient_ = self.data_handler.local_train(50,10,0.02)
         self.__upload_gradient(gradient_)
 
-
-if __name__ == "__main__":
-    client = Client()
-    client.process()
-    

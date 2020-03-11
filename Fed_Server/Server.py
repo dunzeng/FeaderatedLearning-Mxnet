@@ -49,7 +49,7 @@ class Sever():
             sent_size += len(data)
         f.close()
 
-    def __recv_gradient(self,connection):
+    def __recv_data(self,connection):
         # 接收参与者回传梯度
         # ***下一阶段考虑实现由服务器求梯度下传Client更新模型
         gradient_dict = Tools.utils.recv_class(connection)
@@ -91,8 +91,8 @@ class Sever():
                 print('Server Model已发送')
             elif message=='1004':
                 print('Client请求上传模型')
-                gradient_info = self.__recv_gradient(connect)
-                self.data_handler.update_gradient(gradient_info)
+                data_from_client = self.__recv_data(connect)
+                #self.data_handler.update_gradient(data_from_client)
                 self.data_handler.validate_current_model()
                 self.data_handler.save_current_model2file(self.update_model_path)
                 print('模型更新成功')

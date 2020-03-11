@@ -64,6 +64,9 @@ class Server_data_handler():
         self.__net = model
 
     def update_gradient(self,gradient_info=None,traverse_list=[]):
+        # 3.11 
+        # 架构修改后 Client直接回传训练后的模型
+        # 该函数暂时弃置
         # 更新Server梯度信息
         cur_dep = 0
         gradient_w = gradient_info[0]
@@ -85,3 +88,11 @@ class Server_data_handler():
     def save_current_model2file(self,save_dir):
         print("模型保存",save_dir)
         self.__net.save_parameters(save_dir)
+
+    def process_data_from_client(self, client_data):
+        # 用户可重写该函数,自定义数据处理方法
+        pass
+
+    def grab_gradient(self, client_data):
+        # 计算Client端数据集整体梯度
+        pass

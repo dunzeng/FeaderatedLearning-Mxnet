@@ -18,7 +18,6 @@ import Tools
 # 参与者类
 # 维护与服务器端的通信和执行联邦学习协议
 # 维护本地模型，包括参数更新、模型训练
-# 
 class Client:
     def __init__(self,data_handler):
         # 网络通信类
@@ -49,14 +48,15 @@ class Client:
         # 控制码大小为4bit
         msg_code = self.sock.recv(4).decode()
         return msg_code
-    
-    def __upload_gradient(self, gradient_info):
+
+    def __upload_information(self, information):
+        # 用户可自定义内容
+        # 向客户端传送信息
         message = '1004'
-        #获得socket连接
         self.__send_code(message)
-        Tools.utils.send_class(self.sock,gradient_info)
+        Tools.utils.send_class(self.sock, information)
         self.sock.close()
-    
+
     def __ask_for_model(self,save_path=""):
         # 向服务端请求模型
         # 用于本地训练
@@ -78,8 +78,11 @@ class Client:
     def process(self):
         # Client端流程 
         # 初始化参数->请求模型->加载模型->训练->梯度回传
+        # 考虑不同算法 朴素Fed,FedAvg回传信息时的处理
         self.__ask_for_model(self.recv_model_savepath)
         self.data_handler.load_model(self.recv_model_savepath)
-        gradient_ = self.data_handler.local_train(50,10,0.02)
-        self.__upload_gradient(gradient_)
+        self.data_handler.local_train(50,10,0.02)
+        model_info = self.data_handler.get_model()
+        # 上传信息
+        self.__upload_information(model_info)
 

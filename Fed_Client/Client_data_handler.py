@@ -73,11 +73,5 @@ class Client_data_handler:
             metric.reset()
             print('training acc at epoch %d/%d: %s=%f'%(i+1,epoch, name, acc))
     
-    """
-    def load_model(self,model_path=""):
-        # 将model_path指向的模型文件
-        # 加载入self.__net
-        self.__net.load_parameters(model_path)
-    """
-
-    
+    def get_model(self):
+        return copy.deepcopy(self.__model)

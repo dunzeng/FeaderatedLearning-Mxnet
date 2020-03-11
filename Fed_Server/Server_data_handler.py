@@ -59,13 +59,9 @@ class Server_data_handler():
             metric.update(label,outputs)
         print('验证集准确率 validation acc:%s=%f'%metric.get())
 
-    """
-    遍历网络方法
-    for layer in net:
-        layer.weight.data()
-        layer.weight.set_data()
-        layer.bias.data()
-    """
+    def updata_model(self, model):
+        self.__net = model
+
     def update_gradient(self,gradient_info=None,traverse_list=[]):
         # 更新Server梯度信息
         cur_dep = 0

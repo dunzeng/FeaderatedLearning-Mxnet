@@ -77,12 +77,10 @@ class Sever():
         self.sock.listen(5) #最大连接数
         while True:
             print("监听端口：",(self.host,self.port))
-            print("等待连接")
             connect,addr = self.sock.accept()
             # 接收到请求 单次处理一个连接请求
             print("收到连接请求：", addr)    
             message = self.__recv_code(connect)
-            print("收到来自%s的请求\n请求码: %s\n",addr,message)
             #根据请求码处理请求
             if message=='1001':
                 print('请求连接')
@@ -91,12 +89,12 @@ class Sever():
                 self.__send_model(connect)
                 print('Server Model已发送')
             elif message=='1004':
-                print('Client请求上传梯度')
+                print('Client请求上传模型')
                 gradient_info = self.__recv_gradient(connect)
                 self.data_handler.update_gradient(gradient_info)
                 self.data_handler.validate_current_model()
                 self.data_handler.current_model_accepted()
                 print('模型更新成功')
             else:
-                print("Contro Code Error ",message)
+                print("Control Code Error ",message)
             connect.close()

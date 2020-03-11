@@ -61,9 +61,8 @@ class RNN_Model(gluon.Block):
         # 初始状态shape (隐藏层个数, 批量大小, 隐藏单元个数)
         return self.rnn.begin_state(batch_size=batch_size,ctx=context)
     
-    """
+"""
     def grad_clipping(self, params, theta, ctx):
-        """Clip the gradient."""
         if theta is not None:
             norm = nd.array([0], ctx)
             for param in params:
@@ -121,7 +120,7 @@ class RNN_Model(gluon.Block):
         return ''.join([idx_to_char[i] for i in output])
 
 def load_data_jay_lyrics():
-    """Load the Jay Chou lyric data set (available in the Chinese book)."""
+    #Load the Jay Chou lyric data set (available in the Chinese book).
     #返回 四元组
     with zipfile.ZipFile('../data/jaychou_lyrics.txt.zip') as zin:
         with zin.open('jaychou_lyrics.txt') as f:
@@ -148,8 +147,7 @@ if __name__ == "__main__":
     dropout_rate = 0.2
     eval_period = 500
     model = RNNModel(model_name, vocab_size, embed_dim, hidden_dim, num_layers, dropout_rate)
-"""
-"""
+
 def batchify(data, batch_size):
     # 数据形状 (num_batches, batch_size)
     num_batches = data.shape[0] // batch_size

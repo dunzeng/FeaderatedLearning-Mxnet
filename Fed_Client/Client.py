@@ -12,8 +12,8 @@ from mxnet import ndarray as nd
 import copy
 import pickle
 import json
-from Client_data_handler import Client_data_handler
-import Tools
+from Fed_Client.Client_data_handler import Client_data_handler
+from Tools import utils
 
 # 参与者类
 # 维护与服务器端的通信和执行联邦学习协议
@@ -22,7 +22,7 @@ class Client:
     def __init__(self,data_handler):
         # 网络通信类
         self.sock = socket.socket()
-        with open("client_config.json",'r') as f:
+        with open(path_base+"\\Fed_Client\\client_config.json",'r') as f:
             json_data = json.load(f)
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
         self.recv_model_savepath = json_data['default_path']
@@ -35,7 +35,6 @@ class Client:
             json_data = json.load(f)
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
 
-    
     def __send_code(self,msg_code=""):
         # 创建socket连接，发送控制码
         # socket连接将被保存在self.sock中
@@ -54,7 +53,7 @@ class Client:
         # 向客户端传送信息
         message = '1004'
         self.__send_code(message)
-        Tools.utils.send_class(self.sock, information)
+        utils.send_class(self.sock, information)
         self.sock.close()
 
     def __ask_for_model(self,save_path=""):

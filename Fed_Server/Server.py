@@ -8,7 +8,7 @@ from mxnet import gluon
 import socket
 import os
 import pickle
-from Server_data_handler import Server_data_handler
+from Fed_Server.Server_data_handler import Server_data_handler
 import json
 import Tools
 
@@ -30,6 +30,7 @@ class Sever():
         # 初始化Server端模型
         # data_handler自动初始化模型 并将模型储存至update_model_path指向的文件
         self.data_handler = server_data_handler
+        self.data_handler.save_current_model2file(self.update_model_path)
         # 网络连接采用TCP协议
         self.sock = socket.socket()
     
@@ -93,7 +94,7 @@ class Sever():
                 gradient_info = self.__recv_gradient(connect)
                 self.data_handler.update_gradient(gradient_info)
                 self.data_handler.validate_current_model()
-                self.data_handler.current_model_accepted()
+                self.data_handler.save_current_model2file(self.update_model_path)
                 print('模型更新成功')
             else:
                 print("Control Code Error ",message)

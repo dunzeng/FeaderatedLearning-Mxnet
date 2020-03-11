@@ -1,8 +1,6 @@
 import mxnet as mx
 from mxnet import gluon
 from mxnet.gluon import nn
-from mxnet import autograd as ag
-from mxnet import ndarray as nd
 
 def LeNet_(activation='sigmoid'):
     # 获取一个结构定义完整的LeNet卷积神经网络

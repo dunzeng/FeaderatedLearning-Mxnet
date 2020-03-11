@@ -22,7 +22,6 @@ class Client_data_handler:
         self.__ctx = Tools.utils.try_all_gpus()
         self.__model = model
         self.input_shape = None
-
         # 初始化存储路径
         with open(path_base+"\\Fed_Client\\data_handler_config.json",'r') as f:
             json_data = json.load(f)
@@ -32,11 +31,14 @@ class Client_data_handler:
         self.local_data_file = (json_data['local_data_path'],json_data['local_label_path'])
 
     def init_model(self,save_path=""):
-        # 初始化用户自定义的模型
+        # 随机初始化用户自定义的模型
         #self.input_shape,self.__net = self.custom_model()
         self.__model.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)
         self.__model(nd.random.uniform(shape=self.input_shape,ctx=self.__ctx[0]))
     
+    def load_model(self,model_path):
+        self.__model.load_parameters(model_path,ctx=self.__ctx)
+
     def train_data_loader(self):
         # 用户需重写该函数用于读取模型
         # 返回元组(data,label)

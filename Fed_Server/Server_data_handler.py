@@ -10,7 +10,7 @@ import os
 import pickle
 import numpy as np
 import copy
-import Tools
+from Tools import utils
 import json
  
 class Server_data_handler():
@@ -26,13 +26,14 @@ class Server_data_handler():
         with open(path_base+"\\Fed_Server\\param_config.json",'r') as f:
             json_data = json.load(f)
         self.learning_rate = json_data['learning_rate']
-        #self.init_model_path = json_data['init_model_path'] 
-        self.update_model_path = json_data['updata_model_path']
+        #init_model_path = json_data['init_model_path'] 
+        #self.update_model_path = json_data['updata_model_path']
 
         # 初始化模型
         self.__net = model
-        self.input_shape = None
-        self.__ctx = Tools.utils.try_all_gpus()
+        self.input_shape = (50,1,28,28)
+        self.__ctx = utils.try_all_gpus()
+        self.init_model()
         #self.init_model(save_path=self.update_model_path)
     
     def init_model(self,save_path=""):
@@ -43,7 +44,7 @@ class Server_data_handler():
         # 因此初始化神经网络时需要做一次随机前向传播
         self.__net(nd.random.uniform(shape=self.input_shape,ctx=self.__ctx[0]))
         # 保存初始化模型 Server可发送至Client训练
-        self.__net.save_parameters(save_path)
+        #self.__net.save_parameters(save_path)
     
     # 评估当前模型准确率
     def validate_current_model(self):
@@ -77,6 +78,10 @@ class Server_data_handler():
                 continue
         print('weight updated!')
     
-    def current_model_accepted(self,save_dir=''):
-        print("Server模型覆盖更新",self.update_model_path)
-        self.__net.save_parameters(self.update_model_path)
+    def current_model_accepted(self,save_dir):
+        print("Server模型覆盖更新",save_dir)
+        self.__net.save_parameters(save_dir)
+
+    def save_current_model2file(self,save_dir):
+        print("模型保存",save_dir)
+        self.__net.save_parameters(save_dir)

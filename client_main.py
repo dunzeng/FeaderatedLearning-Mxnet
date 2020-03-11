@@ -1,6 +1,8 @@
-import Fed_Client
+from Fed_Client import Client
+from Fed_Client import Client_data_handler
+from Algorithm import LeNet
 
-model = None
-handler = Fed_Client.Client_data_handler.Client_data_handler(model)
-network = Fed_Client.Client.Client(handler)
-network.process()
+model = LeNet.LeNet_()
+handler = Client_data_handler.Client_data_handler(model)
+clinet_network = Client.Client(handler)
+clinet_network.process()

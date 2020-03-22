@@ -28,6 +28,9 @@ class Client:
         self.recv_model_savepath = json_data['default_path']
         # 模型处理类
         self.data_handler = data_handler
+        
+        # 训练模式 从Server端同步获取
+        self.train_mode = ""
     
     def __initialize_from_json(self):
         # 从Json文件中初始化部分变量
@@ -52,6 +55,7 @@ class Client:
         # 用户可自定义内容
         # 向客户端传送信息
         message = '1004'
+        print("正向Server端发送信息 ",message)
         self.__send_code(message)
         utils.send_class(self.sock, information)
         self.sock.close()
@@ -60,6 +64,7 @@ class Client:
         # 向服务端请求模型
         # 用于本地训练
         message = '1002'
+        print("正向Server端请求模型 ",message)
         # 获得socket连接
         self.__send_code(message)
         # 接收模型
@@ -73,15 +78,37 @@ class Client:
             has_recv += len(data)
         f.close()
         self.sock.close()
+        print("模型下载结束 ")
+    
+    def __param_sync(self):
+        message = '1003'
+        self.__send_code(message)
+        # 同步系统参数
+        server_info = utils.recv_class(self.sock)
+        print("同步参数input_shape: ",server_info[0])
+        self.train_mode=server_info[0]
 
-    def process(self):
+    def process(self,mode=''):
         # Client端流程 
         # 初始化参数->请求模型->加载模型->训练->梯度回传
         # 考虑不同算法 朴素Fed,FedAvg回传信息时的处理
         self.__ask_for_model(self.recv_model_savepath)
+        self.__param_sync()
         self.data_handler.load_model(self.recv_model_savepath)
-        self.data_handler.local_train(50,10,0.02)
-        model_info = self.data_handler.get_model()
-        # 上传信息
-        self.__upload_information(model_info)
+        self.data_handler.local_train(600)
+
+        # 根据训练模式不同 选择回传梯度或者模型
+        if self.train_mode=='gradient':
+            grad_info = self.data_handler.get_gradient()
+            self.__upload_information(grad_info)
+        elif self.train_mode=='replace':
+            model_info = self.data_handler.get_model()
+            self.__upload_information(model_info)
+        elif self.train_mode=='defined':
+            defined_info = None
+            self.__upload_information(defined_info)
+        else:
+            raise ValueError("Invalid mode %s. Options are replace, gradient and defined"&mode)
+        
+        
 

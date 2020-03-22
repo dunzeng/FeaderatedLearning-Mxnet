@@ -1,9 +1,10 @@
 from Fed_Server import Server_data_handler
 from Fed_Server import Server
-from Algorithm import LeNet
+from Algorithm import CNN
 
-model = LeNet.LeNet_(activation='relu')
-handler = Server_data_handler.Server_data_handler(model)
+model = CNN.CNN_Model("LeNet")
+shape = (1,1,28,28)
+handler = Server_data_handler.Server_data_handler(model,shape,learning_rate=0.02)
 Serv = Server.Sever(handler)
 
 Serv.listen()

@@ -10,7 +10,7 @@ import os
 import pickle
 from Fed_Server.Server_data_handler import Server_data_handler
 import json
-import Tools
+from Tools import utils
 
 """
 网络服务器：
@@ -33,7 +33,9 @@ class Sever():
         self.data_handler.save_current_model2file(self.update_model_path)
         # 网络连接采用TCP协议
         self.sock = socket.socket()
-    
+        # 训练模式
+        self.train_mode = json_data['train_mode']
+
     def __send_model(self,connection,model_path=""):
         # 将model模型文件发送至Client
         # 从文件中读取发送模型
@@ -52,7 +54,7 @@ class Sever():
     def __recv_data(self,connection):
         # 接收参与者回传梯度
         # ***下一阶段考虑实现由服务器求梯度下传Client更新模型
-        gradient_dict = Tools.utils.recv_class(connection)
+        gradient_dict = utils.recv_class(connection)
         return gradient_dict
 
     def __send_code(self,connection,msg_code=""):
@@ -70,6 +72,11 @@ class Sever():
         file_size = os.path.getsize(file_dir)
         return file_size
     
+    def __send_server_param(self,connection):
+        par = []
+        par.append(self.train_mode)
+        utils.send_class(connection,par)
+         
     def listen(self):
         # C/S架构
         # 网络监听 根据不同的控制码 服务端执行不同操作
@@ -84,15 +91,22 @@ class Sever():
             message = self.__recv_code(connect)
             #根据请求码处理请求
             if message=='1001':
+                # Client池维护
+                # 留空控制码
                 print('请求连接')
             elif message=='1002':
+                # 发送模型
                 print('请求Server下传模型')
                 self.__send_model(connect)
                 print('Server Model已发送')
+            elif message=='1003':
+                # 参数同步
+                self.__send_server_param(connect)
             elif message=='1004':
-                print('Client请求上传模型')
+                # 接收Client信息
+                print('Client请求上传信息')
                 data_from_client = self.__recv_data(connect)
-                #self.data_handler.update_gradient(data_from_client)
+                self.data_handler.process_data_from_client(data_from_client)
                 self.data_handler.validate_current_model()
                 self.data_handler.save_current_model2file(self.update_model_path)
                 print('模型更新成功')

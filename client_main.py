@@ -1,8 +1,8 @@
 from Fed_Client import Client
 from Fed_Client import Client_data_handler
-from Algorithm import LeNet
+from Algorithm import CNN
 
-model = LeNet.LeNet_()
-handler = Client_data_handler.Client_data_handler(model)
+model = CNN.CNN_Model('LeNet')
+handler = Client_data_handler.Client_data_handler(model,input_shape=(1,1,28,28))
 clinet_network = Client.Client(handler)
 clinet_network.process()

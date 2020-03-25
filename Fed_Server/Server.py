@@ -1,10 +1,7 @@
 import sys
 path_base = "E:\\PythonProjects\\Mxnet_FederatedLearning"
 sys.path.append(path_base)
-from mxnet import ndarray as nd
 import mxnet as mx
-from mxnet.gluon import nn
-from mxnet import gluon
 import socket
 import os
 import pickle
@@ -35,6 +32,11 @@ class Sever():
         self.sock = socket.socket()
         # 训练模式
         self.train_mode = json_data['train_mode']
+    
+    def __get_val_data(self):
+        mnist = mx.test_utils.get_mnist()
+        val_data = [mnist['test_data'],mnist['test_label']]
+        return val_data
 
     def __send_model(self,connection,model_path=""):
         # 将model模型文件发送至Client
@@ -96,20 +98,23 @@ class Sever():
                 print('请求连接')
             elif message=='1002':
                 # 发送模型
-                print('请求Server下传模型')
+                print("******Client端请求模型******")
                 self.__send_model(connect)
-                print('Server Model已发送')
+                print('---Server Model已发送---\n\n')
             elif message=='1003':
                 # 参数同步
+                print("******Client端请求系统参数******")
                 self.__send_server_param(connect)
+                print("---系统参数已发送---\n\n")
             elif message=='1004':
                 # 接收Client信息
-                print('Client请求上传信息')
+                print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
-                self.data_handler.process_data_from_client(data_from_client)
-                self.data_handler.validate_current_model()
+                self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
+                val_data_set = self.__get_val_data()
+                self.data_handler.validate_current_model(val_data_set)
                 self.data_handler.save_current_model2file(self.update_model_path)
-                print('模型更新成功')
+                print('---模型更新成功---\n\n')
             else:
                 print("Control Code Error ",message)
             connect.close()

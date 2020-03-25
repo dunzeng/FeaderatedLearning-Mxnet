@@ -16,12 +16,14 @@ class Client_data_handler:
     # 架构第二层
     # 该类直接作为网络类Client的成员
     # 负责数据处理 
-    def __init__(self, model, input_shape):
+    def __init__(self, model, input_shape, train_data_path=None):
         # model为用户自定义网络模型类 其类型应为MXnet中nn.block类
         # 模型初始化
-        self.__ctx = Tools.utils.try_all_gpus()
         self.__model = model
         self.input_shape = input_shape
+        self.__ctx = Tools.utils.try_all_gpus()
+        self.__random_init_model()
+        
         # 初始化存储路径
         with open(path_base+"\\Fed_Client\\data_handler_config.json",'r') as f:
             json_data = json.load(f)
@@ -30,16 +32,24 @@ class Client_data_handler:
         # 本地梯度维护
         self.local_gradient = []
         self.__init_gradient_list()
+        
+        # 本地训练数据路径
+        self.train_data_path = train_data_path
 
     def __init_gradient_list(self):
         for layer in self.__model:
             try:
                 shape = layer.weight.data().shape
-                self.local_gradient.append(nd.zeros(shape=shape))
             except:
-                pass
+                continue
+            self.local_gradient.append(nd.zeros(shape=shape,ctx=self.__ctx[0]))
+        
 
-    def init_model(self,save_path=""):
+        #print("梯度信息shape列表：")
+        #for grad in self.local_gradient:
+        #    print(grad.shape)
+
+    def __random_init_model(self):
         # 随机初始化用户自定义的模型
         #self.input_shape,self.__net = self.custom_model()
         self.__model.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)
@@ -53,8 +63,12 @@ class Client_data_handler:
         # 用户需重写该函数用于读取模型
         # 返回元组(data,label)
         # 用于调用mx.io.NDArrayIter(data,label,batch_size)
-        data = np.load(self.local_data_file[0])
-        label = np.load(self.local_data_file[1])
+        if self.train_data_path!=None:
+            data = np.load(self.train_data_path['data'])
+            label = np.load(self.train_data_path['label'])
+        else:
+            data = np.load(self.local_data_file[0])
+            label = np.load(self.local_data_file[1])
         return data,label
 
     def __gradient_collect(self,batch_size):
@@ -63,17 +77,19 @@ class Client_data_handler:
         for layer in self.__model:
             try:
                 this_grad = layer.weight.data().grad
-                local_gradient[idx] += this_grad/batch_size
-                idx+=1
             except:
-                pass
+                continue
+            # as_in_context() 使tensor处于同一u下运算
+            self.local_gradient[idx] += this_grad.as_in_context(self.local_gradient[idx])/batch_size
+            idx+=1
 
-    def local_train(self,batch_size,learning_rate=0.02,train_data=None,epoch=1):
+    def local_train(self,batch_size,learning_rate=0.02,train_data=None,epoch=10):
         # 可由用户重写
         # 利用本地数据训练模型
         # 返回神经网络梯度信息
         # 保留已训练好的模型
         print("本地训练 batch_size:%d - learning_rate:%f"%(batch_size,learning_rate))
+        #data,label = train_data['data'],train_data['label']
         data,label = self.train_data_loader()
         train_data = mx.io.NDArrayIter(data,label,batch_size=batch_size,shuffle=True)
         loss = gluon.loss.SoftmaxCrossEntropyLoss()
@@ -91,8 +107,6 @@ class Client_data_handler:
                         t_loss = loss(z,y)
                         t_loss.backward()
                         outputs.append(z)
-                #print(label)
-                #print(outputs)
                 metric.update(label,outputs)
                 # 梯度信息采集
                 self.__gradient_collect(batch_size)
@@ -106,6 +120,7 @@ class Client_data_handler:
 
     def get_gradient(self):
         # 上层获取梯度后 模型梯度数据清0
+        gradient = copy.deepcopy(self.local_gradient)
         self.local_gradient.clear()
         self.__init_gradient_list()
-        return copy.deepcopy(self.local_gradient)
+        return gradient

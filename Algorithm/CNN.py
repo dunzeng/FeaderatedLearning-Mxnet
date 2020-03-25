@@ -1,9 +1,6 @@
 # RNN
 from mxnet import gluon
 from mxnet.gluon import nn
-from mxnet import autograd as ag
-from mxnet import ndarray as nd
-from mxnet.gluon import loss 
 
 #from LeNet import LeNet_
 #from AlexNet import AlexNet_
@@ -13,7 +10,7 @@ from mxnet.gluon import loss
 # LeNet
 def LeNet_(activation='relu'):
     # 获取一个结构定义完整的LeNet卷积神经网络
-    # 激活函数可自选 默认为sigmoid
+    # 激活函数可自选 默认为relu
     net = nn.Sequential()
     net.add(nn.Conv2D(channels=6, kernel_size=(5,5), activation=activation),
             nn.MaxPool2D(pool_size=(2,2), strides=(2,2)),

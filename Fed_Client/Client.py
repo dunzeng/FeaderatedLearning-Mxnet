@@ -7,7 +7,7 @@ import pickle
 import json
 from Fed_Client.Client_data_handler import Client_data_handler
 from Tools import utils
-
+from Tools.log import log
 # 参与者类
 # 维护与服务器端的通信和执行联邦学习协议
 # 维护本地模型，包括参数更新、模型训练
@@ -25,7 +25,10 @@ class Client:
         self.train_mode = ""
         self.batch_size = None
         self.epoch = None
-    
+        
+        # log类
+        self.log = log(path_base + "\\Fed_Client\\log")
+
     def __initialize_from_json(self):
         # 从Json文件中初始化部分变量
         with open("server_config.json",'r') as f:
@@ -93,7 +96,7 @@ class Client:
         print("******Phase 3******")
         self.data_handler.load_model(self.recv_model_savepath)
         print("******Phase 4******")
-        self.data_handler.local_train(batch_size=100,learning_rate=0.02,epoch=10)
+        self.data_handler.local_train(batch_size=100,learning_rate=0.02,epoch=10,train_mode=self.train_mode)
         print("******Phase 5******")
         # 根据训练模式不同 选择回传梯度或者模型
         if self.train_mode=='gradient':

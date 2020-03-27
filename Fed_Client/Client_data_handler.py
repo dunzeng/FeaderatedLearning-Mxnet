@@ -10,7 +10,9 @@ from mxnet import ndarray as nd
 import numpy as np
 import copy
 import Tools
+from Tools.log import log
 import json 
+import time
 
 class Client_data_handler:
     # 架构第二层
@@ -30,20 +32,26 @@ class Client_data_handler:
         self.local_data_file = (json_data['local_data_path'],json_data['local_label_path'])
 
         # 本地梯度维护
-        self.local_gradient = []
+        self.local_gradient = {"weight":[],"bias":[]}
         self.__init_gradient_list()
         
         # 本地训练数据路径
         self.train_data_path = train_data_path
 
+        # log类
+        self.log = log(path_base+"\\Fed_Server\\log")
+
+        # 初始化log日志载入
+
     def __init_gradient_list(self):
         for layer in self.__model:
             try:
-                shape = layer.weight.data().shape
+                shape_w = layer.weight.data().shape
+                shape_b = layer.bias.data().shape
             except:
                 continue
-            self.local_gradient.append(nd.zeros(shape=shape,ctx=self.__ctx[0]))
-        
+            self.local_gradient['weight'].append(nd.zeros(shape=shape_w,ctx=self.__ctx[0]))
+            self.local_gradient['bias'].append(nd.zeros(shape=shape_b,ctx=self.__ctx[0]))
 
         #print("梯度信息shape列表：")
         #for grad in self.local_gradient:
@@ -76,14 +84,16 @@ class Client_data_handler:
         idx = 0
         for layer in self.__model:
             try:
-                this_grad = layer.weight.data().grad
+                grad_w = layer.weight.data().grad
+                grad_b = layer.bias.data().grad
             except:
                 continue
             # as_in_context() 使tensor处于同一u下运算
-            self.local_gradient[idx] += this_grad.as_in_context(self.local_gradient[idx])/batch_size
+            self.local_gradient['weight'][idx] += grad_w.as_in_context(self.local_gradient['weight'][idx])/batch_size
+            self.local_gradient['bias'][idx] += grad_b.as_in_context(self.local_gradient['bias'][idx])/batch_size
             idx+=1
 
-    def local_train(self,batch_size,learning_rate=0.02,train_data=None,epoch=10):
+    def local_train(self,batch_size,learning_rate=0.02,train_data=None,epoch=10,train_mode='gradient'):
         # 可由用户重写
         # 利用本地数据训练模型
         # 返回神经网络梯度信息
@@ -108,8 +118,9 @@ class Client_data_handler:
                         t_loss.backward()
                         outputs.append(z)
                 metric.update(label,outputs)
-                # 梯度信息采集
-                self.__gradient_collect(batch_size)
+                # gradient mode：梯度信息采集
+                if train_mode == 'gradient':
+                    self.__gradient_collect(batch_size)
                 trainer.step(batch_size)
             name, acc = metric.get()
             metric.reset()
@@ -121,6 +132,10 @@ class Client_data_handler:
     def get_gradient(self):
         # 上层获取梯度后 模型梯度数据清0
         gradient = copy.deepcopy(self.local_gradient)
-        self.local_gradient.clear()
+        #载入日志文件
+        self.log.new_log_file("grad"+str(int(time.time()))+".txt",gradient)
+        #可优化
+        self.local_gradient['weight'].clear()
+        self.local_gradient['bias'].clear()
         self.__init_gradient_list()
         return gradient

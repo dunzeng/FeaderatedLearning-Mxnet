@@ -11,6 +11,7 @@ import pickle
 import numpy as np
 import copy
 from Tools import utils
+from Tools.log import log
 import json
  
 class Server_data_handler():
@@ -44,14 +45,20 @@ class Server_data_handler():
         if random_initial_model == True:
             self.__init_model()
         else:
-            self.__net.load_parameters(init_model_path,ctx=self.__ctx)
-    
+            try:
+                self.__net.load_parameters(init_model_path,ctx=self.__ctx)
+            except:
+                raise ValueError("Invalid init_model_path")   
+         
+        # log 类
+        self.log = log(path_base + "\\Fed_Server\\log")
+        
     def __get_deafault_valData(self):
         mnist = mx.test_utils.get_mnist()
-        val_data = [mnist['test_data'],mnist['test_label']]
+        val_data = {"test_data":mnist['test_data'],"test_label":mnist['test_label']}
         return val_data
 
-    def __init_model(self,save_path=""):
+    def __init_model(self):
         # 初始化用户自定义的模型
         #self.input_shape,self.__net = self.custom_model()
         self.__net.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)
@@ -66,52 +73,51 @@ class Server_data_handler():
     def validate_current_model(self,val_data_set=None):
         # 给定数据集测试模型性能
         # 评估当前模型准确率
-        val_x,val_y = val_data_set[0],val_data_set[1]
-        val_data = mx.io.NDArrayIter(val_x,val_y,batch_size=100)
-        #mnist = mx.test_utils.get_mnist()
-        #val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100)    
+        #val_x,val_y = val_data_set[0],val_data_set[1]
+        #val_data = mx.io.NDArrayIter(val_x,val_y,batch_size=100)
+        mnist = mx.test_utils.get_mnist()
+        val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100)
         for batch in val_data:
             data = gluon.utils.split_and_load(batch.data[0],ctx_list=self.__ctx,batch_axis=0)
             label = gluon.utils.split_and_load(batch.label[0],ctx_list=self.__ctx,batch_axis=0)
             outputs = []
-            metric = mx.metric.Accuracy()
+            metric = mx.metric.Accuracy()  
             for x in data:
                 outputs.append(self.__net(x))
             metric.update(label,outputs)
         print('验证集准确率 validation acc:%s=%f'%metric.get())
 
-    def __update_gradient(self,gradient_info=None):
+    def __update_gradient(self,gradient_info):
         # 由Client回传的梯度信息 更新Server模型
         idx = 0
-        gradient_w = gradient_info
+        gradient_w = gradient_info['weight']
+        gradient_b = gradient_info['bias']
         update_flag = False
+        lr = self.learning_rate
         for layer in self.__net:
             try:
-                layer.weight.data()[:] = layer.weight.data()[:] - gradient_w[idx].as_in_context(layer.weight.data().context) * self.learning_rate
-                #layer.bias.set_data(layer.bias.data()[:] - self.learning_rate*gradient_b[idx])
+                layer.weight.data()[:] = layer.weight.data()[:] - (lr*gradient_w[idx]).as_in_context(layer.weight.data().context)
+                layer.bias.data()[:] = layer.bias.data()[:] - (lr*gradient_b[idx]).as_in_context(layer.bias.data().context)
             except:
                 continue
             idx += 1
+
             if update_flag is not True:
                 update_flag = True
         
         if update_flag:
             print("-gradient successfully updated-")
         else:
-            print("-gradient failure-")
+            print("-oops! gradient failure-")
     
-    def current_model_accepted(self,save_dir=""):
-        if save_dir == "":
-            save_dir = self.model_path
+    def current_model_accepted(self,save_dir):
         try:
             print("Server模型覆盖更新",save_dir)
             self.__net.save_parameters(save_dir)
         except:
             raise ValueError("Invalid path %s"&save_dir)
 
-    def save_current_model2file(self,save_dir=""):
-        if save_dir == "":
-            save_dir = self.model_path
+    def save_current_model2file(self,save_dir):
         try:
             print("模型保存",save_dir)
             self.__net.save_parameters(save_dir)
@@ -120,6 +126,7 @@ class Server_data_handler():
         
     def process_data_from_client(self, client_data, mode):
         # mode: replace模型替换 gradient梯度更新 defined自定义
+        print("处理Client回传数据 mode: ",mode)
         if mode=='replace':
             # replace 模式下直接将传回的模型作为当前模型
             self.__net = client_data
@@ -136,16 +143,8 @@ class Server_data_handler():
         # 自定义算法使用处理Client数据
         pass
     
-    def grab_gradient(self, client_data):
-        # 暂时弃用
-        # 计算Client端数据集整体梯度
-        # lr: learning rate
-        gradient_list = []
-        for layer1,layer2 in self.__net,client_data:
-            try:
-                gradient = (layer1.weight.data()[:]-layer2.weight.data()[:])/self.learning_rate
-                gradient_list.append(gradient)
-            except:
-                pass
+    # debug
+    def get_model(self):
+        return copy.deepcopy(self.__net)
     
     

@@ -8,6 +8,8 @@ import json
 from Fed_Client.Client_data_handler import Client_data_handler
 from Tools import utils
 from Tools.log import log
+import time
+
 # 参与者类
 # 维护与服务器端的通信和执行联邦学习协议
 # 维护本地模型，包括参数更新、模型训练
@@ -75,7 +77,7 @@ class Client:
             has_recv += len(data)
         f.close()
         self.sock.close()
-        print("模型下载结束 ")
+        print("模型下载结束")
     
     def __param_sync(self):
         message = '1003'
@@ -101,6 +103,7 @@ class Client:
         # 根据训练模式不同 选择回传梯度或者模型
         if self.train_mode=='gradient':
             grad_info = self.data_handler.get_gradient()
+            self.log.new_log_file("grad"+str(int(time.time())),grad_info)
             self.__upload_information(grad_info)
         elif self.train_mode=='replace':
             model_info = self.data_handler.get_model()

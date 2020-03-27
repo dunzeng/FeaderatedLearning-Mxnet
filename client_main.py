@@ -1,7 +1,7 @@
 from Fed_Client import Client
 from Fed_Client import Client_data_handler
 from Algorithm import CNN
-
+import time
 def single_process(data_idx=0):
     model = CNN.CNN_Model('LeNet')
     train_data = {}
@@ -14,7 +14,9 @@ def single_process(data_idx=0):
     clinet_network.process()
 
 if __name__=="__main__":
+    
     for i in range(10):
         single_process(i)
+        time.sleep(5)
     
     #single_process()

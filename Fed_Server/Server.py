@@ -8,7 +8,8 @@ import pickle
 from Fed_Server.Server_data_handler import Server_data_handler
 import json
 from Tools import utils
-
+from Tools.log import log
+import time
 """
 网络服务器：
 维护网络通信，与Client交流
@@ -27,12 +28,15 @@ class Sever():
         # 初始化Server端模型
         # data_handler自动初始化模型 并将模型储存至update_model_path指向的文件
         self.data_handler = server_data_handler
+        # 保存模型至本地
         self.data_handler.save_current_model2file(self.update_model_path)
         # 网络连接采用TCP协议
         self.sock = socket.socket()
         # 训练模式
         self.train_mode = json_data['train_mode']
-    
+        # log类
+        self.log = log(path_base + "\\Fed_Server\\log")
+
     def __get_val_data(self):
         mnist = mx.test_utils.get_mnist()
         val_data = [mnist['test_data'],mnist['test_label']]
@@ -110,10 +114,21 @@ class Sever():
                 # 接收Client信息
                 print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
+                self.log.new_log_file("grad"+str(int(time.time())),data_from_client)
                 self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
-                val_data_set = self.__get_val_data()
-                self.data_handler.validate_current_model(val_data_set)
-                self.data_handler.save_current_model2file(self.update_model_path)
+                #val_data_set = self.__get_val_data()
+                self.data_handler.validate_current_model()
+                self.data_handler.current_model_accepted(self.update_model_path)
+                
+                # debug
+                weight_list = []
+                net = self.data_handler.get_model()
+                for layer in net:
+                    try:
+                        weight_list.append(layer.weight.data())
+                    except:
+                        continue
+                self.log.new_log_file("weight"+str(int(time.time())),weight_list)
                 print('---模型更新成功---\n\n')
             else:
                 print("Control Code Error ",message)

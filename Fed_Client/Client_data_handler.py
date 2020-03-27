@@ -39,7 +39,7 @@ class Client_data_handler:
         self.train_data_path = train_data_path
 
         # log类
-        self.log = log(path_base+"\\Fed_Server\\log")
+        self.log = log(path_base+"\\Fed_Client\\log")
 
         # 初始化log日志载入
 
@@ -125,17 +125,43 @@ class Client_data_handler:
             name, acc = metric.get()
             metric.reset()
             print('training acc at epoch %d/%d: %s=%f'%(i+1,epoch, name, acc))
-    
+        # test validation
+        #self.validation(self.__model)
+        self.save_model()
+
     def get_model(self):
         return copy.deepcopy(self.__model)
 
     def get_gradient(self):
         # 上层获取梯度后 模型梯度数据清0
         gradient = copy.deepcopy(self.local_gradient)
-        #载入日志文件
-        self.log.new_log_file("grad"+str(int(time.time()))+".txt",gradient)
         #可优化
         self.local_gradient['weight'].clear()
         self.local_gradient['bias'].clear()
         self.__init_gradient_list()
         return gradient
+
+    # 测试函数
+    def validation(self,net):
+        mnist = mx.test_utils.get_mnist()
+        ctx = Tools.utils.try_all_gpus()
+        val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100) 
+        val_data.reset()
+        for batch in val_data:
+            data = gluon.utils.split_and_load(batch.data[0],ctx_list=ctx,batch_axis=0)
+            label = gluon.utils.split_and_load(batch.label[0],ctx_list=ctx,batch_axis=0)
+            outputs = []
+            metric = mx.metric.Accuracy()
+            for x in data:
+                outputs.append(net(x))
+            metric.update(label,outputs)
+        print('验证集准确率 validation acc:%s=%f'%metric.get())
+    
+    def save_model(self):
+        weight_list = []
+        for layer in self.__model:
+            try:
+                weight_list.append(layer.weight.data())
+            except:
+                continue
+        self.log.new_log_file("weight"+str(int(time.time())),weight_list)

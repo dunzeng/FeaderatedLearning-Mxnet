@@ -21,7 +21,7 @@ class Client_data_handler:
     def __init__(self, model, input_shape, train_data_path=None):
         # model为用户自定义网络模型类 其类型应为MXnet中nn.block类
         # 模型初始化
-        self.__model = model
+        self.__net = model
         self.input_shape = input_shape
         self.__ctx = Tools.utils.try_all_gpus()
         self.__random_init_model()
@@ -33,7 +33,7 @@ class Client_data_handler:
 
         # 本地梯度维护
         self.local_gradient = {"weight":[],"bias":[]}
-        self.__init_gradient_list()
+        self.init_gradient_list()
         
         # 本地训练数据路径
         self.train_data_path = train_data_path
@@ -43,29 +43,15 @@ class Client_data_handler:
 
         # 初始化log日志载入
 
-    def __init_gradient_list(self):
-        for layer in self.__model:
-            try:
-                shape_w = layer.weight.data().shape
-                shape_b = layer.bias.data().shape
-            except:
-                continue
-            self.local_gradient['weight'].append(nd.zeros(shape=shape_w,ctx=self.__ctx[0]))
-            self.local_gradient['bias'].append(nd.zeros(shape=shape_b,ctx=self.__ctx[0]))
-
-        #print("梯度信息shape列表：")
-        #for grad in self.local_gradient:
-        #    print(grad.shape)
-
     def __random_init_model(self):
         # 随机初始化用户自定义的模型
         #self.input_shape,self.__net = self.custom_model()
-        self.__model.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)
-        self.__model(nd.random.uniform(shape=self.input_shape,ctx=self.__ctx[0]))
+        self.__net.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)
+        self.__net(nd.random.uniform(shape=self.input_shape,ctx=self.__ctx[0]))
     
     def load_model(self,model_path):
         print("加载模型 ",model_path)
-        self.__model.load_parameters(model_path,ctx=self.__ctx)
+        self.__net.load_parameters(model_path,ctx=self.__ctx)
 
     def train_data_loader(self):
         # 用户需重写该函数用于读取模型
@@ -79,31 +65,73 @@ class Client_data_handler:
             label = np.load(self.local_data_file[1])
         return data,label
 
-    def __gradient_collect(self,batch_size):
+    def __collect_gradient(self,batch_size):
         # local_train中调用 从model中收集梯度信息
         idx = 0
-        for layer in self.__model:
+        for layer in self.__net:
             try:
                 grad_w = layer.weight.data().grad
                 grad_b = layer.bias.data().grad
             except:
                 continue
             # as_in_context() 使tensor处于同一u下运算
-            self.local_gradient['weight'][idx] += grad_w.as_in_context(self.local_gradient['weight'][idx])/batch_size
-            self.local_gradient['bias'][idx] += grad_b.as_in_context(self.local_gradient['bias'][idx])/batch_size
+            self.local_gradient['weight'][idx][:] += grad_w.as_in_context(self.local_gradient['weight'][idx])/batch_size
+            self.local_gradient['bias'][idx][:] += grad_b.as_in_context(self.local_gradient['bias'][idx])/batch_size
             idx+=1
 
-    def local_train(self,batch_size,learning_rate=0.02,train_data=None,epoch=10,train_mode='gradient'):
+    def init_gradient_list(self):
+        self.local_gradient['weight'].clear()
+        self.local_gradient['bias'].clear()
+        for layer in self.__net:
+            try:
+                shape_w = layer.weight.data().shape
+                shape_b = layer.bias.data().shape
+            except:
+                continue
+            self.local_gradient['weight'].append(nd.zeros(shape=shape_w,ctx=self.__ctx[0]))
+            self.local_gradient['bias'].append(nd.zeros(shape=shape_b,ctx=self.__ctx[0]))
+        
+
+    def updata_local_model(self,learning_rate,batch_size):
+        #grad_w = self.local_gradient['weight']
+        #grad_b = self.local_gradient['bias']
+        idx = 0
+        for layer in self.__net:
+            try:
+                grad_w = layer.weight.data().grad
+                grad_b = layer.bias.data().grad
+                # 梯度收集
+                self.local_gradient["weight"][idx] += grad_w/batch_size
+                self.local_gradient["bias"][idx] += grad_b/batch_size
+                # 模型更新
+                layer.weight.data()[:] -= grad_w*learning_rate/batch_size
+                layer.bias.data()[:] -= grad_b*learning_rate/batch_size
+                idx += 1
+            except:
+                continue
+
+    def local_train(self,batch_size,learning_rate,train_data=None,epoch=10,train_mode='gradient'):
         # 可由用户重写
         # 利用本地数据训练模型
         # 返回神经网络梯度信息
         # 保留已训练好的模型
         print("本地训练 batch_size:%d - learning_rate:%f"%(batch_size,learning_rate))
+        #print("Context ", self.__ctx)
+        #print(self.__net)
+        # Debug
+        """
+        mnist = mx.test_utils.get_mnist()
+        train_data = mx.io.NDArrayIter(mnist['train_data'],mnist['train_label'],batch_size=batch_size) 
+        print(mnist['train_data'].shape,mnist['train_label'].shape)
+        origin_net = copy.deepcopy(self.__net) #保存训练前的net
+        """
         #data,label = train_data['data'],train_data['label']
         data,label = self.train_data_loader()
         train_data = mx.io.NDArrayIter(data,label,batch_size=batch_size,shuffle=True)
-        loss = gluon.loss.SoftmaxCrossEntropyLoss()
-        trainer = gluon.Trainer(self.__model.collect_params(),'sgd',{'learning_rate':learning_rate})
+        
+        # 定义损失函数 训练器 验证
+        smc_loss = gluon.loss.SoftmaxCrossEntropyLoss()
+        #trainer = gluon.Trainer(self.__net.collect_params(),'sgd',{'learning_rate':learning_rate})
         metric = mx.metric.Accuracy()
         for i in range(epoch):
             train_data.reset()
@@ -113,24 +141,30 @@ class Client_data_handler:
                 outputs = []
                 with ag.record():
                     for x,y in zip(data,label):
-                        z = self.__model(x)
-                        t_loss = loss(z,y)
-                        t_loss.backward()
+                        z = self.__net(x)
+                        loss = smc_loss(z,y)
+                        loss.backward()
                         outputs.append(z)
-                metric.update(label,outputs)
                 # gradient mode：梯度信息采集
-                if train_mode == 'gradient':
-                    self.__gradient_collect(batch_size)
-                trainer.step(batch_size)
+                #if train_mode == 'gradient':
+                #    self.__collect_gradient(batch.data[0].shape[0])
+                metric.update(label,outputs)
+                self.updata_local_model(learning_rate,batch.data[0].shape[0])
+                #trainer.step(batch.data[0].shape[0]) #batch.data[0].shape[0] = batch_size
+                # debug
             name, acc = metric.get()
             metric.reset()
             print('training acc at epoch %d/%d: %s=%f'%(i+1,epoch, name, acc))
+        
         # test validation
-        #self.validation(self.__model)
-        self.save_model()
+        # self.validation(self.__net)
+        #grad_w = self.local_gradient['weight'][0]
+        #self.log.new_log_file("grad_my"+str(int(time.time())),grad_w)
+        #grad_m = (origin_net[0].weight.data()[:] - self.__net[0].weight.data()[:])/learning_rate
+        #self.log.new_log_file("grad_his"+str(int(time.time())),grad_m)
 
     def get_model(self):
-        return copy.deepcopy(self.__model)
+        return copy.deepcopy(self.__net)
 
     def get_gradient(self):
         # 上层获取梯度后 模型梯度数据清0
@@ -138,11 +172,11 @@ class Client_data_handler:
         #可优化
         self.local_gradient['weight'].clear()
         self.local_gradient['bias'].clear()
-        self.__init_gradient_list()
+        self.init_gradient_list()
         return gradient
-
+        
     # 测试函数
-    def validation(self,net):
+    def validation(self):
         mnist = mx.test_utils.get_mnist()
         ctx = Tools.utils.try_all_gpus()
         val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100) 
@@ -153,13 +187,13 @@ class Client_data_handler:
             outputs = []
             metric = mx.metric.Accuracy()
             for x in data:
-                outputs.append(net(x))
+                outputs.append(self.__net(x))
             metric.update(label,outputs)
         print('验证集准确率 validation acc:%s=%f'%metric.get())
     
     def save_model(self):
         weight_list = []
-        for layer in self.__model:
+        for layer in self.__net:
             try:
                 weight_list.append(layer.weight.data())
             except:

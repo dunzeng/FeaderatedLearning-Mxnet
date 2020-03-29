@@ -19,4 +19,12 @@ if __name__=="__main__":
         single_process(i)
         time.sleep(5)
     
-    #single_process()
+    #single_process(5)
+    """
+    model =CNN.CNN_Model("LeNet")
+    handler = Client_data_handler.Client_data_handler(model,input_shape=(1,1,28,28))
+    handler.load_model("E:\\PythonProjects\\Mxnet_FederatedLearning\\Fed_Client\\recv_model.params")
+    handler.init_gradient_list()
+    handler.local_train(batch_size=100,learning_rate=0.02)
+    handler.validation()
+    """

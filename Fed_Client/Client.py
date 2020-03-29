@@ -20,14 +20,15 @@ class Client:
         with open(path_base+"\\Fed_Client\\client_config.json",'r') as f:
             json_data = json.load(f)
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
-        self.recv_model_savepath = json_data['default_path']
+        self.recv_model_savepath = json_data['default_path'] # recv_model.params
         # 模型处理类
         self.data_handler = data_handler
         # 训练模式 从Server端同步获取
         self.train_mode = ""
-        self.batch_size = None
-        self.epoch = None
-        
+        self.learning_rate = None
+        # self.batch_size = None
+        # self.epoch = None
+
         # log类
         self.log = log(path_base + "\\Fed_Client\\log")
 
@@ -84,8 +85,9 @@ class Client:
         self.__send_code(message)
         # 同步系统参数
         server_info = utils.recv_class(self.sock)
-        print("同步参数train_mode: ",server_info[0])
-        self.train_mode=server_info[0]
+        print("同步参数train_mode: ",server_info)
+        self.train_mode=server_info["train_mode"]
+        self.learning_rate = server_info["learning_rate"]
 
     def process(self,mode=''):
         # Client端流程 
@@ -97,13 +99,15 @@ class Client:
         self.__param_sync()
         print("******Phase 3******")
         self.data_handler.load_model(self.recv_model_savepath)
+        #self.data_handler.save_model()  #log 模型信息
         print("******Phase 4******")
-        self.data_handler.local_train(batch_size=100,learning_rate=0.02,epoch=10,train_mode=self.train_mode)
+        self.data_handler.local_train(batch_size=100,learning_rate=self.learning_rate,epoch=10,train_mode=self.train_mode)
+        #self.data_handler.save_model()  #log 模型信息
         print("******Phase 5******")
         # 根据训练模式不同 选择回传梯度或者模型
         if self.train_mode=='gradient':
             grad_info = self.data_handler.get_gradient()
-            self.log.new_log_file("grad"+str(int(time.time())),grad_info)
+            #self.log.new_log_file("grad"+str(int(time.time())),grad_info) #备份上传至Server的梯度信息
             self.__upload_information(grad_info)
         elif self.train_mode=='replace':
             model_info = self.data_handler.get_model()

@@ -10,11 +10,14 @@ import json
 from Tools import utils
 from Tools.log import log
 import time
+mx.random.seed(int(time.time()))
+
 """
 网络服务器：
 维护网络通信，与Client交流
 与后台数据处理类进行信息交换
 """
+
 class Sever():
     def __init__(self,server_data_handler):
         # server_data_handler由开发者初始化作为成员参数传入Server类
@@ -79,9 +82,11 @@ class Sever():
         return file_size
     
     def __send_server_param(self,connection):
-        par = []
-        par.append(self.train_mode)
-        utils.send_class(connection,par)
+        # train_mode learning_rate input_shape
+        param_dict = self.data_handler.get_param_dict()
+        param_dict["train_mode"] = self.train_mode
+        print("发送参数 ",param_dict)
+        utils.send_class(connection,param_dict)
          
     def listen(self):
         # C/S架构
@@ -114,13 +119,13 @@ class Sever():
                 # 接收Client信息
                 print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
-                self.log.new_log_file("grad"+str(int(time.time())),data_from_client)
+                #self.log.new_log_file("grad"+str(int(time.time())),data_from_client) # log Client上传的数据
                 self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
                 #val_data_set = self.__get_val_data()
                 self.data_handler.validate_current_model()
                 self.data_handler.current_model_accepted(self.update_model_path)
-                
                 # debug
+                """
                 weight_list = []
                 net = self.data_handler.get_model()
                 for layer in net:
@@ -129,6 +134,8 @@ class Sever():
                     except:
                         continue
                 self.log.new_log_file("weight"+str(int(time.time())),weight_list)
+                """
+
                 print('---模型更新成功---\n\n')
             else:
                 print("Control Code Error ",message)

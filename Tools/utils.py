@@ -194,3 +194,24 @@ def data_iter_consecutive(corpus_indices, batch_size, num_steps, ctx=None):
         X = indices[:, i: i + num_steps]
         Y = indices[:, i + 1: i + num_steps + 1]
         yield X, Y
+
+
+def get_weight_list(net):
+    weight_list = []
+    for layer in net:
+        try:
+            weight = layer.weight.data()[:]
+            weight_list.append(weight)
+        except:
+            continue
+    return weight_list
+
+def get_grad_list(net):
+    grad_list = []
+    for layer in net:
+        try:
+            grad = layer.grad.data()[:]
+            grad_list.append(grad)
+        except:
+            continue
+    return grad_list

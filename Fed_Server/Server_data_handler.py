@@ -13,7 +13,9 @@ import copy
 from Tools import utils
 from Tools.log import log
 import json
- 
+import time
+mx.random.seed(int(time.time()))
+
 class Server_data_handler():
     """
     模型管理类
@@ -42,6 +44,9 @@ class Server_data_handler():
         self.__ctx = utils.try_all_gpus()
         self.model_path = init_model_path
 
+        # log 类
+        self.log = log(path_base + "\\Fed_Server\\log")
+        
         if random_initial_model == True:
             self.__init_model()
         else:
@@ -49,10 +54,7 @@ class Server_data_handler():
                 self.__net.load_parameters(init_model_path,ctx=self.__ctx)
             except:
                 raise ValueError("Invalid init_model_path")   
-         
-        # log 类
-        self.log = log(path_base + "\\Fed_Server\\log")
-        
+    
     def __get_deafault_valData(self):
         mnist = mx.test_utils.get_mnist()
         val_data = {"test_data":mnist['test_data'],"test_label":mnist['test_label']}
@@ -67,8 +69,16 @@ class Server_data_handler():
         self.__net(nd.random.uniform(shape=self.input_shape,ctx=self.__ctx[0]))
         # 保存初始化模型 Server可发送至Client训练
         #self.__net.save_parameters(save_path)
+        weight_list = utils.get_weight_list(self.__net)
+        self.log.new_log_file("weight"+str(int(time.time())),weight_list)
         print("-验证Server端初始模型性能-")
         self.validate_current_model(self.__get_deafault_valData())
+
+    def get_param_dict(self):
+        params = {}
+        params["learning_rate"] = self.learning_rate
+        params["input_shape"] = self.input_shape
+        return params
 
     def validate_current_model(self,val_data_set=None):
         # 给定数据集测试模型性能
@@ -91,20 +101,20 @@ class Server_data_handler():
         # 由Client回传的梯度信息 更新Server模型
         idx = 0
         gradient_w = gradient_info['weight']
-        gradient_b = gradient_info['bias']
+        #gradient_b = gradient_info['bias']
         update_flag = False
         lr = self.learning_rate
         for layer in self.__net:
             try:
-                layer.weight.data()[:] = layer.weight.data()[:] - (lr*gradient_w[idx]).as_in_context(layer.weight.data().context)
-                layer.bias.data()[:] = layer.bias.data()[:] - (lr*gradient_b[idx]).as_in_context(layer.bias.data().context)
+                layer.weight.data()[:] -= gradient_w[idx].as_in_context(layer.weight.data().context) * lr
+                #layer.bias.data()[:] -= gradient_b[idx].as_in_context(layer.bias.data().context) * lr
+                if update_flag is False:
+                    update_flag = True
             except:
                 continue
             idx += 1
-
             if update_flag is not True:
                 update_flag = True
-        
         if update_flag:
             print("-gradient successfully updated-")
         else:

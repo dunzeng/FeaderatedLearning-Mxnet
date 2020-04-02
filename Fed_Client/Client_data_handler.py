@@ -33,7 +33,6 @@ class Client_data_handler:
 
         # 本地梯度维护
         self.local_gradient = {"weight":[],"bias":[]}
-        self.init_gradient_list()
         
         # 本地训练数据路径
         self.train_data_path = train_data_path
@@ -50,6 +49,7 @@ class Client_data_handler:
         self.__net(nd.random.uniform(shape=self.input_shape,ctx=self.__ctx[0]))
     
     def load_model(self,model_path):
+        # 调用加载模型
         print("加载模型 ",model_path)
         self.__net.load_parameters(model_path,ctx=self.__ctx)
 
@@ -66,6 +66,7 @@ class Client_data_handler:
         return data,label
 
     def __collect_gradient(self,batch_size):
+        # 弃置函数
         # local_train中调用 从model中收集梯度信息
         idx = 0
         for layer in self.__net:
@@ -79,7 +80,7 @@ class Client_data_handler:
             self.local_gradient['bias'][idx][:] += grad_b.as_in_context(self.local_gradient['bias'][idx])/batch_size
             idx+=1
 
-    def init_gradient_list(self):
+    def __init_gradient_list(self):
         self.local_gradient['weight'].clear()
         self.local_gradient['bias'].clear()
         for layer in self.__net:
@@ -92,20 +93,19 @@ class Client_data_handler:
             self.local_gradient['bias'].append(nd.zeros(shape=shape_b,ctx=self.__ctx[0]))
         
 
-    def updata_local_model(self,learning_rate,batch_size):
-        #grad_w = self.local_gradient['weight']
-        #grad_b = self.local_gradient['bias']
+    def updata_local_model(self,learning_rate,batch_size, train_mode = "replace"):
         idx = 0
         for layer in self.__net:
             try:
                 grad_w = layer.weight.data().grad
                 grad_b = layer.bias.data().grad
-                # 梯度收集
-                self.local_gradient["weight"][idx] += grad_w/batch_size
-                self.local_gradient["bias"][idx] += grad_b/batch_size
                 # 模型更新
                 layer.weight.data()[:] -= grad_w*learning_rate/batch_size
                 layer.bias.data()[:] -= grad_b*learning_rate/batch_size
+                if train_mode == "gradient":
+                    # 梯度收集
+                    self.local_gradient["weight"][idx] += grad_w/batch_size
+                    self.local_gradient["bias"][idx] += grad_b/batch_size
                 idx += 1
             except:
                 continue
@@ -115,23 +115,12 @@ class Client_data_handler:
         # 利用本地数据训练模型
         # 返回神经网络梯度信息
         # 保留已训练好的模型
+        if train_mode=="gradient":
+            self.__init_gradient_list()
         print("本地训练 batch_size:%d - learning_rate:%f"%(batch_size,learning_rate))
-        #print("Context ", self.__ctx)
-        #print(self.__net)
-        # Debug
-        """
-        mnist = mx.test_utils.get_mnist()
-        train_data = mx.io.NDArrayIter(mnist['train_data'],mnist['train_label'],batch_size=batch_size) 
-        print(mnist['train_data'].shape,mnist['train_label'].shape)
-        origin_net = copy.deepcopy(self.__net) #保存训练前的net
-        """
-        #data,label = train_data['data'],train_data['label']
         data,label = self.train_data_loader()
         train_data = mx.io.NDArrayIter(data,label,batch_size=batch_size,shuffle=True)
-        
-        # 定义损失函数 训练器 验证
         smc_loss = gluon.loss.SoftmaxCrossEntropyLoss()
-        #trainer = gluon.Trainer(self.__net.collect_params(),'sgd',{'learning_rate':learning_rate})
         metric = mx.metric.Accuracy()
         for i in range(epoch):
             train_data.reset()
@@ -145,23 +134,12 @@ class Client_data_handler:
                         loss = smc_loss(z,y)
                         loss.backward()
                         outputs.append(z)
-                # gradient mode：梯度信息采集
-                #if train_mode == 'gradient':
-                #    self.__collect_gradient(batch.data[0].shape[0])
                 metric.update(label,outputs)
-                self.updata_local_model(learning_rate,batch.data[0].shape[0])
-                #trainer.step(batch.data[0].shape[0]) #batch.data[0].shape[0] = batch_size
-                # debug
+                self.updata_local_model(learning_rate,batch.data[0].shape[0])  # 手动更新模型
             name, acc = metric.get()
             metric.reset()
             print('training acc at epoch %d/%d: %s=%f'%(i+1,epoch, name, acc))
         
-        # test validation
-        # self.validation(self.__net)
-        #grad_w = self.local_gradient['weight'][0]
-        #self.log.new_log_file("grad_my"+str(int(time.time())),grad_w)
-        #grad_m = (origin_net[0].weight.data()[:] - self.__net[0].weight.data()[:])/learning_rate
-        #self.log.new_log_file("grad_his"+str(int(time.time())),grad_m)
 
     def get_model(self):
         return copy.deepcopy(self.__net)
@@ -172,9 +150,8 @@ class Client_data_handler:
         #可优化
         self.local_gradient['weight'].clear()
         self.local_gradient['bias'].clear()
-        self.init_gradient_list()
         return gradient
-        
+    
     # 测试函数
     def validation(self):
         mnist = mx.test_utils.get_mnist()
@@ -190,12 +167,3 @@ class Client_data_handler:
                 outputs.append(self.__net(x))
             metric.update(label,outputs)
         print('验证集准确率 validation acc:%s=%f'%metric.get())
-    
-    def save_model(self):
-        weight_list = []
-        for layer in self.__net:
-            try:
-                weight_list.append(layer.weight.data())
-            except:
-                continue
-        self.log.new_log_file("weight"+str(int(time.time())),weight_list)

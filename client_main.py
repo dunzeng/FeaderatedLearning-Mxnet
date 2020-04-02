@@ -20,6 +20,7 @@ if __name__=="__main__":
         time.sleep(5)
     
     #single_process(5)
+    
     """
     model =CNN.CNN_Model("LeNet")
     handler = Client_data_handler.Client_data_handler(model,input_shape=(1,1,28,28))

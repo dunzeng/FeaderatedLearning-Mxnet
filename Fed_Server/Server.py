@@ -2,7 +2,7 @@ import sys
 path_base = "E:\\PythonProjects\\Mxnet_FederatedLearning"
 sys.path.append(path_base)
 import mxnet as mx
-import socket
+from socket import socket
 import os
 import pickle
 from Fed_Server.Server_data_handler import Server_data_handler
@@ -10,6 +10,8 @@ import json
 from Tools import utils
 from Tools.log import log
 import time
+#from multiprocessing import Process
+from threading import Thread
 mx.random.seed(int(time.time()))
 
 """
@@ -34,7 +36,8 @@ class Sever():
         # 保存模型至本地
         self.data_handler.save_current_model2file(self.update_model_path)
         # 网络连接采用TCP协议
-        self.sock = socket.socket()
+        self.server_socket = socket()
+        
         # 训练模式
         self.train_mode = json_data['train_mode']
         # log类
@@ -88,17 +91,59 @@ class Sever():
         print("发送参数 ",param_dict)
         utils.send_class(connection,param_dict)
          
+    def message_handler(self, new_sock, clinet_info):
+        # 线程同步机制未添加
+        print("客户端{}已经连接".format(clinet_info))
+        # 多线程处理Client信息
+        message = self.__recv_code(new_sock)
+        #根据请求码处理请求
+        if message=='1001':
+            # Client池维护
+            # 留空控制码
+            print('请求连接')
+        elif message=='1002':
+            # 发送模型
+            print("******Client端请求模型******")
+            self.__send_model(new_sock)
+            print('---Server Model已发送---\n\n')
+        elif message=='1003':
+            # 参数同步
+            print("******Client端请求系统参数******")
+            self.__send_server_param(new_sock)
+            print("---系统参数已发送---\n\n")
+        elif message=='1004':
+            # 接收Client信息
+            print('******Client端请求上传信息******')
+            data_from_client = self.__recv_data(new_sock)
+            self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
+            self.data_handler.validate_current_model()
+            self.data_handler.current_model_accepted(self.update_model_path)  # 覆盖更新
+            print('---模型更新成功---\n\n')
+        else:
+            print("Control Code Error ",message)
+        
+        new_sock.close()
+    
+    def multithread_lisen(self):
+        # 监听
+        self.server_socket.bind(address=(self.host,self.port))
+        self.server_socket.listen(5)
+        while True:
+            new_sock ,client_info = self.server_socket.accept()
+            p = Thread(target=self.message_handler, args=(new_sock,client_info))
+            p.start()
+    
     def listen(self):
         # C/S架构
         # 网络监听 根据不同的控制码 服务端执行不同操作
         # Client连接->下传模型->接收梯度->更新模型
-        self.sock.bind((self.host,self.port))
-        self.sock.listen(5) #最大连接数
+        self.server_socket.bind((self.host,self.port))
+        self.server_socket.listen(5) #最大连接数
         while True:
             print("监听端口：",(self.host,self.port))
-            connect,addr = self.sock.accept()
+            connect,addr = self.server_socket.accept()
             # 接收到请求 单次处理一个连接请求
-            print("收到连接请求：", addr)    
+            print("收到连接请求：{}".format(addr))    
             message = self.__recv_code(connect)
             #根据请求码处理请求
             if message=='1001':
@@ -119,23 +164,9 @@ class Sever():
                 # 接收Client信息
                 print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
-                #self.log.new_log_file("grad"+str(int(time.time())),data_from_client) # log Client上传的数据
                 self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
-                #val_data_set = self.__get_val_data()
-                self.data_handler.validate_current_model()
+                #self.data_handler.validate_current_model()
                 self.data_handler.current_model_accepted(self.update_model_path)
-                # debug
-                """
-                weight_list = []
-                net = self.data_handler.get_model()
-                for layer in net:
-                    try:
-                        weight_list.append(layer.weight.data())
-                    except:
-                        continue
-                self.log.new_log_file("weight"+str(int(time.time())),weight_list)
-                """
-
                 print('---模型更新成功---\n\n')
             else:
                 print("Control Code Error ",message)

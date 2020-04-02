@@ -14,6 +14,7 @@ from Tools import utils
 from Tools.log import log
 import json
 import time
+from Algorithm.FedAvg import Fed_avg_tool
 mx.random.seed(int(time.time()))
 
 class Server_data_handler():
@@ -23,7 +24,7 @@ class Server_data_handler():
     Algorithm: 模型选择
                梯度处理
     """
-    def __init__(self, model, input_shape, learning_rate, init_model_path="", random_initial_model=True):
+    def __init__(self, model, input_shape, learning_rate, init_model_path="", random_initial_model=True,fed_avg_act=False):
         # model: MXnet中nn.Block类或其派生类
         # data_shape: 模型输入数据形状
         # learning_rate: Server端接收梯度时的更新学习率
@@ -54,6 +55,11 @@ class Server_data_handler():
                 self.__net.load_parameters(init_model_path,ctx=self.__ctx)
             except:
                 raise ValueError("Invalid init_model_path")   
+        
+        # algorithm
+        self.fed_avg = fed_avg_act
+        if self.fed_avg:
+            self.fed_avg_tool = Fed_avg_tool(model,ctx=self.__ctx,cla=5)
     
     def __get_deafault_valData(self):
         mnist = mx.test_utils.get_mnist()
@@ -69,8 +75,6 @@ class Server_data_handler():
         self.__net(nd.random.uniform(shape=self.input_shape,ctx=self.__ctx[0]))
         # 保存初始化模型 Server可发送至Client训练
         #self.__net.save_parameters(save_path)
-        weight_list = utils.get_weight_list(self.__net)
-        self.log.new_log_file("weight"+str(int(time.time())),weight_list)
         print("-验证Server端初始模型性能-")
         self.validate_current_model(self.__get_deafault_valData())
 
@@ -101,20 +105,18 @@ class Server_data_handler():
         # 由Client回传的梯度信息 更新Server模型
         idx = 0
         gradient_w = gradient_info['weight']
-        #gradient_b = gradient_info['bias']
+        gradient_b = gradient_info['bias']
         update_flag = False
         lr = self.learning_rate
         for layer in self.__net:
             try:
                 layer.weight.data()[:] -= gradient_w[idx].as_in_context(layer.weight.data().context) * lr
-                #layer.bias.data()[:] -= gradient_b[idx].as_in_context(layer.bias.data().context) * lr
+                layer.bias.data()[:] -= gradient_b[idx].as_in_context(layer.bias.data().context) * lr
                 if update_flag is False:
                     update_flag = True
             except:
                 continue
             idx += 1
-            if update_flag is not True:
-                update_flag = True
         if update_flag:
             print("-gradient successfully updated-")
         else:
@@ -139,7 +141,14 @@ class Server_data_handler():
         print("处理Client回传数据 mode: ",mode)
         if mode=='replace':
             # replace 模式下直接将传回的模型作为当前模型
-            self.__net = client_data
+            if self.fed_avg is not True:
+                self.__net = client_data
+            else:
+                # fed_avg模式下
+                self.fed_avg_tool.add_fed_model(client_data)
+                # fed_avg参数
+                if self.fed_avg_tool.chk_cla():
+                    self.__net = self.fed_avg_tool.get_averaged_model()
         elif mode=='gradient':
             # 3.22 Client回传梯度
             self.__update_gradient(client_data)
@@ -152,9 +161,5 @@ class Server_data_handler():
     def defined_data_method(self,client_data):
         # 自定义算法使用处理Client数据
         pass
-    
-    # debug
-    def get_model(self):
-        return copy.deepcopy(self.__net)
     
     

@@ -2,5 +2,8 @@
     "port":8080,
     "host":"localhost",
     "update_model_path":"E:\\PythonProjects\\Mxnet_FederatedLearning\\Fed_Server\\current_model.params",
-    "train_mode":"gradient"
+    "train_mode":"gradient",
+    "FedAvg_Epoch":"",
+    "FedAvg_BatchSize":"",
+    "FedAvg_Class":""
 }

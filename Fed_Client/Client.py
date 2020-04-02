@@ -93,21 +93,18 @@ class Client:
         # Client端流程 
         # 初始化参数->请求模型->加载模型->训练->梯度回传
         # 考虑不同算法 朴素Fed,FedAvg回传信息时的处理
-        print("******Phase 1******")
+        print("\n******Phase 1******")
         self.__ask_for_model(self.recv_model_savepath)
-        print("******Phase 2******")
+        print("\n******Phase 2******")
         self.__param_sync()
-        print("******Phase 3******")
+        print("\n******Phase 3******")
         self.data_handler.load_model(self.recv_model_savepath)
-        #self.data_handler.save_model()  #log 模型信息
-        print("******Phase 4******")
+        print("\n******Phase 4******")
         self.data_handler.local_train(batch_size=100,learning_rate=self.learning_rate,epoch=10,train_mode=self.train_mode)
-        #self.data_handler.save_model()  #log 模型信息
-        print("******Phase 5******")
+        print("\n******Phase 5******")
         # 根据训练模式不同 选择回传梯度或者模型
         if self.train_mode=='gradient':
             grad_info = self.data_handler.get_gradient()
-            #self.log.new_log_file("grad"+str(int(time.time())),grad_info) #备份上传至Server的梯度信息
             self.__upload_information(grad_info)
         elif self.train_mode=='replace':
             model_info = self.data_handler.get_model()

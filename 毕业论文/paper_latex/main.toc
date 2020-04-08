@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}引言}{1}%
+\contentsline {section}{\numberline {2}神经网络}{1}%
+\contentsline {subsection}{\numberline {2.1}训练方法}{2}%
+\contentsline {subsection}{\numberline {2.2}随机梯度下降}{2}%
+\contentsline {section}{\numberline {3}分布式学习}{3}%
+\contentsline {subsection}{\numberline {3.1}隐私保护的基本要求}{3}%
+\contentsline {subsection}{\numberline {3.2}学习系统架构}{3}%
+\contentsline {subsection}{\numberline {3.3}学习算法概述}{3}%
+\contentsline {section}{\numberline {4}分布式最优化算法}{4}%
+\contentsline {subsection}{\numberline {4.1}Federated Averaging}{4}%
+\contentsline {subsection}{\numberline {4.2}Selective SGD}{4}%
+\contentsline {subsection}{\numberline {4.3}Deep Gradient Compression}{4}%
+\contentsfinish 

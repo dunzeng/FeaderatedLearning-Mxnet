@@ -1,0 +1,108 @@
+\documentclass[zihao = -4,cn]{oucart}
+
+\title{隐私保护的分布式机器学习系统原型设计与实现}
+\entitle{Prototype design and implementation of distributed machine learning system for privacy protection}
+\author{曾趸}
+\studentid{16090022049}
+\advisor{高峰}
+\department{信息科学与工程学院}{2016级计算机科学与技术}
+
+\cnabstractkeywords{
+基于神经网络的人工智能方法近年来取得巨大的成就， 但是人工智能技术往往是基于大数据，即大数据驱动的人工智能。 但是数据的匮乏往往限制了人工智能的发展，与此同时，数据源之间存在着难以打破的壁垒。一方面，人工智能所需数据来源广泛，遍及各领域，且各领域数据往往是以孤岛形式存在，整合各领域的数据也面临重重阻力。另一方面，随着大数据的发展，世界各国对用户数据隐私和安全管理也日趋严格。因此，要解决大数据的困境，就要保证数据隐私的同时，让机器学习系统高效和准确的利用各自的数据进行学习。我设计了一个分布式机器学习系统的基本模型，在实现模型可利用多方数据信息进行训练的同时，保证了数据隐私安全以及无预测性能损失，并为研究者提供了可拓展的算法接口。实验中，采用当前常用神经网络与数据集测试系统的有效性。
+}{
+神经网络，分布式，隐私保护
+}
+\enabstractkeywords{
+Artificial intelligence method based on neural network has accomplished great achievements in recent years, and artificial intelligence technology is often based on big data, that is, big data-driven artificial intelligence. But the lack of data often limits the development of artificial intelligence. At the same time, there are barriers between data sources that are hard to break. On the one hand, AI needs a wide range of data sources, covering all fields, and the data in all fields are often in the form of isolated islands, so integrating the data in all fields also faces many obstacles. On the other hand, with the development of big data, the privacy and security management of user data are increasingly strict in the world. Therefore, in order to solve the dilemma of big data, it is necessary to ensure the privacy of data, at the same time, let the machine learning system efficiently and accurately use their own data for learning. I designed a basic model of distributed machine learning system, which can use multi-party data for model collaborative training, at the same time, ensure the data privacy security and no prediction accuracy loss, and provide researchers with scalable algorithm interface. And in the experiment, I use the current commonly used neural network and data set to test the effectiveness of the system.
+}{
+neural network, distributed ML, privacy-preserving
+}
+
+\begin{document}
+
+\makecover
+
+\makesignature
+
+\makeabstract
+
+\thispagestyle{tableofcontents}  
+\tableofcontents
+
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1} 
+% 正文内容
+% 建议使用 \input{<文件名>} 指令引用其他文件
+\section{引言}
+1956年，在由达特茅斯学院举办的一次会议上，计算机专家约翰·麦卡锡提出了“人工智能”一词。 1997年5月11日，IBM的计算机系统“深蓝”战胜了国际象棋世界冠军卡斯帕罗夫。2006年，Hinton在神经网络的深度学习领域取得突破\cite{hinton2006fast}，人类又一次看到机器赶超人类的希望,也是标志性的技术进步。2016~2017年，AlphaGo战胜围棋冠军。至今为止，深度学习已经取得了令人瞩目的成就，但当前的人工智能发展仍然受到很多限制。AlphaGo使用了超过300,000场棋局数据训练，才取得如此成绩，由此可见，训练数据的质量和数量是影响学习模型泛化效果的一大重要因素。\par
+在这个信息爆炸的时代，人类社会中存有大量有用的数据，但是将如此庞大的分散数据集合起来开销极大。例如，智能手机中存有用户的个性化信息。与此同时，世界各国和企业对隐私数据的保护和管理方面的意识日渐加强，例如，欧盟于2018年5月提出的the General Data Protection Regulation (GDPR)\cite{voigt2017eu}旨在保护用户的个人隐私和数据安全。中国于2017年颁布的《中华人民共和国网络安全法》和《中华人民共和国民法通则》要求，互联网企业不得泄露或篡改其收集的个人信息，在与第三方进行数据交易时，必须确保拟议的合同遵守法律规定的数据保护义务。使得社会中的大量数据不能被合法的收集起来（如用户手机上的数据），并使数据源之间形成壁垒，且领域间的数据以孤岛形式存在。这些法规的建立，显然将有助于建立一个更具公民性的社会，但也将对人工智能目前常用的数据交易程序提出新的挑战。\par
+现今，传统的人工智能学习方法往往是在单一机构下，使用已预处理好的大量数据训练，再将其部署至应用。其中，数据的收集和预处理需要耗费大量的资源。诸多限制例如GDPR和《网络安全法》使得数据的收集和预处理面临诸多限制因素，如何在不违反相关法律法规、不泄露隐私的条件下，合理地利用处于数据孤岛状态的各方数据，训练出一个有效的模型，是现如今面临的问题和挑战。\par
+在本文中，我设计了一个分布式学习系统原型框架，提供了隐私保护、分布式部署、多方网络交流模块等一系列功能，并能够为用户提供该方向算法研究的快速实现解决方案。\par
+
+\section{神经网络}
+深度神经网络从大量高维数据中提取复杂特征，并且利用这些特征建立一个输入-输出模型。其结构往往含有多隐含神经网络层，从而实现一个将高维度输入映射至低纬度输出的一个方法。在本文的实验方法中，主要面向神经网络的监督学习方法，即输入的数据带有正确的输出标签。多层神经网络是最常见的学习网络架构【图】。\par
+在一个典型的多层网络中，每个神经元接收前一层神经元的输出信号$x$和一个特殊神经元发出的偏置信号$b$，然后计算其输入的加权平均值$wx+b$，称为总输入。神经元的输出是通过对输入值应用非线性激活函数来计算的。神经网络第$k$层的输出$a_k = f(W_ka_{k-1})$,其中$f$为激活函数而$W_k$是决定每个输入信号贡献的权重矩阵。如果这个神经网络是一个分类模型，即将输入数据分类为有限个类（每个类由不同的输出神经元表示），那么最后一层神经网络的激活函数通常为softmax函数$f(z_j)=e^{z_j}\cdot(\sum_k{e^{z_k}})^{-1}$,$\forall{j}$。在这种情况下，最后一层的任意神经元$j$输出为输入数据是属于当前类$j$的相对概率。\par
+
+\subsection{训练方法}
+神经网络的权值学习是一个非线性函数的优化任务。在监督学习方面，目标函数是关于神经网络的输出和标签值的函数，并常采用梯度下降来解决这个问题。\par
+在神经网络学习中，随机初始化神经元权值，作为梯度下降的初始点。进行一次前向传播和反向传播过程，获得每个神经元的梯度。并利用梯度更新神经网络权值，并作为下一次梯度下降的起点。重复上述过程，直到模型收敛或达到要求。关于神经网络的前向传播和反向传播计算细节可见\cite{周志华2016机器学习}。 \par
+
+\subsection{随机梯度下降}
+参数的梯度可以在所有可用数据上平均。这个优化方法被称为批梯度下降（BGD），但是它的效率并不高，尤其是当训练的数据集过大时。随机梯度下降算法将数据集拆分为一个个批次，随机抽取一个批次来计算并更新参数，所以又称为MGBD（mini-batch gradient descent）。本文的实验方法中，主要采用了随机梯度下降作为优化算法。\par
+设$W$为神经网络的所有参数权值，特别的$W_j$为神经网络某一层的参数权值。$E$为训练的目标函数，E通常为$L^2$范数或者交叉熵\cite{murphy2012machine}。反向传播过程会计算目标函数E关于每一层权值的偏导，然后通过将权值减去梯度的方法更新参数。对于单层参数$W_j$的更新方法如下：\par
+\begin{equation}
+W_i := W_i - \alpha \frac{\partial E_i}{\partial W_i}\\
+\end{equation}
+其中$\alpha$是学习率，$E_i$是在数据集第i个小批量的计算结果。
+
+\section{分布式学习}
+大规模分布式机器学习系统为解决怎样协调和利用大量的GPU集群，来完成深度学习模型的训练和获取好的收敛，达到相对较高的性能。 分布式机器学习在如何分配训练任务，调配计算资源，协调各个功能模块，以达到训练速度与精度的平衡方面，已经有了较为成熟的研究成果【】。但是其主要是为了解决训练数据集太大和模型规模太大的问题，数据集仍然是集中于集群系统之中，仍存有引言中我提到的数据隐私问题。
+\subsection{隐私保护的基本要求}
+关于神经网络的学习过程，简单的可以抽象为四步：
+\begin{itemize}
+	\item [1)]
+	随机初始化网络模型参数，作为模型迭代起点。
+	\item [2)]
+	利用训练数据集进行前向传播，计算损失函数。
+	\item [3)]
+	反向传播计算各层参数关于损失函数的梯度。
+	\item [4)]
+	更新各层网络参数，回到步骤2)，直至模型收敛或达到要求。
+\end{itemize}
+\par
+隐私保护的基本要求即为：在模型训练的过程中，本地数据自始至终不能离开本地。因此，可以将学习过程中的模型分为全局模型和本地模型，且本地模型与全局模型保持同步。数据持有方可利用本地数据对本地模型进行训练，反向传播得到的梯度信息传到全局模型管理方，用于全局模型的更新。【示意图】
+\subsection{学习系统架构}
+基于隐私保护的学习算法思想，基于参数服务器的通信拓扑结构是最为适合该学习算法的分布式系统架构。参数服务器的架构可以把参数服务器看做是一个媒介，在工作节点之间的媒介，负责数据交流，通信只发生在工作节点和参数服务器之间。\par
+参数服务器负责管理全局模型，并维护与工作节点之间的通信和信息交流。工作节点即为数据的持有方，工作节点负责维护本地模型，并于参数服务器协同工作，合理利用本地数据更新全局模型。
+\subsection{学习算法概述}
+为了描述方便，仅描述参数服务器与单工作节点间的算法流程关系。综合隐私保护的限制，即数据不能离开本地的要求，与C/S架构的分布式系统，可将分布式学习算法抽象如下：
+\begin{itemize}
+	\item [1)]
+	参数服务器随机初始化全局模型$W^{(global)}$，工作节点与参数服务器通信获得模型$W^{(local)}$，特别的，$W^{(global)} = W^{(local)}$。
+	\item [2)]
+	工作节点利用本地数据执行模型的学习过程（3.1节中提到），并更新本地模型$W^{(local)}$。
+	\item [3)]
+	工作节点将本地训练的模型梯度上传至参数服务器。
+	\item [4)]
+	参数服务器接收梯度，并根据梯度信息更新全局模型$W^{(global)}$，其中更新方法将在第四章中讨论。
+\end{itemize}
+\section{分布式最优化算法}
+最优化算法的设计仍然是该方向研究的热点问题之一，合理的优化算法可以在加速模型收敛的同时，达到较好的泛化效果。在这个方面，已经有很多优秀的工作成果，其中Federated Averaging\cite{mcmahan2016communication}在通信带宽较小以及数据分布不均衡的学习场景下，在Mnist数据集下达到了较好的效果。Selective SGD\cite{shokri2015privacy}使用户可以在提高模型泛化性能和数据隐私强度之间权衡。Deep Gradient Compression\cite{lin2017deep}方法在保证模型收敛的同时，大幅度降低了服务器与工作节点之间的通信资源消耗。在本章我将讨论该三个方法的具体内容，而后将在我的系统原型下，开发并测试以上三个算法的有效性，从而证明系统的可用性。具体实验内容将在第四章讨论。
+\subsection{Federated Averaging}
+\subsection{Selective SGD}
+\subsection{Deep Gradient Compression}
+\newpage
+%\bibliographystyle{unsrt}
+\bibliography{refer}
+
+\newpage
+\begin{center}
+\zihao{3} \textbf{致谢} \\
+\end{center}
+
+\newpage
+\begin{center}
+\zihao{3} \textbf{附录} \\
+\end{center}
+\end{document}

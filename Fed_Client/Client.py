@@ -16,7 +16,7 @@ import time
 class Client:
     def __init__(self,data_handler):
         # 网络通信类
-        self.sock = socket.socket()
+        self.client_sock = socket.socket()
         with open(path_base+"\\Fed_Client\\client_config.json",'r') as f:
             json_data = json.load(f)
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
@@ -41,14 +41,14 @@ class Client:
     def __send_code(self,msg_code=""):
         # 创建socket连接，发送控制码
         # socket连接将被保存在self.sock中
-        self.sock = socket.socket()
-        self.sock.connect(self.server_addr)
-        self.sock.send(msg_code.encode('utf-8'))
+        self.client_sock = socket.socket()
+        self.client_sock.connect(self.server_addr)
+        self.client_sock.send(msg_code.encode('utf-8'))
 
     def __recv_code(self):
         # 从socket中获得控制码信息
         # 控制码大小为4bit
-        msg_code = self.sock.recv(4).decode()
+        msg_code = self.client_sock.recv(4).decode()
         return msg_code
 
     def __upload_information(self, information):
@@ -57,8 +57,8 @@ class Client:
         message = '1004'
         print("正向Server端发送信息 ",message)
         self.__send_code(message)
-        utils.send_class(self.sock, information)
-        self.sock.close()
+        utils.send_class(self.client_sock, information)
+        self.client_sock.close()
 
     def __ask_for_model(self,save_path=""):
         # 向服务端请求模型
@@ -69,22 +69,22 @@ class Client:
         self.__send_code(message)
         # 接收模型
         # 下载模型并写入文件
-        file_size = int(self.sock.recv(1024).decode())
+        file_size = int(self.client_sock.recv(1024).decode())
         has_recv = 0
         f = open(save_path,'wb')
         while has_recv != file_size:
-            data = self.sock.recv(1024)
+            data = self.client_sock.recv(1024)
             f.write(data)
             has_recv += len(data)
         f.close()
-        self.sock.close()
+        self.client_sock.close()
         print("模型下载结束")
     
     def __param_sync(self):
         message = '1003'
         self.__send_code(message)
         # 同步系统参数
-        server_info = utils.recv_class(self.sock)
+        server_info = utils.recv_class(self.client_sock)
         print("同步参数train_mode: ",server_info)
         self.train_mode=server_info["train_mode"]
         self.learning_rate = server_info["learning_rate"]
@@ -100,7 +100,7 @@ class Client:
         print("\n******Phase 3******")
         self.data_handler.load_model(self.recv_model_savepath)
         print("\n******Phase 4******")
-        self.data_handler.local_train(batch_size=100,learning_rate=self.learning_rate,epoch=10,train_mode=self.train_mode)
+        self.data_handler.local_train(batch_size=600,learning_rate=self.learning_rate,epoch=5,train_mode=self.train_mode)
         print("\n******Phase 5******")
         # 根据训练模式不同 选择回传梯度或者模型
         if self.train_mode=='gradient':

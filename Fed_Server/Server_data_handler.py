@@ -99,8 +99,10 @@ class Server_data_handler():
             for x in data:
                 outputs.append(self.__net(x))
             metric.update(label,outputs)
-        print('验证集准确率 validation acc:%s=%f'%metric.get())
-
+        name,acc = metric.get()
+        print('验证集准确率 validation acc:%s=%f'%(name,acc))
+        return acc
+        
     def __update_gradient(self,gradient_info):
         # 由Client回传的梯度信息 更新Server模型
         idx = 0

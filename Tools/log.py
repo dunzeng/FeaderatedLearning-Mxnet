@@ -16,6 +16,6 @@ class log:
         # 将info信息输入file_name文件中
         path = self.__log + "\\" + str(file_name)
         file_handle = open(path,"w")
-        file_handle.write(str(info))
+        file_handle.write(str(info)+"\n")
         file_handle.close()
         

@@ -8,12 +8,12 @@ import pickle
 from Fed_Server.Server_data_handler import Server_data_handler
 import json
 from Tools import utils
-from Tools.log import log
+#from Tools.log import log
 import time
 #from multiprocessing import Process
 from threading import Thread
 mx.random.seed(int(time.time()))
-
+from Fed_Server.Server_log import server_log
 """
 网络服务器：
 维护网络通信，与Client交流
@@ -41,7 +41,10 @@ class Sever():
         # 训练模式
         self.train_mode = json_data['train_mode']
         # log类
-        self.log = log(path_base + "\\Fed_Server\\log")
+        self.log = server_log(path_base + "\\Fed_Server\\log")
+        # 通信轮数
+        self.communicate_round = 0
+
 
     def __get_val_data(self):
         mnist = mx.test_utils.get_mnist()
@@ -92,6 +95,7 @@ class Sever():
         utils.send_class(connection,param_dict)
          
     def message_handler(self, new_sock, clinet_info):
+        # 多线程响应
         # 线程同步机制未添加
         print("客户端{}已经连接".format(clinet_info))
         # 多线程处理Client信息
@@ -121,11 +125,11 @@ class Sever():
             print('---模型更新成功---\n\n')
         else:
             print("Control Code Error ",message)
-        
         new_sock.close()
     
     def multithread_lisen(self):
         # 监听
+        # 多线程后台执行
         self.server_socket.bind(address=(self.host,self.port))
         self.server_socket.listen(5)
         while True:
@@ -165,9 +169,14 @@ class Sever():
                 print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
                 self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
-                #self.data_handler.validate_current_model()
+                acc = self.data_handler.validate_current_model()
                 self.data_handler.current_model_accepted(self.update_model_path)
                 print('---模型更新成功---\n\n')
+                self.log.record_acc(acc)
+                self.log.add_cummu_round()
+            elif message=='6666':
+                self.log.record_to_file()
+                break
             else:
                 print("Control Code Error ",message)
             connect.close()

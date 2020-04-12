@@ -1,7 +1,7 @@
 # LSTM 下一词预测
 # mxnet.gluon.rnn.LSTM
 import sys
-path_base = "E:\PythonProjects\Mxnet_FederatedLearning"
+path_base = "E:\\PythonProjects\\Mxnet_FederatedLearning"
 sys.path.append(path_base)
 import Tools
 import mxnet as mx

@@ -1,0 +1,33 @@
+%Server端算法
+\begin{algorithm}
+\caption{Federated SGD
+\\$w$为模型权重参数; $\eta$为模型的学习率; $l(w;b)$为目标函数。}
+\label{FedSGDServer}
+{\bfseries Server Excutes:}
+\begin{algorithmic}
+\STATE 初始化模型权重参数$w_0$
+\REPEAT
+\STATE 等待Client连接Server
+\IF{Client请求模型}
+\STATE 将模型参数下发至Clien
+\ELSIF{Client回传模型}
+\STATE 接收Client回传的模型$w_t$
+\STATE Server更新模型 $w_{t+1} := w_{t}$
+\ELSIF{Client回传梯度}
+\STATE 接收Client回传的梯度$\nabla{l(w;b)}$
+\STATE Server更新模型 $w_{t+1} := w_t - \eta\nabla(l(w;b))$
+\ELSE
+\STATE 非法连接
+\ENDIF
+\UNTIL{模型达到收敛条件}
+\end{algorithmic}
+%Client端算法
+{\bfseries Client Excutes:}
+\begin{algorithmic}
+\STATE 向Server请求模型参数$w_t$
+\FOR{batch $b \in B$}
+\STATE 更新模型 $w_t := w_t-\eta\nabla{l(w;b)}$
+\ENDFOR
+\STATE 返回模型$w_t$或梯度$\sum{\nabla{l(w;b)}}$至Server 
+\end{algorithmic}
+\end{algorithm}

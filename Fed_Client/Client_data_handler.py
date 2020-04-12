@@ -26,10 +26,11 @@ class Client_data_handler:
         self.__ctx = Tools.utils.try_all_gpus()
         self.__random_init_model()
         
-        # 初始化存储路径
+        """
         with open(path_base+"\\Fed_Client\\data_handler_config.json",'r') as f:
             json_data = json.load(f)
         self.local_data_file = (json_data['local_data_path'],json_data['local_label_path'])
+        """
 
         # 本地梯度维护
         self.local_gradient = {"weight":[],"bias":[]}
@@ -60,9 +61,11 @@ class Client_data_handler:
         if self.train_data_path!=None:
             data = np.load(self.train_data_path['data'])
             label = np.load(self.train_data_path['label'])
+        """
         else:
             data = np.load(self.local_data_file[0])
             label = np.load(self.local_data_file[1])
+        """
         return data,label
 
     def __collect_gradient(self,batch_size):
@@ -117,8 +120,8 @@ class Client_data_handler:
         # 保留已训练好的模型
         if train_mode=="gradient":
             self.__init_gradient_list()
-        print("本地训练 batch_size:%d - learning_rate:%f"%(batch_size,learning_rate))
         data,label = self.train_data_loader()
+        print("本地训练 batch_size:%d - learning_rate:%f"%(batch_size,learning_rate))
         train_data = mx.io.NDArrayIter(data,label,batch_size=batch_size,shuffle=True)
         smc_loss = gluon.loss.SoftmaxCrossEntropyLoss()
         metric = mx.metric.Accuracy()

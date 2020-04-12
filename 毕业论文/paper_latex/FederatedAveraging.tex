@@ -1,0 +1,29 @@
+\renewcommand{\algorithmiccomment}[1]{// #1}
+\begin{algorithm}
+\caption{Federated Averaging\\
+Client总数为$K$且以$k$标志；$B$是本地数据批量大小；$E$是本地训练epoch；$\eta$是学习率。}
+\label{FedAvg}
+{\bfseries Server Excutes:}
+\begin{algorithmic}
+\STATE 初始化模型权重参数$w_0$
+\FOR{每一轮 t}
+\STATE $m \leftarrow \max(C\cdot K,1)$
+\STATE $S_t$ $\leftarrow$ (随机选取Clients子集,其数量为m)
+\FOR{每一个Client $k \in S_t$} 
+\STATE $w_{t+1}^{k}\leftarrow$ClientUpdate($k$,$w_t$) \COMMENT{各Client间并行计算}
+\ENDFOR
+\STATE $w_{t+1}\leftarrow\sum_{k=1}^{K}\frac{n_k}{n}w_{t+1}^k$
+\ENDFOR
+\end{algorithmic}
+
+{\bfseries ClientUpdate($k,w$):} // 在Client $k$上运行
+\begin{algorithmic}
+\STATE $\mathcal{B}$ $\leftarrow$ 将本地数据集以batch大小$B$分割
+\FOR{每一个本地epoch $i$ 从1到$E$}
+\FOR{batch $b \in \mathcal{B}$}
+\STATE $w\leftarrow w-\eta\nabla{l(w;b)}$
+\ENDFOR
+\ENDFOR
+\STATE 返回$w$至Server
+\end{algorithmic}
+\end{algorithm}

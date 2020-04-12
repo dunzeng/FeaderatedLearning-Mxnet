@@ -7,7 +7,8 @@
 \contentsline {subsection}{\numberline {3.2}学习系统架构}{3}%
 \contentsline {subsection}{\numberline {3.3}学习算法概述}{3}%
 \contentsline {section}{\numberline {4}分布式最优化算法}{4}%
-\contentsline {subsection}{\numberline {4.1}Federated Averaging}{4}%
-\contentsline {subsection}{\numberline {4.2}Selective SGD}{4}%
-\contentsline {subsection}{\numberline {4.3}Deep Gradient Compression}{4}%
+\contentsline {subsection}{\numberline {4.1}Federated SGD}{4}%
+\contentsline {subsection}{\numberline {4.2}Federated Averaging}{6}%
+\contentsline {section}{\numberline {5}系统架构}{8}%
+\contentsline {section}{\numberline {6}实验}{8}%
 \contentsfinish 

@@ -18,46 +18,34 @@ from Algorithm.FedAvg import Fed_avg_tool
 mx.random.seed(int(time.time()))
 
 class Server_data_handler():
-    """
-    模型管理类
-    管理服务器端内部参数处理
-    Algorithm: 模型选择
-               梯度处理
-    """
-    def __init__(self, model, input_shape, learning_rate, init_model_path="", random_initial_model=True,fed_avg_act=False):
+    # 模型管理类
+    # 管理服务器端内部参数处理，Server类调用该类方法
+
+    def __init__(self, model, input_shape, learning_rate, init_model_path="", init_model_randomly=True,fed_avg_act=False):
         # model: MXnet中nn.Block类或其派生类
         # data_shape: 模型输入数据形状
         # learning_rate: Server端接收梯度时的更新学习率
         # random_inital_model: 是否随机生辰初始模型
         # init_model_dir: 随机初始化模型保存路径
 
-        #with open(path_base+"\\Fed_Server\\param_config.json",'r') as f:
-            # 初始化系统参数
-            #json_data = json.load(f)
-        #self.learning_rate = json_data['learning_rate']
-        #init_model_path = json_data['init_model_path'] 
-        #self.update_model_path = json_data['updata_model_path']
-
         # 初始化模型
         self.__net = model
-        self.input_shape = input_shape
-        self.learning_rate = learning_rate
         self.__ctx = utils.try_all_gpus()
-        self.model_path = init_model_path
-
-        # log 类
+        self.input_shape = input_shape  # 训练数据的形状
+        self.learning_rate = learning_rate  # 学习率
+        self.model_path = init_model_path   # init_model_randomly为false时会使用该路径下的模型初始化
+        # log类
+        # 存储系统日志信息
         self.log = log(path_base + "\\Fed_Server\\log")
-        
-        if random_initial_model == True:
+        if init_model_randomly == True:
             self.__init_model()
         else:
             try:
                 self.__net.load_parameters(init_model_path,ctx=self.__ctx)
             except:
                 raise ValueError("Invalid init_model_path")   
-        
-        # algorithm
-        self.fed_avg = fed_avg_act
+        # 算法拓展
+        self.fed_avg = fed_avg_act # Federated Averaging
         if self.fed_avg:
             self.fed_avg_tool = Fed_avg_tool(model,ctx=self.__ctx,cla=5)
     
@@ -79,6 +67,7 @@ class Server_data_handler():
         self.validate_current_model(self.__get_deafault_valData())
 
     def get_param_dict(self):
+        # 获得系统参数信息
         params = {}
         params["learning_rate"] = self.learning_rate
         params["input_shape"] = self.input_shape
@@ -91,6 +80,8 @@ class Server_data_handler():
         #val_data = mx.io.NDArrayIter(val_x,val_y,batch_size=100)
         mnist = mx.test_utils.get_mnist()
         val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100)
+        # 待通用化
+
         for batch in val_data:
             data = gluon.utils.split_and_load(batch.data[0],ctx_list=self.__ctx,batch_axis=0)
             label = gluon.utils.split_and_load(batch.label[0],ctx_list=self.__ctx,batch_axis=0)
@@ -123,13 +114,6 @@ class Server_data_handler():
             print("-gradient successfully updated-")
         else:
             print("-oops! gradient failure-")
-    
-    def current_model_accepted(self,save_dir):
-        try:
-            print("Server模型覆盖更新",save_dir)
-            self.__net.save_parameters(save_dir)
-        except:
-            raise ValueError("Invalid path %s"&save_dir)
 
     def save_current_model2file(self,save_dir):
         try:
@@ -139,7 +123,7 @@ class Server_data_handler():
             raise ValueError("Invalid path %s"&save_dir)
         
     def process_data_from_client(self, client_data, mode):
-        # mode: replace模型替换 gradient梯度更新 defined自定义
+        # mode: replace 模型直接替换 gradient 梯度更新 defined由用户自定义
         print("处理Client回传数据 mode: ",mode)
         if mode=='replace':
             # replace 模式下直接将传回的模型作为当前模型
@@ -161,7 +145,7 @@ class Server_data_handler():
             raise ValueError("Invalid mode %s. Options are replace, gradient and defined"&mode)
 
     def defined_data_method(self,client_data):
-        # 自定义算法使用处理Client数据
+        # 用户可重写该函数算法使用处理Client数据
         pass
     
     

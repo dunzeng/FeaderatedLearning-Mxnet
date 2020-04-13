@@ -4,6 +4,6 @@ from mxnet.gluon import nn
 
 def MLP():
     net = nn.Sequential()
-    net.add(nn.Dense(200,activation='relu'),
-            nn.Dense(200,activation='relu'),
+    net.add(nn.Dense(128,activation='relu'),
+            nn.Dense(64,activation='relu'),
             nn.Dense(10))

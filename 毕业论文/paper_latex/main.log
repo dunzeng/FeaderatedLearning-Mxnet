@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  12 APR 2020 13:31
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  12 APR 2020 22:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -769,7 +769,7 @@ LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <10.53937> not available
 
 ] [8
 
-] (./main.bbl
+] [9] (./main.bbl
 Underfull \hbox (badness 1629) in paragraph at lines 32--36
 []\TU/lmr/m/n/12.045 MCMAHAN H B, MOORE E, RAMAGE D, et al.  Communication-
  []
@@ -780,12 +780,12 @@ Underfull \hbox (badness 3635) in paragraph at lines 38--43
 ]//
  []
 
-) [9]
+) [10]
 
 LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
-(Font)              using `TU/SimSun(1)/m/n' instead on input line 113.
+(Font)              using `TU/SimSun(1)/m/n' instead on input line 128.
 
-[10] [11] (./main.aux (./FederatedSGD.aux) (./FederatedAveraging.aux))
+[11] [12] (./main.aux (./FederatedSGD.aux) (./FederatedAveraging.aux))
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.22pt have occurred.
@@ -803,4 +803,4 @@ Here is how much of TeX's memory you used:
  1348 hyphenation exceptions out of 8191
  63i,11n,70p,2554b,608s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on main.pdf (16 pages).
+Output written on main.pdf (17 pages).

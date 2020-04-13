@@ -27,7 +27,6 @@ def network_layers_filter(network):
             break
     return (weight,bias),depth
 
-
 def network_grad_fileter(network):
     params = {}
     depth = 0
@@ -42,10 +41,11 @@ def network_grad_fileter(network):
             break
     return params,depth
 
-# 返回梯度字典 
-# 待更新为梯度列表 方便梯度更新的统一化2.18
-# traverse_list表示带有权值的网络参数
+
 def direct_gradient(network_old,network_new,learning_rate,traverse_list=[]):
+    # 返回梯度字典 
+    # 待更新为梯度列表 方便梯度更新的统一化2.18
+    # traverse_list表示带有权值的网络参数
     gradient_w = []
     gradient_b = []
     depth = 0
@@ -60,8 +60,8 @@ def direct_gradient(network_old,network_new,learning_rate,traverse_list=[]):
         depth+=1
     return (gradient_w,gradient_b)
 
-# 将data切割为大小为block_size每块的列表
 def cut_bytes(data,block_size):
+    # 将data切割为大小为block_size每块的列表
     size = len(data)
     ret = []
     idx = 0
@@ -74,8 +74,10 @@ def cut_bytes(data,block_size):
         idx += block_size 
     return ret
 
-# 利用pickle模块将data按照connect连接发送
+
 def send_class(connect, class_data):
+    # 利用pickle模块将data序列化，并通过connect发送
+    # connect参数为socket连接对象
     data = pickle.dumps(class_data)
     data_list = cut_bytes(data,1024)
     list_size = len(data_list)
@@ -85,10 +87,9 @@ def send_class(connect, class_data):
     for i in tqdm(range(list_size),desc="Sending Data"):
         connect.send(data_list[i])
 
-
-# 与send_class成对使用  此端为接收方
-# 1024bit为1Byte
 def recv_class(connect):
+    # 与send_class成对使用，从socket连接中接收数据
+    # 1024bit为1Byte
     tmp_data = connect.recv(1024)
     try:
         block_size = int(tmp_data.decode())
@@ -101,9 +102,10 @@ def recv_class(connect):
     class_info = pickle.loads(data)
     return class_info
 
-# 选取从大到小排列占比为ratio的矩阵值，其余置零  传入numpy矩阵
-# 计算速度过慢?
+
 def max_parse_gradient_matrix(theta,matrix):
+    # 选取从大到小排列占比为ratio的矩阵值，其余置零，传入numpy矩阵
+    # 计算速度过慢?
     sort_list = []
     mat_np = matrix.asnumpy()
     for x in np.nditer(mat_np):
@@ -116,7 +118,6 @@ def max_parse_gradient_matrix(theta,matrix):
             x[...] = 0
     return mat_np
 
-#未测试
 def max_parse_gradient_matrix_list(theta, matrix_set):
     sort_list = []
     num_of_elements = 0
@@ -136,7 +137,7 @@ def max_parse_gradient_matrix_list(theta, matrix_set):
     
 
 def try_all_gpus():
-    """Return all available GPUs, or [mx.cpu()] if there is no GPU."""
+    # 返回所有可用GPUs，如果没有GPC则返回[mx.cpu()]
     ctxes = []
     try:
         for i in range(16):
@@ -149,69 +150,11 @@ def try_all_gpus():
         ctxes = [mx.cpu()]
     return ctxes
 
-
 def try_gpu():
-    """If GPU is available, return mx.gpu(0); else return mx.cpu()."""
+    # 返回GPU，若无则返回CPU
     try:
         ctx = mx.gpu()
         _ = nd.array([0], ctx=ctx)
     except mx.base.MXNetError:
         ctx = mx.cpu()
     return ctx
-
-def data_iter_random(corpus_indices, batch_size, num_steps, ctx=None):
-    #随机采样
-    # 减1是因为输出的索引是相应输入的索引加1
-    num_examples = (len(corpus_indices) - 1) // num_steps
-    epoch_size = num_examples // batch_size
-    example_indices = list(range(num_examples))
-    random.shuffle(example_indices)
-
-    # 返回从pos开始的长为num_steps的序列
-    def _data(pos):
-        return corpus_indices[pos: pos + num_steps]
-
-    for i in range(epoch_size):
-        # 每次读取batch_size个随机样本
-        i = i * batch_size
-        batch_indices = example_indices[i: i + batch_size]
-        X = [_data(j * num_steps) for j in batch_indices]
-        Y = [_data(j * num_steps + 1) for j in batch_indices]
-        # yield语法
-        # 将函数构造为一个迭代器 节约内存
-        yield nd.array(X, ctx), nd.array(Y, ctx)
-
-def data_iter_consecutive(corpus_indices, batch_size, num_steps, ctx=None):
-    #相邻采样
-    corpus_indices = nd.array(corpus_indices, ctx=ctx)
-    data_len = len(corpus_indices)
-    batch_len = data_len // batch_size
-    indices = corpus_indices[0: batch_size*batch_len].reshape((
-        batch_size, batch_len))
-    epoch_size = (batch_len - 1) // num_steps
-    for i in range(epoch_size):
-        i = i * num_steps
-        X = indices[:, i: i + num_steps]
-        Y = indices[:, i + 1: i + num_steps + 1]
-        yield X, Y
-
-
-def get_weight_list(net):
-    weight_list = []
-    for layer in net:
-        try:
-            weight = layer.weight.data()[:]
-            weight_list.append(weight)
-        except:
-            continue
-    return weight_list
-
-def get_grad_list(net):
-    grad_list = []
-    for layer in net:
-        try:
-            grad = layer.grad.data()[:]
-            grad_list.append(grad)
-        except:
-            continue
-    return grad_list

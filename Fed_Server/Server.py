@@ -8,19 +8,15 @@ import pickle
 from Fed_Server.Server_data_handler import Server_data_handler
 import json
 from Tools import utils
-#from Tools.log import log
 import time
-#from multiprocessing import Process
 from threading import Thread
 mx.random.seed(int(time.time()))
 from Fed_Server.Server_log import server_log
-"""
-网络服务器：
-维护网络通信，与Client交流
-与后台数据处理类进行信息交换
-"""
 
 class Sever():
+    # 网络服务器：
+    # 维护网络通信，与Client交流
+    # 与后台数据处理类进行信息交换
     def __init__(self,server_data_handler):
         # server_data_handler由开发者初始化作为成员参数传入Server类
         # 从Json文件中读取系统配置
@@ -37,7 +33,6 @@ class Sever():
         self.data_handler.save_current_model2file(self.update_model_path)
         # 网络连接采用TCP协议
         self.server_socket = socket()
-        
         # 训练模式
         self.train_mode = json_data['train_mode']
         # log类
@@ -45,11 +40,6 @@ class Sever():
         # 通信轮数
         self.communicate_round = 0
 
-
-    def __get_val_data(self):
-        mnist = mx.test_utils.get_mnist()
-        val_data = [mnist['test_data'],mnist['test_label']]
-        return val_data
 
     def __send_model(self,connection,model_path=""):
         # 将model模型文件发送至Client
@@ -68,7 +58,6 @@ class Sever():
 
     def __recv_data(self,connection):
         # 接收参与者回传梯度
-        # ***下一阶段考虑实现由服务器求梯度下传Client更新模型
         gradient_dict = utils.recv_class(connection)
         return gradient_dict
 
@@ -88,6 +77,7 @@ class Sever():
         return file_size
     
     def __send_server_param(self,connection):
+        # Client向Server请求训练参数
         # train_mode learning_rate input_shape
         param_dict = self.data_handler.get_param_dict()
         param_dict["train_mode"] = self.train_mode
@@ -121,7 +111,7 @@ class Sever():
             data_from_client = self.__recv_data(new_sock)
             self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
             self.data_handler.validate_current_model()
-            self.data_handler.current_model_accepted(self.update_model_path)  # 覆盖更新
+            self.data_handler.save_current_model2file(self.update_model_path)  # 覆盖更新
             print('---模型更新成功---\n\n')
         else:
             print("Control Code Error ",message)
@@ -138,7 +128,6 @@ class Sever():
             p.start()
     
     def listen(self):
-        # C/S架构
         # 网络监听 根据不同的控制码 服务端执行不同操作
         # Client连接->下传模型->接收梯度->更新模型
         self.server_socket.bind((self.host,self.port))
@@ -170,11 +159,12 @@ class Sever():
                 data_from_client = self.__recv_data(connect)
                 self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
                 acc = self.data_handler.validate_current_model()
-                self.data_handler.current_model_accepted(self.update_model_path)
+                self.data_handler.save_current_model2file(self.update_model_path)
                 print('---模型更新成功---\n\n')
                 self.log.record_acc(acc)
                 self.log.add_cummu_round()
             elif message=='6666':
+                # 待修改 结束循环并将日志信息存入log
                 self.log.record_to_file()
                 break
             else:

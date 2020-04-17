@@ -1,4 +1,4 @@
-\begin{thebibliography}{7}
+\begin{thebibliography}{10}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{#1}
 \providecommand{\href}[2]{\url{#2}}
@@ -26,6 +26,29 @@ VOIGT P, VON~DEM BUSSCHE A.
 MURPHY K~P.
 \newblock Machine learning: a probabilistic perspective\allowbreak[M].
 \newblock [S.l.]: MIT press, 2012.
+
+\bibitem[Ho\ et~al.(2013)Ho, Cipar, Cui, Lee, Kim, Gibbons, Gibson, Ganger, and
+  Xing]{ho2013more}
+HO Q, CIPAR J, CUI H, et~al.
+\newblock More effective distributed ml via a stale synchronous parallel
+  parameter server\allowbreak[C]//\allowbreak{}Advances in neural information
+  processing systems.
+\newblock [S.l.: s.n.], 2013: 1223-1231.
+
+\bibitem[Xing\ et~al.(2015)Xing, Ho, Dai, Kim, Wei, Lee, Zheng, Xie, Kumar, and
+  Yu]{xing2015petuum}
+XING E~P, HO Q, DAI W, et~al.
+\newblock Petuum: A new platform for distributed machine learning on big
+  data\allowbreak[J].
+\newblock IEEE Transactions on Big Data, 2015, 1\penalty0 (2): 49-67.
+
+\bibitem[Wei\ et~al.(2015)Wei, Dai, Qiao, Ho, Cui, Ganger, Gibbons, Gibson, and
+  Xing]{wei2015managed}
+WEI J, DAI W, QIAO A, et~al.
+\newblock Managed communication and consistency for fast data-parallel
+  iterative analytics\allowbreak[C]//\allowbreak{}Proceedings of the Sixth ACM
+  Symposium on Cloud Computing.
+\newblock [S.l.: s.n.], 2015: 381-394.
 
 \bibitem[McMahan\ et~al.(2016)McMahan, Moore, Ramage, Hampson,
   et~al.]{mcmahan2016communication}

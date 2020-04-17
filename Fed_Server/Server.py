@@ -20,28 +20,30 @@ class Sever():
     def __init__(self,server_data_handler):
         # server_data_handler由开发者初始化作为成员参数传入Server类
         # 从Json文件中读取系统配置
-        with open(path_base+"\\Fed_Server\\server_config.json",'r') as f:
-            json_data = json.load(f)
-        self.port = json_data['port']
-        self.host = json_data['host']
+        with open(path_base+"\\Fed_Server\\server_config.json",'r') as f1:
+            server_config = json.load(f1)
+        with open(path_base+"\\Fed_Server\\client_train_param.json",'r') as f2:
+            client_train_param = json.load(f2)
+        self.port = server_config['port']
+        self.host = server_config['host']
         # 存储更新的模型
-        self.update_model_path = json_data['update_model_path']
+        self.update_model_path = server_config['update_model_path']
+        # 训练模式
+        self.train_mode = client_train_param['train_mode']
         # 初始化Server端模型
         # data_handler自动初始化模型 并将模型储存至update_model_path指向的文件
         self.data_handler = server_data_handler
+        self.data_handler.init_from_Server(learning_rate=client_train_param["learning_rate"],updata_path=server_config["update_model_path"])
         # 保存模型至本地
         self.data_handler.save_current_model2file(self.update_model_path)
         # 网络连接采用TCP协议
         self.server_socket = socket()
-        # 训练模式
-        self.train_mode = json_data['train_mode']
         # log类
         self.log = server_log(path_base + "\\Fed_Server\\log")
         # 通信轮数
         self.communicate_round = 0
 
-
-    def __send_model(self,connection,model_path=""):
+    def __send_model(self,connection,model_path=""):  #待重写
         # 将model模型文件发送至Client
         # 从文件中读取发送模型
         file_size = self.__get_model_size(self.update_model_path)
@@ -79,10 +81,10 @@ class Sever():
     def __send_server_param(self,connection):
         # Client向Server请求训练参数
         # train_mode learning_rate input_shape
-        param_dict = self.data_handler.get_param_dict()
-        param_dict["train_mode"] = self.train_mode
-        print("发送参数 ",param_dict)
-        utils.send_class(connection,param_dict)
+        with open(path_base+"\\Fed_Server\\client_train_param.json",'r') as f:
+            json_data = json.load(f)
+        print("发送参数 ",json_data)
+        utils.send_class(connection,json_data)
          
     def message_handler(self, new_sock, clinet_info):
         # 多线程响应
@@ -158,11 +160,15 @@ class Sever():
                 print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
                 self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
-                acc = self.data_handler.validate_current_model()
-                self.data_handler.save_current_model2file(self.update_model_path)
-                print('---模型更新成功---\n\n')
-                self.log.record_acc(acc)
-                self.log.add_cummu_round()
+                if self.train_mode != "FedAvg":
+                    acc = self.data_handler.validate_current_model()
+                    self.data_handler.save_current_model2file(self.update_model_path)
+                    print('---模型更新成功---\n\n')
+                    self.log.record_acc(acc)
+                    self.log.add_cummu_round()
+                    if acc >= 0.99:
+                        self.log.record_to_file()
+                        break
             elif message=='6666':
                 # 待修改 结束循环并将日志信息存入log
                 self.log.record_to_file()

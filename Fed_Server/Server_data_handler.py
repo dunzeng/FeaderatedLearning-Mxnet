@@ -20,23 +20,22 @@ mx.random.seed(int(time.time()))
 class Server_data_handler():
     # 模型管理类
     # 管理服务器端内部参数处理，Server类调用该类方法
-
-    def __init__(self, model, input_shape, learning_rate, init_model_path="", init_model_randomly=True,fed_avg_act=False):
+    def __init__(self, model, input_shape, init_model_path="", init_model_randomly=False):
         # model: MXnet中nn.Block类或其派生类
         # data_shape: 模型输入数据形状
         # learning_rate: Server端接收梯度时的更新学习率
         # random_inital_model: 是否随机生辰初始模型
         # init_model_dir: 随机初始化模型保存路径
-
         # 初始化模型
         self.__net = model
         self.__ctx = utils.try_all_gpus()
         self.input_shape = input_shape  # 训练数据的形状
-        self.learning_rate = learning_rate  # 学习率
+        self.learning_rate = None  # 学习率
         self.model_path = init_model_path   # init_model_randomly为false时会使用该路径下的模型初始化
+        self.updata_model_path = "" 
         # log类
         # 存储系统日志信息
-        self.log = log(path_base + "\\Fed_Server\\log")
+        #self.log = log(path_base + "\\Fed_Server\\log")
         if init_model_randomly == True:
             self.__init_model()
         else:
@@ -45,10 +44,16 @@ class Server_data_handler():
             except:
                 raise ValueError("Invalid init_model_path")   
         # 算法拓展
-        self.fed_avg = fed_avg_act # Federated Averaging
-        if self.fed_avg:
-            self.fed_avg_tool = Fed_avg_tool(model,ctx=self.__ctx,cla=5)
+        self.fed_avg_tool = None
     
+    def init_from_Server(self,learning_rate, updata_path, FedAvg=False, cla=0):
+        # 由Server调用设置参数
+        self.learning_rate = learning_rate
+        self.updata_model_path = updata_path
+        # FedAvg
+        if FedAvg is True:
+            self.fed_avg_tool = Fed_avg_tool(self.__net, ctx=self.__ctx, cla=cla)
+        
     def __get_deafault_valData(self):
         mnist = mx.test_utils.get_mnist()
         val_data = {"test_data":mnist['test_data'],"test_label":mnist['test_label']}
@@ -66,13 +71,6 @@ class Server_data_handler():
         print("-验证Server端初始模型性能-")
         self.validate_current_model(self.__get_deafault_valData())
 
-    def get_param_dict(self):
-        # 获得系统参数信息
-        params = {}
-        params["learning_rate"] = self.learning_rate
-        params["input_shape"] = self.input_shape
-        return params
-
     def validate_current_model(self,val_data_set=None):
         # 给定数据集测试模型性能
         # 评估当前模型准确率
@@ -81,7 +79,6 @@ class Server_data_handler():
         mnist = mx.test_utils.get_mnist()
         val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100)
         # 待通用化
-
         for batch in val_data:
             data = gluon.utils.split_and_load(batch.data[0],ctx_list=self.__ctx,batch_axis=0)
             label = gluon.utils.split_and_load(batch.label[0],ctx_list=self.__ctx,batch_axis=0)
@@ -123,21 +120,19 @@ class Server_data_handler():
             raise ValueError("Invalid path %s"&save_dir)
         
     def process_data_from_client(self, client_data, mode):
-        # mode: replace 模型直接替换 gradient 梯度更新 defined由用户自定义
+        # mode: replace 模型直接替换 gradient 梯度更新 defined由用户自定义 FedAvg
         print("处理Client回传数据 mode: ",mode)
         if mode=='replace':
             # replace 模式下直接将传回的模型作为当前模型
-            if self.fed_avg is not True:
-                self.__net = client_data
-            else:
-                # fed_avg模式下
-                self.fed_avg_tool.add_fed_model(client_data)
-                # fed_avg参数
-                if self.fed_avg_tool.chk_cla():
-                    self.__net = self.fed_avg_tool.get_averaged_model()
+            self.__net = client_data
         elif mode=='gradient':
-            # 3.22 Client回传梯度
             self.__update_gradient(client_data)
+        elif mode=='FedAvg':
+            self.fed_avg_tool.add_fed_model(client_data)
+            if self.fed_avg_tool.chk_cla():
+                self.__net = self.fed_avg_tool.get_averaged_model()
+                self.validate_current_model()
+                self.save_current_model2file(self.updata_model_path)
         elif mode=='defined':
             # 自定义算法
             self.defined_data_method(client_data)

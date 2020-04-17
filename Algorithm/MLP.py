@@ -7,3 +7,4 @@ def MLP():
     net.add(nn.Dense(128,activation='relu'),
             nn.Dense(64,activation='relu'),
             nn.Dense(10))
+    return net

@@ -26,9 +26,8 @@ class Client:
         # 训练模式 从Server端同步获取
         self.train_mode = ""
         self.learning_rate = None
-        # self.batch_size = None
-        # self.epoch = None
-
+        self.batch_size = None
+        self.epoch = None
         # log类
         self.log = log(path_base + "\\Fed_Client\\log")
 
@@ -85,9 +84,11 @@ class Client:
         self.__send_code(message)
         # 同步系统参数
         server_info = utils.recv_class(self.client_sock)
-        print("同步参数train_mode: ",server_info)
-        self.train_mode=server_info["train_mode"]
+        print("同步参数Client端训练参数: ",server_info)
+        self.train_mode= server_info["train_mode"]
         self.learning_rate = server_info["learning_rate"]
+        self.batch_size = server_info["batch_size"]
+        self.epoch = server_info["epoch"]
 
     def process(self,mode=''):
         # Client端流程 
@@ -100,10 +101,10 @@ class Client:
         print("\n******Phase 3******")
         self.data_handler.load_model(self.recv_model_savepath)
         print("\n******Phase 4******")
-        self.data_handler.local_train(batch_size=600,learning_rate=self.learning_rate,epoch=5,train_mode=self.train_mode)
+        self.data_handler.local_train(batch_size=self.batch_size,learning_rate=self.learning_rate,epoch=self.epoch,train_mode=self.train_mode)
         print("\n******Phase 5******")
         # 根据训练模式不同 选择回传梯度或者模型
-        if self.train_mode=='gradient':
+        if self.train_mode=='gradient' or self.train_mode=='FedAvg':
             grad_info = self.data_handler.get_gradient()
             self.__upload_information(grad_info)
         elif self.train_mode=='replace':

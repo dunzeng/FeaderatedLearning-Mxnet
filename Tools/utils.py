@@ -94,7 +94,7 @@ def recv_class(connect):
     try:
         block_size = int(tmp_data.decode())
     except:
-        raise("decode error"+str(tmp_data))
+        raise Exception("Decode Error"+str(tmp_data))
     data = bytes()
     for _ in tqdm(range(block_size),desc="Recving Data"):
         data_slice = connect.recv(1024)

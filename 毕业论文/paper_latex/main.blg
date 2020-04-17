@@ -2,46 +2,48 @@ This is BibTeX, Version 0.99d (TeX Live 2019/W32TeX)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
 The style file: gbt7714-unsrt.bst
+A level-1 auxiliary file: FederatedSGD.aux
+A level-1 auxiliary file: FederatedAveraging.aux
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: refer.bib
-You've used 7 entries,
+You've used 10 entries,
             3663 wiz_defined-function locations,
-            833 strings with 6824 characters,
-and the built_in function-call counts, 30875 in all, are:
-= -- 368
-> -- 3583
-< -- 4766
-+ -- 1327
-- -- 46
-* -- 200
-:= -- 4343
-add.period$ -- 21
-call.type$ -- 7
-change.case$ -- 27
-chr.to.int$ -- 1186
-cite$ -- 7
-duplicate$ -- 140
-empty$ -- 338
-format.name$ -- 98
-if$ -- 7891
+            852 strings with 7770 characters,
+and the built_in function-call counts, 60852 in all, are:
+= -- 603
+> -- 7264
+< -- 9586
++ -- 2629
+- -- 91
+* -- 360
+:= -- 8523
+add.period$ -- 30
+call.type$ -- 10
+change.case$ -- 42
+chr.to.int$ -- 2377
+cite$ -- 10
+duplicate$ -- 204
+empty$ -- 512
+format.name$ -- 190
+if$ -- 15563
 int.to.chr$ -- 1
-int.to.str$ -- 8
+int.to.str$ -- 11
 missing$ -- 0
-newline$ -- 44
-num.names$ -- 21
-pop$ -- 1726
+newline$ -- 59
+num.names$ -- 30
+pop$ -- 3355
 preamble$ -- 1
-purify$ -- 7
+purify$ -- 10
 quote$ -- 0
-skip$ -- 3091
+skip$ -- 6274
 stack$ -- 0
-substring$ -- 1313
-swap$ -- 17
-text.length$ -- 58
+substring$ -- 2609
+swap$ -- 29
+text.length$ -- 106
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 60
+type$ -- 87
 warning$ -- 0
-while$ -- 76
+while$ -- 136
 width$ -- 0
-write$ -- 104
+write$ -- 150

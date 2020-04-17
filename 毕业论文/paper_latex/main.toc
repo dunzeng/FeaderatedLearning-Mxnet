@@ -5,13 +5,13 @@
 \contentsline {section}{\numberline {3}分布式学习}{3}%
 \contentsline {subsection}{\numberline {3.1}隐私保护的基本要求}{3}%
 \contentsline {subsection}{\numberline {3.2}学习系统架构}{3}%
-\contentsline {subsection}{\numberline {3.3}学习算法概述}{3}%
-\contentsline {section}{\numberline {4}分布式最优化算法}{4}%
-\contentsline {subsection}{\numberline {4.1}Federated SGD}{4}%
-\contentsline {subsection}{\numberline {4.2}Federated Averaging}{6}%
-\contentsline {section}{\numberline {5}系统架构}{8}%
-\contentsline {subsection}{\numberline {5.1}网络层}{8}%
-\contentsline {subsection}{\numberline {5.2}逻辑层}{8}%
-\contentsline {subsection}{\numberline {5.3}计算层和架构总结}{9}%
-\contentsline {section}{\numberline {6}实验}{9}%
+\contentsline {subsection}{\numberline {3.3}学习算法概述}{4}%
+\contentsline {section}{\numberline {4}分布式最优化算法}{5}%
+\contentsline {subsection}{\numberline {4.1}Federated SGD}{5}%
+\contentsline {subsection}{\numberline {4.2}Federated Averaging}{5}%
+\contentsline {section}{\numberline {5}系统架构}{6}%
+\contentsline {subsection}{\numberline {5.1}网络层}{6}%
+\contentsline {subsection}{\numberline {5.2}逻辑层}{6}%
+\contentsline {subsection}{\numberline {5.3}计算层和架构总结}{7}%
+\contentsline {section}{\numberline {6}实验}{7}%
 \contentsfinish 

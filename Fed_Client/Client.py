@@ -16,11 +16,12 @@ import time
 class Client:
     def __init__(self,data_handler):
         # 网络通信类
-        self.client_sock = socket.socket()
+        
         with open(path_base+"\\Fed_Client\\client_config.json",'r') as f:
             json_data = json.load(f)
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
         self.recv_model_savepath = json_data['default_path'] # recv_model.params
+        self.client_sock = socket.socket()
         # 模型处理类
         self.data_handler = data_handler
         # 训练模式 从Server端同步获取
@@ -30,12 +31,6 @@ class Client:
         self.epoch = None
         # log类
         self.log = log(path_base + "\\Fed_Client\\log")
-
-    def __initialize_from_json(self):
-        # 从Json文件中初始化部分变量
-        with open("server_config.json",'r') as f:
-            json_data = json.load(f)
-        self.server_addr = (json_data['server_ip'],json_data['server_port'])
 
     def __send_code(self,msg_code=""):
         # 创建socket连接，发送控制码
@@ -104,10 +99,10 @@ class Client:
         self.data_handler.local_train(batch_size=self.batch_size,learning_rate=self.learning_rate,epoch=self.epoch,train_mode=self.train_mode)
         print("\n******Phase 5******")
         # 根据训练模式不同 选择回传梯度或者模型
-        if self.train_mode=='gradient' or self.train_mode=='FedAvg':
+        if self.train_mode=='gradient':
             grad_info = self.data_handler.get_gradient()
             self.__upload_information(grad_info)
-        elif self.train_mode=='replace':
+        elif self.train_mode=='replace' or self.train_mode=='FedAvg':
             model_info = self.data_handler.get_model()
             self.__upload_information(model_info)
         elif self.train_mode=='defined':

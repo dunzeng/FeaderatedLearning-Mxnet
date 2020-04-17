@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  14 APR 2020 16:33
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  17 APR 2020 22:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -764,7 +764,10 @@ File: assets/test.png Graphic file (type bmp)
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[3] [4] [5] [6] [7] (./main.bbl
+[3] [4] [5]
+File: assets/process.png Graphic file (type bmp)
+<assets/process.png>
+ [6] [7] [8] (./main.bbl
 Underfull \hbox (badness 1158) in paragraph at lines 55--59
 []\TU/lmr/m/n/12.045 MCMAHAN H B, MOORE E, RAMAGE D, et al.  Communication-
  []
@@ -775,24 +778,23 @@ Underfull \hbox (badness 2538) in paragraph at lines 61--66
 ]//
  []
 
-) [8]
+[9]) [10]
 
 LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
-(Font)              using `TU/SimSun(1)/m/n' instead on input line 145.
+(Font)              using `TU/SimSun(1)/m/n' instead on input line 158.
 
-[9] [10]
+[11] [12]
 \openout2 = `FederatedSGD.aux'.
 
- (./FederatedSGD.tex) [11
+ (./FederatedSGD.tex) [13
 
 ]
 \openout2 = `FederatedAveraging.aux'.
 
- (./FederatedAveraging.tex) [12
+ (./FederatedAveraging.tex) [14
 
 
-] (./main.aux
-(./FederatedSGD.aux) (./FederatedAveraging.aux))
+] (./main.aux (./FederatedSGD.aux) (./FederatedAveraging.aux))
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.22pt have occurred.
@@ -802,12 +804,12 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 11385 strings out of 479805
- 270111 string characters out of 5893180
- 565496 words of memory out of 5000000
- 28256 multiletter control sequences out of 15000+600000
+ 11425 strings out of 479805
+ 271920 string characters out of 5893180
+ 565638 words of memory out of 5000000
+ 28295 multiletter control sequences out of 15000+600000
  539668 words of font info for 99 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  63i,11n,70p,2554b,736s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on main.pdf (17 pages).
+Output written on main.pdf (19 pages).

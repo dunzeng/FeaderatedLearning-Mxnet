@@ -11,7 +11,9 @@
 \contentsline {subsection}{\numberline {4.2}Federated Averaging}{5}%
 \contentsline {section}{\numberline {5}系统架构}{6}%
 \contentsline {subsection}{\numberline {5.1}网络层}{6}%
-\contentsline {subsection}{\numberline {5.2}逻辑层}{6}%
+\contentsline {subsection}{\numberline {5.2}逻辑层}{7}%
 \contentsline {subsection}{\numberline {5.3}计算层和架构总结}{7}%
 \contentsline {section}{\numberline {6}实验}{7}%
+\contentsline {subsection}{\numberline {6.1}Federated SGD}{7}%
+\contentsline {subsection}{\numberline {6.2}Federated Averaging}{8}%
 \contentsfinish 

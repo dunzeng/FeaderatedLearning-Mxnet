@@ -2,5 +2,6 @@
     "learning_rate":0.02,
     "batch_size":100,
     "epoch":10,
-    "train_mode":"replace"
+    "train_mode":"FedAvg",
+    "cla":10
 }

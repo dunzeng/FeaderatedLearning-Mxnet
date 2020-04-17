@@ -33,15 +33,16 @@ class Sever():
         # 初始化Server端模型
         # data_handler自动初始化模型 并将模型储存至update_model_path指向的文件
         self.data_handler = server_data_handler
-        self.data_handler.init_from_Server(learning_rate=client_train_param["learning_rate"],updata_path=server_config["update_model_path"])
+        if self.train_mode == "FedAvg":
+            self.data_handler.init_from_Server(learning_rate=client_train_param["learning_rate"],updata_path=server_config["update_model_path"],FedAvg=True,cla=client_train_param["cla"])
+        else:
+            self.data_handler.init_from_Server(learning_rate=client_train_param["learning_rate"],updata_path=server_config["update_model_path"])
         # 保存模型至本地
-        self.data_handler.save_current_model2file(self.update_model_path)
+        #self.data_handler.save_current_model2file(self.update_model_path)
         # 网络连接采用TCP协议
         self.server_socket = socket()
         # log类
         self.log = server_log(path_base + "\\Fed_Server\\log")
-        # 通信轮数
-        self.communicate_round = 0
 
     def __send_model(self,connection,model_path=""):  #待重写
         # 将model模型文件发送至Client
@@ -112,8 +113,6 @@ class Sever():
             print('******Client端请求上传信息******')
             data_from_client = self.__recv_data(new_sock)
             self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
-            self.data_handler.validate_current_model()
-            self.data_handler.save_current_model2file(self.update_model_path)  # 覆盖更新
             print('---模型更新成功---\n\n')
         else:
             print("Control Code Error ",message)
@@ -160,15 +159,6 @@ class Sever():
                 print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
                 self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
-                if self.train_mode != "FedAvg":
-                    acc = self.data_handler.validate_current_model()
-                    self.data_handler.save_current_model2file(self.update_model_path)
-                    print('---模型更新成功---\n\n')
-                    self.log.record_acc(acc)
-                    self.log.add_cummu_round()
-                    if acc >= 0.99:
-                        self.log.record_to_file()
-                        break
             elif message=='6666':
                 # 待修改 结束循环并将日志信息存入log
                 self.log.record_to_file()

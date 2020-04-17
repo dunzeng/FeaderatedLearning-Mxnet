@@ -70,6 +70,7 @@ class Server_data_handler():
         #self.__net.save_parameters(save_path)
         print("-验证Server端初始模型性能-")
         self.validate_current_model(self.__get_deafault_valData())
+        self.save_current_model2file(self.updata_model_path)
 
     def validate_current_model(self,val_data_set=None):
         # 给定数据集测试模型性能
@@ -125,9 +126,15 @@ class Server_data_handler():
         if mode=='replace':
             # replace 模式下直接将传回的模型作为当前模型
             self.__net = client_data
+            self.validate_current_model()
+            self.save_current_model2file(self.updata_model_path)
         elif mode=='gradient':
+            # gradient 处理Client回传的gradient信息
             self.__update_gradient(client_data)
+            self.validate_current_model()
+            self.save_current_model2file(self.updata_model_path)
         elif mode=='FedAvg':
+            # FedAvg
             self.fed_avg_tool.add_fed_model(client_data)
             if self.fed_avg_tool.chk_cla():
                 self.__net = self.fed_avg_tool.get_averaged_model()

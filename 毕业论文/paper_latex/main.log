@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  17 APR 2020 22:35
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  18 APR 2020 17:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -781,7 +781,7 @@ Underfull \hbox (badness 2538) in paragraph at lines 61--66
 [9]) [10]
 
 LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
-(Font)              using `TU/SimSun(1)/m/n' instead on input line 158.
+(Font)              using `TU/SimSun(1)/m/n' instead on input line 159.
 
 [11] [12]
 \openout2 = `FederatedSGD.aux'.

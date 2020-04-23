@@ -31,7 +31,9 @@ class Client_data_handler:
         self.train_data_path = train_data_path
         # log类
         self.log = log(path_base+"\\Fed_Client\\log")
-
+        print("-Client Data Handler初始化完成-")
+        print(self.__net)
+        
     def __random_init_model(self):
         # 随机初始化用户自定义的模型
         self.__net.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)

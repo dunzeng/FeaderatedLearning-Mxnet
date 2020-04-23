@@ -14,21 +14,21 @@ import time
 # 维护与服务器端的通信和执行联邦学习协议
 # 维护本地模型，包括参数更新、模型训练
 class Client:
-    def __init__(self,data_handler):
+    def __init__(self, model, input_shape, train_data):
         # 网络通信类
-        
         with open(path_base+"\\Fed_Client\\client_config.json",'r') as f:
             json_data = json.load(f)
         self.server_addr = (json_data['server_ip'],json_data['server_port'])
         self.recv_model_savepath = json_data['default_path'] # recv_model.params
         self.client_sock = socket.socket()
         # 模型处理类
-        self.data_handler = data_handler
+        self.data_handler = Client_data_handler(model, input_shape=input_shape, train_data_path=train_data)
         # 训练模式 从Server端同步获取
         self.train_mode = ""
         self.learning_rate = None
         self.batch_size = None
         self.epoch = None
+        self.__param_sync()
         # log类
         self.log = log(path_base + "\\Fed_Client\\log")
 
@@ -91,8 +91,8 @@ class Client:
         # 考虑不同算法 朴素Fed,FedAvg回传信息时的处理
         print("\n******Phase 1******")
         self.__ask_for_model(self.recv_model_savepath)
-        print("\n******Phase 2******")
-        self.__param_sync()
+        #print("\n******Phase 2******")
+        #self.__param_sync()
         print("\n******Phase 3******")
         self.data_handler.load_model(self.recv_model_savepath)
         print("\n******Phase 4******")

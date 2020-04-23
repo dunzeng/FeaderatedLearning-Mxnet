@@ -47,6 +47,8 @@ class Fed_avg_tool():
                 continue
             layer_idx += 1
         self.model_cnt += 1
+        if(self.model_cnt == self.cla):
+            pass
         if add_flag:
             print("FedAvg: 添加模型成功")
         else:

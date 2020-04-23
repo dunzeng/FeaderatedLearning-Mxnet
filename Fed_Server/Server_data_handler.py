@@ -20,46 +20,53 @@ mx.random.seed(int(time.time()))
 class Server_data_handler():
     # 模型管理类
     # 管理服务器端内部参数处理，Server类调用该类方法
-    def __init__(self, model, input_shape, init_model_path="", init_model_randomly=False):
+    def __init__(self, model, input_shape, learning_rate, update_model_path, init_model_path="", init_model_randomly=False):
         # model: MXnet中nn.Block类或其派生类
         # data_shape: 模型输入数据形状
         # learning_rate: Server端接收梯度时的更新学习率
         # random_inital_model: 是否随机生辰初始模型
         # init_model_dir: 随机初始化模型保存路径
-        # 初始化模型
         self.__net = model
         self.__ctx = utils.try_all_gpus()
         self.input_shape = input_shape  # 训练数据的形状
         self.learning_rate = None  # 学习率
-        self.model_path = init_model_path   # init_model_randomly为false时会使用该路径下的模型初始化
         self.updata_model_path = "" 
         # log类
         # 存储系统日志信息
         #self.log = log(path_base + "\\Fed_Server\\log")
         if init_model_randomly == True:
-            self.__init_model()
+            self.__random_init_model()
         else:
             try:
-                self.__net.load_parameters(init_model_path,ctx=self.__ctx)
+                self.__init_model_file(init_model_path)
             except:
                 raise ValueError("Invalid init_model_path")   
+            
         # 算法拓展
         self.fed_avg_tool = None
     
-    def init_from_Server(self,learning_rate, updata_path, FedAvg=False, cla=0):
-        # 由Server调用设置参数
-        self.learning_rate = learning_rate
-        self.updata_model_path = updata_path
-        # FedAvg
-        if FedAvg is True:
-            self.fed_avg_tool = Fed_avg_tool(self.__net, ctx=self.__ctx, cla=cla)
+    def get_model_info(self):
+        return str(self.__net)
+
+    def activate_FedAvg(self, cla):
+        self.fed_avg_tool = Fed_avg_tool(self.__net, ctx=self.__ctx, cla=cla)
         
     def __get_deafault_valData(self):
         mnist = mx.test_utils.get_mnist()
         val_data = {"test_data":mnist['test_data'],"test_label":mnist['test_label']}
         return val_data
 
-    def __init_model(self):
+    def __init_model_file(self,model_path):
+        print("-读取初始化模型-")
+        print(self.__net)
+        self.__net.load_parameters(model_path,ctx=self.__ctx)
+        print("-验证Server端初始模型性能-")
+        self.validate_current_model(self.__get_deafault_valData())
+        self.save_current_model2file(self.updata_model_path)
+
+    def __random_init_model(self):
+        print("-随机初始化模型-")
+        print(self.__net)
         # 初始化用户自定义的模型
         #self.input_shape,self.__net = self.custom_model()
         self.__net.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)
@@ -126,13 +133,15 @@ class Server_data_handler():
         if mode=='replace':
             # replace 模式下直接将传回的模型作为当前模型
             self.__net = client_data
-            self.validate_current_model()
+            acc = self.validate_current_model()
             self.save_current_model2file(self.updata_model_path)
+            return acc
         elif mode=='gradient':
             # gradient 处理Client回传的gradient信息
             self.__update_gradient(client_data)
-            self.validate_current_model()
+            acc = self.validate_current_model()
             self.save_current_model2file(self.updata_model_path)
+            return acc
         elif mode=='FedAvg':
             # FedAvg
             self.fed_avg_tool.add_fed_model(client_data)

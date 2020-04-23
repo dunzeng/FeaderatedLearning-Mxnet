@@ -11,6 +11,9 @@ class server_log(log):
         log.__init__(self,log_file_root)
         self.accuracy = []
         self.communication_round = 0
+        with open(path_base+"\\Fed_Server\\client_train_param.json",'r') as f:
+            json_data = json.load(f)
+        self.write_data = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime()) + "\n" + str(json_data) + "\n"
     
     def record_acc(self, accuracy):
         self.accuracy.append(accuracy)
@@ -18,10 +21,10 @@ class server_log(log):
     def add_cummu_round(self):
         self.communication_round += 1
 
+    def add_data(self,data):
+        self.write_data += data + "\n"
+        
     def record_to_file(self):
         Tim = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
-        with open(path_base+"\\Fed_Server\\client_train_param.json",'r') as f:
-            json_data = json.load(f)
-        data = Tim + "\n" + str(json_data) + "\n" + str(self.communication_round) + "\n" + str(self.accuracy)
-        self.new_log_file("Train_Information"+Tim,data)
+        self.new_log_file("Train_Information"+Tim,self.write_data)
         

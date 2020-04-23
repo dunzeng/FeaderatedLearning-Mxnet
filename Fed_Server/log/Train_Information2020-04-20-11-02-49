@@ -1,0 +1,4 @@
+2020-04-20-11-02-49
+{'learning_rate': 0.01, 'batch_size': 200, 'epoch': 10, 'train_mode': 'replace', 'cla': 10}
+0
+[]

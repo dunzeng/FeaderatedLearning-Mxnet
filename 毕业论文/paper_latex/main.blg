@@ -6,44 +6,44 @@ A level-1 auxiliary file: FederatedSGD.aux
 A level-1 auxiliary file: FederatedAveraging.aux
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: refer.bib
-You've used 12 entries,
+You've used 13 entries,
             3663 wiz_defined-function locations,
-            862 strings with 8176 characters,
-and the built_in function-call counts, 73443 in all, are:
-= -- 709
-> -- 8794
-< -- 11584
-+ -- 3173
-- -- 111
-* -- 427
-:= -- 10292
-add.period$ -- 36
-call.type$ -- 12
-change.case$ -- 50
-chr.to.int$ -- 2871
-cite$ -- 12
-duplicate$ -- 244
-empty$ -- 602
-format.name$ -- 232
-if$ -- 18781
+            869 strings with 8398 characters,
+and the built_in function-call counts, 78849 in all, are:
+= -- 771
+> -- 9435
+< -- 12422
++ -- 3403
+- -- 120
+* -- 468
+:= -- 11053
+add.period$ -- 39
+call.type$ -- 13
+change.case$ -- 55
+chr.to.int$ -- 3078
+cite$ -- 13
+duplicate$ -- 264
+empty$ -- 651
+format.name$ -- 252
+if$ -- 20157
 int.to.chr$ -- 1
-int.to.str$ -- 13
+int.to.str$ -- 14
 missing$ -- 0
-newline$ -- 69
-num.names$ -- 36
-pop$ -- 4049
+newline$ -- 74
+num.names$ -- 39
+pop$ -- 4348
 preamble$ -- 1
-purify$ -- 12
+purify$ -- 13
 quote$ -- 0
-skip$ -- 7599
+skip$ -- 8148
 stack$ -- 0
-substring$ -- 3120
-swap$ -- 35
-text.length$ -- 128
+substring$ -- 3349
+swap$ -- 39
+text.length$ -- 138
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 109
+type$ -- 120
 warning$ -- 0
-while$ -- 163
+while$ -- 177
 width$ -- 0
-write$ -- 178
+write$ -- 194

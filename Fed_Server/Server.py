@@ -17,9 +17,11 @@ class Sever():
     # 网络服务器：
     # 维护网络通信，与Client交流
     # 与后台数据处理类进行信息交换
-    def __init__(self,server_data_handler):
+    def __init__(self, model, input_shape, init_model_randomly, init_model_path=""):
         # server_data_handler由开发者初始化作为成员参数传入Server类
         # 从Json文件中读取系统配置
+        # 网络连接采用TCP协议
+        self.server_socket = socket()
         with open(path_base+"\\Fed_Server\\server_config.json",'r') as f1:
             server_config = json.load(f1)
         with open(path_base+"\\Fed_Server\\client_train_param.json",'r') as f2:
@@ -32,17 +34,11 @@ class Sever():
         self.train_mode = client_train_param['train_mode']
         # 初始化Server端模型
         # data_handler自动初始化模型 并将模型储存至update_model_path指向的文件
-        self.data_handler = server_data_handler
-        if self.train_mode == "FedAvg":
-            self.data_handler.init_from_Server(learning_rate=client_train_param["learning_rate"],updata_path=server_config["update_model_path"],FedAvg=True,cla=client_train_param["cla"])
-        else:
-            self.data_handler.init_from_Server(learning_rate=client_train_param["learning_rate"],updata_path=server_config["update_model_path"])
-        # 保存模型至本地
-        #self.data_handler.save_current_model2file(self.update_model_path)
-        # 网络连接采用TCP协议
-        self.server_socket = socket()
+        self.data_handler = Server_data_handler(model, input_shape, client_train_param["learning_rate"], 
+                                                server_config['update_model_path'], init_model_randomly,init_model_path)
         # log类
         self.log = server_log(path_base + "\\Fed_Server\\log")
+        self.log.add_data(self.data_handler.get_model_info())
 
     def __send_model(self,connection,model_path=""):  #待重写
         # 将model模型文件发送至Client
@@ -158,7 +154,9 @@ class Sever():
                 # 接收Client信息
                 print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
-                self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
+                acc = self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
+                self.log.add_cummu_round()
+                self.log.record_acc(acc)
             elif message=='6666':
                 # 待修改 结束循环并将日志信息存入log
                 self.log.record_to_file()

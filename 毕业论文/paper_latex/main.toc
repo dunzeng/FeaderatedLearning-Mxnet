@@ -8,12 +8,12 @@
 \contentsline {subsection}{\numberline {3.3}学习算法概述}{4}%
 \contentsline {section}{\numberline {4}分布式最优化算法}{5}%
 \contentsline {subsection}{\numberline {4.1}Federated SGD}{5}%
-\contentsline {subsection}{\numberline {4.2}Federated Averaging}{5}%
+\contentsline {subsection}{\numberline {4.2}Federated Averaging}{6}%
 \contentsline {section}{\numberline {5}系统架构}{6}%
 \contentsline {subsection}{\numberline {5.1}网络层}{6}%
 \contentsline {subsection}{\numberline {5.2}逻辑层}{7}%
 \contentsline {subsection}{\numberline {5.3}计算层和架构总结}{7}%
-\contentsline {section}{\numberline {6}实验}{7}%
-\contentsline {subsection}{\numberline {6.1}Federated SGD}{7}%
-\contentsline {subsection}{\numberline {6.2}Federated Averaging}{8}%
+\contentsline {section}{\numberline {6}实验}{8}%
+\contentsline {subsection}{\numberline {6.1}Federated SGD}{8}%
+\contentsline {subsection}{\numberline {6.2}Federated Averaging}{9}%
 \contentsfinish 

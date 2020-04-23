@@ -9,7 +9,7 @@ class Fed_avg_tool():
     def __init__(self, init_model, ctx, cla):
         # init_model初始化存储权值的模型
         self.model_cnt = 0
-        self.merge_model = init_model
+        self.merge_model = copy.deepcopy(init_model)
         self.__ctx = ctx
         self.cla = cla
         self.__set_model_weight2zero()
@@ -47,31 +47,39 @@ class Fed_avg_tool():
                 continue
             layer_idx += 1
         self.model_cnt += 1
-        if(self.model_cnt == self.cla):
-            pass
         if add_flag:
             print("FedAvg: 添加模型成功")
+            #print(self.merge_model[2].weight.data()[0])
+            #print((self.merge_model[2].weight.data()[:]/5)[0])
         else:
             raise Exception("FedAvg: 添加模型失败")
+        if(self.model_cnt == self.cla):
+            return True
+        else:
+            return False
         
-    def get_averaged_model(self):
+    def get_averaged_model(self, net):
         average_flag = False
-        for layer in self.merge_model:
+        id = 0
+        for layer in net:
             try:
                 # 算术平均
-                layer.weight.data()[:] = layer.weight.data()[:]/self.model_cnt      
-                layer.bias.data()[:] = layer.bias.data()[:]/self.model_cnt
+                layer.weight.data()[:] = self.merge_model[id].weight.data()[:]/self.model_cnt      
+                layer.bias.data()[:] = self.merge_model[id].bias.data()[:]/self.model_cnt
                 if average_flag is False:
                     average_flag = True
             except:
                 continue
-        ret_model = copy.deepcopy(self.merge_model)
+            id += 1
         # 数据初始化
+        print("avg: chk")
+        print(net[2].weight.data()[0])
         self.__set_model_weight2zero()
+        print("avg: chk2")
+        print(net[2].weight.data()[0])
         self.model_cnt=0
         if average_flag:
             print("FedAvg: 模型参数加权平均完成")
-            return ret_model
         else:
             raise Exception("FedAvg: 模型参数加权平均模型失败")
 

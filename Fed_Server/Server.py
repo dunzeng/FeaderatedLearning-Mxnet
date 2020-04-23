@@ -17,7 +17,7 @@ class Sever():
     # 网络服务器：
     # 维护网络通信，与Client交流
     # 与后台数据处理类进行信息交换
-    def __init__(self, model, input_shape, init_model_randomly, init_model_path=""):
+    def __init__(self, model, input_shape, init_model_randomly, init_model_path="", FedAvg=False):
         # server_data_handler由开发者初始化作为成员参数传入Server类
         # 从Json文件中读取系统配置
         # 网络连接采用TCP协议
@@ -36,6 +36,10 @@ class Sever():
         # data_handler自动初始化模型 并将模型储存至update_model_path指向的文件
         self.data_handler = Server_data_handler(model, input_shape, client_train_param["learning_rate"], 
                                                 server_config['update_model_path'], init_model_randomly,init_model_path)
+        # Fed
+        if FedAvg is True:
+            self.data_handler.activate_FedAvg(cla=client_train_param['cla'])
+        
         # log类
         self.log = server_log(path_base + "\\Fed_Server\\log")
         self.log.add_data(self.data_handler.get_model_info())
@@ -155,8 +159,14 @@ class Sever():
                 print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
                 acc = self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
-                self.log.add_cummu_round()
-                self.log.record_acc(acc)
+                if self.train_mode!='FedAvg':
+                    self.log.add_cummu_round()
+                    self.log.record_acc(acc)
+                elif acc!=-1:
+                    self.log.add_cummu_round()
+                    self.log.record_acc(acc)
+                else:
+                    pass
             elif message=='6666':
                 # 待修改 结束循环并将日志信息存入log
                 self.log.record_to_file()

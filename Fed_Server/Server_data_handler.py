@@ -20,7 +20,7 @@ mx.random.seed(int(time.time()))
 class Server_data_handler():
     # 模型管理类
     # 管理服务器端内部参数处理，Server类调用该类方法
-    def __init__(self, model, input_shape, learning_rate, update_model_path, init_model_path="", init_model_randomly=False):
+    def __init__(self, model, input_shape, learning_rate, update_model_path, init_model_randomly, init_model_path="",):
         # model: MXnet中nn.Block类或其派生类
         # data_shape: 模型输入数据形状
         # learning_rate: Server端接收梯度时的更新学习率
@@ -29,8 +29,8 @@ class Server_data_handler():
         self.__net = model
         self.__ctx = utils.try_all_gpus()
         self.input_shape = input_shape  # 训练数据的形状
-        self.learning_rate = None  # 学习率
-        self.updata_model_path = "" 
+        self.learning_rate = learning_rate  # 学习率
+        self.updata_model_path = update_model_path
         # log类
         # 存储系统日志信息
         #self.log = log(path_base + "\\Fed_Server\\log")
@@ -144,11 +144,15 @@ class Server_data_handler():
             return acc
         elif mode=='FedAvg':
             # FedAvg
-            self.fed_avg_tool.add_fed_model(client_data)
-            if self.fed_avg_tool.chk_cla():
-                self.__net = self.fed_avg_tool.get_averaged_model()
-                self.validate_current_model()
+            flg = self.fed_avg_tool.add_fed_model(client_data)
+            if flg is True:
+                self.fed_avg_tool.get_averaged_model(self.__net)
+                #print(self.__net[2].weight.data()[0])
                 self.save_current_model2file(self.updata_model_path)
+                acc = self.validate_current_model()
+                return acc
+            else:
+                return -1
         elif mode=='defined':
             # 自定义算法
             self.defined_data_method(client_data)

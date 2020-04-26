@@ -26,5 +26,9 @@ class server_log(log):
         
     def record_to_file(self):
         Tim = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
-        self.new_log_file("Train_Information"+Tim,self.write_data)
+        self.write_data += str(self.communication_round) + "\n"
+        self.write_data += str(self.accuracy) + "\n"
+        file_name ="Train_Information"+Tim
+        print("Server Log: 日志文件写入", file_name)
+        self.new_log_file(file_name,self.write_data)
         

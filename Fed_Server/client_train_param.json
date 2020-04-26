@@ -3,5 +3,5 @@
     "batch_size":100,
     "epoch":5,
     "train_mode":"FedAvg",
-    "cla":5
+    "cla":100
 }

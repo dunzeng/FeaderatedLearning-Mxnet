@@ -14,7 +14,6 @@ class Fed_avg_tool():
         self.cla = cla
         self.__set_model_weight2zero()
         
-
     def __set_model_weight2zero(self):
         set_flag = False
         for layer in self.merge_model:
@@ -26,8 +25,7 @@ class Fed_avg_tool():
                 if set_flag is False:
                     set_flag = True
             except:
-                continue
-        
+                pass
         if set_flag:
             print("FedAvg: 模型参数归零")
         else:
@@ -44,13 +42,11 @@ class Fed_avg_tool():
                 if add_flag is False:
                     add_flag = True
             except:
-                continue
+                pass
             layer_idx += 1
         self.model_cnt += 1
         if add_flag:
-            print("FedAvg: 添加模型成功")
-            #print(self.merge_model[2].weight.data()[0])
-            #print((self.merge_model[2].weight.data()[:]/5)[0])
+            print("FedAvg: 添加模型成功 %d/%d"%(self.model_cnt,self.cla))
         else:
             raise Exception("FedAvg: 添加模型失败")
         if(self.model_cnt == self.cla):
@@ -69,14 +65,10 @@ class Fed_avg_tool():
                 if average_flag is False:
                     average_flag = True
             except:
-                continue
+                pass
             id += 1
         # 数据初始化
-        print("avg: chk")
-        print(net[2].weight.data()[0])
         self.__set_model_weight2zero()
-        print("avg: chk2")
-        print(net[2].weight.data()[0])
         self.model_cnt=0
         if average_flag:
             print("FedAvg: 模型参数加权平均完成")

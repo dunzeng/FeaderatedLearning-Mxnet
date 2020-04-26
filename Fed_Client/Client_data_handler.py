@@ -115,7 +115,7 @@ class Client_data_handler:
             name, acc = metric.get()
             metric.reset()
             print('training acc at epoch %d/%d: %s=%f'%(i+1,epoch, name, acc))
-        
+
     def get_model(self):
         return copy.deepcopy(self.__net)
 
@@ -126,3 +126,23 @@ class Client_data_handler:
         self.local_gradient['weight'].clear()
         self.local_gradient['bias'].clear()
         return gradient
+
+    # test
+    def validate_current_model(self,val_data_set=None):
+        # 给定数据集测试模型性能
+        # 评估当前模型准确率
+        #val_x,val_y = val_data_set[0],val_data_set[1]
+        #val_data = mx.io.NDArrayIter(val_x,val_y,batch_size=100)
+        mnist = mx.test_utils.get_mnist()
+        val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100)
+        # 待通用化
+        for batch in val_data:
+            data = gluon.utils.split_and_load(batch.data[0],ctx_list=self.__ctx,batch_axis=0)
+            label = gluon.utils.split_and_load(batch.label[0],ctx_list=self.__ctx,batch_axis=0)
+            outputs = []
+            metric = mx.metric.Accuracy()  
+            for x in data:
+                outputs.append(self.__net(x))
+            metric.update(label,outputs)
+        name,acc = metric.get()
+        print('验证集准确率 validation acc:%s=%f'%(name,acc))

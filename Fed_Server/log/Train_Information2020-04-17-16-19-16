@@ -1,4 +1,0 @@
-2020-04-17-16-19-16
-{'learning_rate': 0.02, 'batch_size': 100, 'epoch': 10, 'train_mode': 'FedAvg', 'cla': 10}
-0
-[]

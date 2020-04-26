@@ -4,6 +4,7 @@ import pickle
 from tqdm import tqdm
 import numpy as np
 import random
+import time
 
 def network_layers_filter(network):
     """
@@ -79,11 +80,12 @@ def send_class(connect, class_data):
     # 利用pickle模块将data序列化，并通过connect发送
     # connect参数为socket连接对象
     data = pickle.dumps(class_data)
+    #connect.sendall(data)
     data_list = cut_bytes(data,1024)
     list_size = len(data_list)
-    print(list_size)
     msg = str(list_size).encode('utf-8')
     connect.send(msg)
+    time.sleep(0.2)
     for i in tqdm(range(list_size),desc="Sending Data"):
         connect.send(data_list[i])
 
@@ -94,7 +96,8 @@ def recv_class(connect):
     try:
         block_size = int(tmp_data.decode())
     except:
-        raise Exception("Decode Error"+str(tmp_data))
+        print("Error: %s"%(str(tmp_data)))
+        raise Exception("Decode Error")
     data = bytes()
     for _ in tqdm(range(block_size),desc="Recving Data"):
         data_slice = connect.recv(1024)

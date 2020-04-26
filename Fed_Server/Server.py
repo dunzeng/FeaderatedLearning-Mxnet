@@ -162,11 +162,13 @@ class Sever():
                 if self.train_mode!='FedAvg':
                     self.log.add_cummu_round()
                     self.log.record_acc(acc)
-                elif acc!=-1:
-                    self.log.add_cummu_round()
-                    self.log.record_acc(acc)
                 else:
-                    pass
+                    if acc != -1:
+                        self.log.add_cummu_round()
+                        self.log.record_acc(acc)
+                        if acc >= 0.988:
+                            self.log.record_to_file()
+                            break
             elif message=='6666':
                 # 待修改 结束循环并将日志信息存入log
                 self.log.record_to_file()

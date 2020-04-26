@@ -1,0 +1,14 @@
+2020-04-25-17-01-55
+{'learning_rate': 0.04, 'batch_size': 10, 'epoch': 5, 'train_mode': 'FedAvg', 'cla': 50}
+Sequential(
+  (0): Conv2D(1 -> 6, kernel_size=(5, 5), stride=(1, 1), Activation(relu))
+  (1): MaxPool2D(size=(2, 2), stride=(2, 2), padding=(0, 0), ceil_mode=False, global_pool=False, pool_type=max, layout=NCHW)
+  (2): Conv2D(6 -> 16, kernel_size=(5, 5), stride=(1, 1), Activation(relu))
+  (3): MaxPool2D(size=(2, 2), stride=(2, 2), padding=(0, 0), ceil_mode=False, global_pool=False, pool_type=max, layout=NCHW)
+  (4): Dense(256 -> 120, Activation(relu))
+  (5): Dense(120 -> 84, Activation(relu))
+  (6): Dense(84 -> 10, linear)
+)
+49
+[0.86, 0.92, 0.93, 0.93, 0.93, 0.95, 0.95, 0.95, 0.95, 0.96, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.97, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.98, 0.99]
+

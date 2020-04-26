@@ -1,8 +1,0 @@
-2020-04-24-00-22-01
-{'learning_rate': 0.02, 'batch_size': 100, 'epoch': 5, 'train_mode': 'FedAvg', 'cla': 5}
-Sequential(
-  (0): Dense(784 -> 128, Activation(relu))
-  (1): Dense(128 -> 64, Activation(relu))
-  (2): Dense(64 -> 10, linear)
-)
-

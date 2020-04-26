@@ -147,7 +147,6 @@ class Server_data_handler():
             flg = self.fed_avg_tool.add_fed_model(client_data)
             if flg is True:
                 self.fed_avg_tool.get_averaged_model(self.__net)
-                #print(self.__net[2].weight.data()[0])
                 self.save_current_model2file(self.updata_model_path)
                 acc = self.validate_current_model()
                 return acc

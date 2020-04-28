@@ -166,7 +166,7 @@ class Sever():
                     if acc != -1:
                         self.log.add_cummu_round()
                         self.log.record_acc(acc)
-                        if acc >= 0.988:
+                        if acc >= 0.97:
                             self.log.record_to_file()
                             break
             elif message=='6666':

@@ -14,5 +14,6 @@
 \contentsline {section}{\numberline {5}实验与分析}{9}%
 \contentsline {subsection}{\numberline {5.1}Federated SGD}{9}%
 \contentsline {subsection}{\numberline {5.2}Federated Averaging}{10}%
+\contentsline {subsection}{\numberline {5.3}不平衡数据上的表现}{11}%
 \contentsline {section}{\numberline {6}总结与展望}{11}%
 \contentsfinish 

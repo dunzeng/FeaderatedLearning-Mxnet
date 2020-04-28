@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  26 APR 2020 16:53
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  28 APR 2020 13:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -760,7 +760,11 @@ LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <10.53937> not available
  [3]
 File: assets/MLP.png Graphic file (type bmp)
 <assets/MLP.png>
- [1] [2]
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[1] [2]
 File: assets/test.png Graphic file (type bmp)
 <assets/test.png>
 
@@ -770,30 +774,29 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [3]
 File: assets/fed.png Graphic file (type bmp)
 <assets/fed.png>
- [4]
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[4]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [5]
 
-LaTeX Warning: Reference `FedAvg' on page 6 undefined on input line 162.
-
-
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[6]
 File: assets/process.png Graphic file (type bmp)
 <assets/process.png>
 
-
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[7] [8] [9]
-Underfull \hbox (badness 10000) in paragraph at lines 238--256
+[6] [7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 235--253
 [][]
  []
 
-[10] [11] [12] (./main.bbl
+[9] [10] [11] (./main.bbl
 Underfull \hbox (badness 1158) in paragraph at lines 61--65
 []\TU/lmr/m/n/12.045 MCMAHAN H B, MOORE E, RAMAGE D, et al.  Communication-
  []
@@ -804,12 +807,12 @@ Underfull \hbox (badness 2538) in paragraph at lines 67--72
 ]//
  []
 
-[13]) [14]
+[12]) [13]
 
 LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
-(Font)              using `TU/SimSun(1)/m/n' instead on input line 294.
+(Font)              using `TU/SimSun(1)/m/n' instead on input line 291.
 
-[15] [16] (./main.aux)
+[14] [15] (./main.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.22pt have occurred.
@@ -818,19 +821,16 @@ LaTeX Font Warning: Size substitutions with differences
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 
-LaTeX Warning: There were undefined references.
-
-
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 11465 strings out of 479805
- 274228 string characters out of 5893180
- 568799 words of memory out of 5000000
- 28344 multiletter control sequences out of 15000+600000
+ 11466 strings out of 479805
+ 274238 string characters out of 5893180
+ 569833 words of memory out of 5000000
+ 28345 multiletter control sequences out of 15000+600000
  540138 words of font info for 103 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 63i,11n,70p,2554b,606s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 63i,10n,70p,2554b,608s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on main.pdf (21 pages).
+Output written on main.pdf (20 pages).

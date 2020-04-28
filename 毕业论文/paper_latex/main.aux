@@ -5,51 +5,50 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1}引言}{1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}神经网络}{1}\protected@file@percent }
 \citation{周志华2016机器学习}
+\citation{murphy2012machine}
 \@writefile{lof}{\contentsline {figure}{\numberline {2-1}{\ignorespaces 多层感知机\relax }}{2}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:MLP}{{2-1}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}训练方法}{2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}随机梯度下降}{2}\protected@file@percent }
-\citation{murphy2012machine}
 \citation{ho2013more}
 \citation{xing2015petuum}
 \citation{wei2015managed}
+\newlabel{eqa:grad}{{2.1}{3}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}分布式学习}{3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}隐私保护的基本要求}{3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}学习系统架构简述}{3}\protected@file@percent }
 \citation{yang2019federated}
 \citation{yang2019federated}
+\citation{mcmahan2016communication}
 \@writefile{lof}{\contentsline {figure}{\numberline {3-1}{\ignorespaces 信息交流示意图\relax }}{4}\protected@file@percent }
 \newlabel{fig:commu}{{3-1}{4}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}学习系统架构}{4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}学习算法概述}{4}\protected@file@percent }
-\citation{mcmahan2016communication}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}分布式最优化算法}{4}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {3-2}{\ignorespaces 示意图，引用自论文\cite  {yang2019federated}\relax }}{5}\protected@file@percent }
 \newlabel{fig:MLP}{{3-2}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}分布式最优化算法}{5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Federated SGD}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Federated SGD}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Federated Averaging}{5}\protected@file@percent }
+\citation{chen2015mxnet}
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Federated SGD  $w$为模型权重参数; $\eta $为模型的学习率; $l(w;b)$为目标函数。\relax }}{6}\protected@file@percent }
 \newlabel{FedSGDServer}{{1}{6}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Federated Averaging}{6}\protected@file@percent }
-\citation{chen2015mxnet}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Federated Averaging  Client总数为$K$且以$k$标志；$B$是本地数据批量大小；$E$是本地训练epoch；$\eta $是学习率。\relax }}{7}\protected@file@percent }
-\newlabel{FedAvg}{{2}{7}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}系统架构}{7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}网络层}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}系统架构}{6}\protected@file@percent }
 \citation{lin2017deep}
 \citation{shokri2015privacy}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Federated Averaging  Client总数为$K$且以$k$标志；$B$是本地数据批量大小；$E$是本地训练epoch；$\eta $是学习率。\relax }}{7}\protected@file@percent }
+\newlabel{FedAvg}{{2}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}网络层}{7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}逻辑层}{7}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {4-1}{\ignorespaces 架构示意图：箭头为信息流动情况，完整的一次模型更新过程为一个round\relax }}{8}\protected@file@percent }
 \newlabel{fig:process}{{4-1}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}逻辑层}{8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}计算层和架构总结}{8}\protected@file@percent }
 \citation{lecun2015lenet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}计算层和架构总结}{9}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5}实验与分析}{9}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Federated SGD}{9}\protected@file@percent }
-\newlabel{cal}{{5.1}{10}}
+\newlabel{cal}{{5.1}{9}}
 \@writefile{lot}{\contentsline {table}{\numberline {5-1}{\ignorespaces 数据集中式与分布式计算量对比\relax }}{10}\protected@file@percent }
 \newlabel{tab:experiment}{{5-1}{10}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Federated Averaging}{10}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5-2}{\ignorespaces FedAvg分布式训练实验结果数据。实验初始化模型与6.1节中的实验相同。\relax }}{11}\protected@file@percent }
-\newlabel{tab:expFedAvg}{{5-2}{11}}
+\@writefile{lot}{\contentsline {table}{\numberline {5-2}{\ignorespaces FedAvg与FedSGD实验结果数据。实验初始化模型与5.1节中的实验相同。\relax }}{10}\protected@file@percent }
+\newlabel{tab:expFedAvg}{{5-2}{10}}
 \@writefile{toc}{\contentsline {section}{\numberline {6}总结与展望}{11}\protected@file@percent }
 \bibdata{refer}
 \bibcite{hinton2006fast}{{1}{2006}{{Hinton\ et~al.}}{{Hinton, Osindero, and Teh}}}

@@ -1,0 +1,179 @@
+\begin{thebibliography}{26}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{#1}
+\providecommand{\href}[2]{\url{#2}}
+\providecommand{\doi}[1]{\href{https://doi.org/#1}{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax\relax\else
+  \urlstyle{same}\fi
+
+\bibitem[Hinton\ et~al.(2006)Hinton, Osindero, and Teh]{hinton2006fast}
+HINTON G~E, OSINDERO S, TEH Y~W.
+\newblock A fast learning algorithm for deep belief nets\allowbreak[J].
+\newblock Neural computation, 2006, 18\penalty0 (7): 1527-1554.
+
+\bibitem[Voigt\ et~al.(2017)Voigt and Von~dem Bussche]{voigt2017eu}
+VOIGT P, VON~DEM BUSSCHE A.
+\newblock The eu general data protection regulation (gdpr)\allowbreak[J].
+\newblock A Practical Guide, 1st Ed., Cham: Springer International Publishing,
+  2017.
+
+\bibitem[McMahan\ et~al.(2016)McMahan, Moore, Ramage, Hampson,
+  et~al.]{mcmahan2016communication}
+MCMAHAN H~B, MOORE E, RAMAGE D, et~al.
+\newblock Communication-efficient learning of deep networks from decentralized
+  data\allowbreak[J].
+\newblock arXiv preprint arXiv:1602.05629, 2016.
+
+\bibitem[McMahan\ et~al.(2017)McMahan and Ramage]{googleaiblog}
+MCMAHAN H~B, RAMAGE D.
+\newblock Federated learning: Collaborative machine learning without
+  centralized training data\allowbreak[Z].
+\newblock [S.l.: s.n.], 2017.
+
+\bibitem[Erlingsson\ et~al.(2014)Erlingsson, Pihur, and
+  Korolova]{erlingsson2014rappor}
+ERLINGSSON {\'U}, PIHUR V, KOROLOVA A.
+\newblock Rappor: Randomized aggregatable privacy-preserving ordinal
+  response\allowbreak[C]//\allowbreak{}Proceedings of the 2014 ACM SIGSAC
+  conference on computer and communications security.
+\newblock [S.l.: s.n.], 2014: 1054-1067.
+
+\bibitem[Team(2017)]{appleai}
+TEAM D~P.
+\newblock Learning with privacy at scale\allowbreak[Z].
+\newblock [S.l.: s.n.], 2017.
+
+\bibitem[Chen\ et~al.(2019)Chen, Mathews, Ouyang, and
+  Beaufays]{chen2019federated}
+CHEN M, MATHEWS R, OUYANG T, et~al.
+\newblock Federated learning of out-of-vocabulary words\allowbreak[J].
+\newblock arXiv preprint arXiv:1903.10635, 2019.
+
+\bibitem[Hard\ et~al.(2018)Hard, Rao, Mathews, Ramaswamy, Beaufays, Augenstein,
+  Eichner, Kiddon, and Ramage]{hard2018federated}
+HARD A, RAO K, MATHEWS R, et~al.
+\newblock Federated learning for mobile keyboard prediction\allowbreak[J].
+\newblock arXiv preprint arXiv:1811.03604, 2018.
+
+\bibitem[Ramaswamy\ et~al.(2019)Ramaswamy, Mathews, Rao, and
+  Beaufays]{ramaswamy2019federated}
+RAMASWAMY S, MATHEWS R, RAO K, et~al.
+\newblock Federated learning for emoji prediction in a mobile
+  keyboard\allowbreak[J].
+\newblock arXiv preprint arXiv:1906.04329, 2019.
+
+\bibitem[Yang\ et~al.(2018)Yang, Andrew, Eichner, Sun, Li, Kong, Ramage, and
+  Beaufays]{yang2018applied}
+YANG T, ANDREW G, EICHNER H, et~al.
+\newblock Applied federated learning: Improving google keyboard query
+  suggestions\allowbreak[J].
+\newblock arXiv preprint arXiv:1812.02903, 2018.
+
+\bibitem[Apple(2019)]{Apple}
+APPLE.
+\newblock Private federated learning (neurips 2019 expo talk
+  abstract)\allowbreak[Z].
+\newblock [S.l.: s.n.], 2019.
+
+\bibitem[Leroy\ et~al.(2019)Leroy, Coucke, Lavril, Gisselbrecht, and
+  Dureau]{leroy2019federated}
+LEROY D, COUCKE A, LAVRIL T, et~al.
+\newblock Federated learning for keyword
+  spotting\allowbreak[C]//\allowbreak{}ICASSP 2019-2019 IEEE International
+  Conference on Acoustics, Speech and Signal Processing (ICASSP).
+\newblock [S.l.]: IEEE, 2019: 6341-6345.
+
+\bibitem[WeBank(2019)]{Webank}
+WEBANK.
+\newblock Webank and swiss re signed cooperation mou, 2019\allowbreak[J].
+\newblock URL:
+  https://finance.yahoo.com/news/webank-swiss-signed-cooperation-mou-112300218.html,
+  2019.
+
+\bibitem[Courtiol\ et~al.(2019)Courtiol, Maussion, Moarii, Pronier, Pilcer,
+  Sefta, Manceron, Toldo, Zaslavskiy, Le~Stang, et~al.]{courtiol2019deep}
+COURTIOL P, MAUSSION C, MOARII M, et~al.
+\newblock Deep learning-based classification of mesothelioma improves
+  prediction of patient outcome\allowbreak[J].
+\newblock Nature medicine, 2019, 25\penalty0 (10): 1519-1525.
+
+\bibitem[周志华(2016)]{周志华2016机器学习}
+周志华.
+\newblock 机器学习\allowbreak[M].
+\newblock China: 清华大学出版社, 2016.
+
+\bibitem[Murphy(2012)]{murphy2012machine}
+MURPHY K~P.
+\newblock Machine learning: a probabilistic perspective\allowbreak[M].
+\newblock [S.l.]: MIT press, 2012.
+
+\bibitem[Ho\ et~al.(2013)Ho, Cipar, Cui, Lee, Kim, Gibbons, Gibson, Ganger, and
+  Xing]{ho2013more}
+HO Q, CIPAR J, CUI H, et~al.
+\newblock More effective distributed ml via a stale synchronous parallel
+  parameter server\allowbreak[C]//\allowbreak{}Advances in neural information
+  processing systems.
+\newblock [S.l.: s.n.], 2013: 1223-1231.
+
+\bibitem[Xing\ et~al.(2015)Xing, Ho, Dai, Kim, Wei, Lee, Zheng, Xie, Kumar, and
+  Yu]{xing2015petuum}
+XING E~P, HO Q, DAI W, et~al.
+\newblock Petuum: A new platform for distributed machine learning on big
+  data\allowbreak[J].
+\newblock IEEE Transactions on Big Data, 2015, 1\penalty0 (2): 49-67.
+
+\bibitem[Wei\ et~al.(2015)Wei, Dai, Qiao, Ho, Cui, Ganger, Gibbons, Gibson, and
+  Xing]{wei2015managed}
+WEI J, DAI W, QIAO A, et~al.
+\newblock Managed communication and consistency for fast data-parallel
+  iterative analytics\allowbreak[C]//\allowbreak{}Proceedings of the Sixth ACM
+  Symposium on Cloud Computing.
+\newblock [S.l.: s.n.], 2015: 381-394.
+
+\bibitem[Dean\ et~al.(2012)Dean, Corrado, Monga, Chen, Devin, Mao, Ranzato,
+  Senior, Tucker, Yang, et~al.]{dean2012large}
+DEAN J, CORRADO G, MONGA R, et~al.
+\newblock Large scale distributed deep
+  networks\allowbreak[C]//\allowbreak{}Advances in neural information
+  processing systems.
+\newblock [S.l.: s.n.], 2012: 1223-1231.
+
+\bibitem[Yang\ et~al.(2019)Yang, Liu, Chen, and Tong]{yang2019federated}
+YANG Q, LIU Y, CHEN T, et~al.
+\newblock Federated machine learning: Concept and applications\allowbreak[J].
+\newblock ACM Transactions on Intelligent Systems and Technology (TIST), 2019,
+  10\penalty0 (2): 1-19.
+
+\bibitem[Chen\ et~al.(2015)Chen, Li, Li, Lin, Wang, Wang, Xiao, Xu, Zhang, and
+  Zhang]{chen2015mxnet}
+CHEN T, LI M, LI Y, et~al.
+\newblock Mxnet: A flexible and efficient machine learning library for
+  heterogeneous distributed systems\allowbreak[J].
+\newblock arXiv preprint arXiv:1512.01274, 2015.
+
+\bibitem[Lin\ et~al.(2017)Lin, Han, Mao, Wang, and Dally]{lin2017deep}
+LIN Y, HAN S, MAO H, et~al.
+\newblock Deep gradient compression: Reducing the communication bandwidth for
+  distributed training\allowbreak[J].
+\newblock arXiv preprint arXiv:1712.01887, 2017.
+
+\bibitem[Shokri\ et~al.(2015)Shokri and Shmatikov]{shokri2015privacy}
+SHOKRI R, SHMATIKOV V.
+\newblock Privacy-preserving deep
+  learning\allowbreak[C]//\allowbreak{}Proceedings of the 22nd ACM SIGSAC
+  conference on computer and communications security.
+\newblock [S.l.: s.n.], 2015: 1310-1321.
+
+\bibitem[LeCun\ et~al.(2015)LeCun et~al.]{lecun2015lenet}
+LECUN Y, et~al.
+\newblock Lenet-5, convolutional neural networks\allowbreak[J].
+\newblock URL: http://yann. lecun. com/exdb/lenet, 2015, 20: 5.
+
+\bibitem[Hsieh\ et~al.(2019)Hsieh, Phanishayee, Mutlu, and
+  Gibbons]{hsieh2019non}
+HSIEH K, PHANISHAYEE A, MUTLU O, et~al.
+\newblock The non-iid data quagmire of decentralized machine
+  learning\allowbreak[J].
+\newblock arXiv preprint arXiv:1910.00189, 2019.
+
+\end{thebibliography}

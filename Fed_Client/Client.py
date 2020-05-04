@@ -28,7 +28,7 @@ class Client:
         self.learning_rate = None
         self.batch_size = None
         self.epoch = None
-        self.__param_sync()
+        self.__param_sync()  #同步参数
         # log类
         self.log = log(path_base + "\\Fed_Client\\log")
 
@@ -91,13 +91,11 @@ class Client:
         # 考虑不同算法 朴素Fed,FedAvg回传信息时的处理
         print("\n******Phase 1******")
         self.__ask_for_model(self.recv_model_savepath)
-        #print("\n******Phase 2******")
-        #self.__param_sync()
-        print("\n******Phase 3******")
+        print("\n******Phase 2******")
         self.data_handler.load_model(self.recv_model_savepath)
-        print("\n******Phase 4******")
+        print("\n******Phase 3******")
         self.data_handler.local_train(batch_size=self.batch_size,learning_rate=self.learning_rate,epoch=self.epoch,train_mode=self.train_mode)
-        print("\n******Phase 5******")
+        print("\n******Phase 4******")
         # 根据训练模式不同 选择回传梯度或者模型
         if self.train_mode=='gradient':
             grad_info = self.data_handler.get_gradient()

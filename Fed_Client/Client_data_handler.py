@@ -115,6 +115,8 @@ class Client_data_handler:
             name, acc = metric.get()
             metric.reset()
             print('training acc at epoch %d/%d: %s=%f'%(i+1,epoch, name, acc))
+            if acc>= 1:
+                break
 
     def get_model(self):
         return copy.deepcopy(self.__net)

@@ -14,7 +14,7 @@ class server_log(log):
         with open(path_base+"\\Fed_Server\\client_train_param.json",'r') as f:
             json_data = json.load(f)
         self.write_data = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime()) + "\n" + str(json_data) + "\n"
-    
+        self.file_name = "Train_Information"+time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
     def record_acc(self, accuracy):
         self.accuracy.append(accuracy)
 
@@ -23,12 +23,7 @@ class server_log(log):
 
     def add_data(self,data):
         self.write_data += data + "\n"
-        
     def record_to_file(self):
-        Tim = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
-        self.write_data += str(self.communication_round) + "\n"
-        self.write_data += str(self.accuracy) + "\n"
-        file_name ="Train_Information"+Tim
-        print("Server Log: 日志文件写入", file_name)
-        self.new_log_file(file_name,self.write_data)
+        print("Server Log: 日志文件写入", self.file_name)
+        self.new_log_file(self.file_name,self.write_data+str(self.communication_round)+"\n"+str(self.accuracy) + "\n")
         

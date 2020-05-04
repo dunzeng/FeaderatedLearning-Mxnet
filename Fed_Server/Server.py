@@ -17,7 +17,7 @@ class Sever():
     # 网络服务器：
     # 维护网络通信，与Client交流
     # 与后台数据处理类进行信息交换
-    def __init__(self, model, input_shape, init_model_randomly, init_model_path="", FedAvg=False):
+    def __init__(self, model, input_shape, init_model_randomly, decay_factor=0.99, init_model_path="", FedAvg=False):
         # server_data_handler由开发者初始化作为成员参数传入Server类
         # 从Json文件中读取系统配置
         # 网络连接采用TCP协议
@@ -43,6 +43,10 @@ class Sever():
         # log类
         self.log = server_log(path_base + "\\Fed_Server\\log")
         self.log.add_data(self.data_handler.get_model_info())
+
+        # for lr deacy
+        self.commu_rnd = 0
+        self.decay_factor = decay_factor
 
     def __send_model(self,connection,model_path=""):  #待重写
         # 将model模型文件发送至Client
@@ -84,9 +88,14 @@ class Sever():
         # train_mode learning_rate input_shape
         with open(path_base+"\\Fed_Server\\client_train_param.json",'r') as f:
             json_data = json.load(f)
+        json_data["learning_rate"] = self.__learning_rate_decay(json_data["learning_rate"],self.decay_factor, 0.0001)
         print("发送参数 ",json_data)
         utils.send_class(connection,json_data)
          
+    def __learning_rate_decay(self, lr, deacy_factor, min_lr):
+        # 学习率衰减
+        return min(lr*(0.99**self.commu_rnd),min_lr) 
+
     def message_handler(self, new_sock, clinet_info):
         # 多线程响应
         # 线程同步机制未添加
@@ -164,11 +173,15 @@ class Sever():
                     self.log.record_acc(acc)
                 else:
                     if acc != -1:
+                        print("当前迭代轮次：",self.commu_rnd)
+                        self.commu_rnd+=1
                         self.log.add_cummu_round()
                         self.log.record_acc(acc)
                         if acc >= 0.97:
                             self.log.record_to_file()
                             break
+                        if self.commu_rnd%10 == 0:
+                            self.log.record_to_file()
             elif message=='6666':
                 # 待修改 结束循环并将日志信息存入log
                 self.log.record_to_file()

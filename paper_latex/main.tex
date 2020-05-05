@@ -258,13 +258,26 @@ MXNet是amazon的一个轻量化分布式可移植深度学习计算平台，在
 \section{实验与分析}
 本章在上述框架上开发一个基础的隐私保护的分布式学习系统，在其上拓展实现FedAvg算法并完成一个图像分类任务，讨论现有算法的优势与局限性。在体现框架可用性的同时，并分析未来的研究难点与方向。\par
 实验中，本文选择了常用的数据集MNIST，MNIST数据集包括60,000张图像的训练集和10,000张图像的验证集，每一张图片为0-9中的一个手写数字并带有标签。模型选取了简单的感知机模型（带有两个隐藏层，分别有128和64个神经元，并选取ReLu作为激活函数,下文称2NN）和卷积神经网络LeNet-5\cite{lecun2015lenet}，在Mnist数据集上训练模型完成分类任务。\par
-在实验中，本文将训练数据集随机分割并分配至100个Client，每个Client有600张训练图。而对于不平衡的数据集分割，本文将数据集先根据标签将数据排序，然后将数据分割为300张图片每份的数据子集，再随机将2份数据子集分配给每一个Client。不平衡数据集中，由于Mnist数据集并不是平均每个标签6000张图，因此每个Client至多拥有三种且其中一种数字图极少的数据或至少拥有两种数字图数据。\par
-图\ref{fig:random_data}是100个Client中随机选出的5个Client数据的标签分布情况。
+
+\begin{figure}[h]
+	\centering %居中
+	\includegraphics[scale=0.4]{assets/LeNet}
+	\caption{LeNet-5}
+	\label{fig:lenet}
+\end{figure}
+
+在实验中，本文将训练数据集随机分割并分配至100个Client，每个Client有600张训练图。而对于不平衡的数据集分割，本文将数据集先根据标签将数据排序，然后将数据分割为300张图片每份的数据子集，再随机将2份数据子集分配给每一个Client。不平衡数据集中，由于Mnist数据集并不是平均每个标签6000张图，因此每个Client至多拥有三种且其中一种数字图极少的数据或至少拥有两种数字图数据。图\ref{fig:random_data}和图\ref{fig:non-iid}是Mnist在两种数据集分割后，从100个Client中随机选出的5份数据的标签分布情况。\par
 \begin{figure}[h]
 	\centering %居中
 	\includegraphics[width=15cm,height=4cm]{assets/random_data}
-	\caption{数据集分布情况}
+	\caption{随机数据集分布情况}
 	\label{fig:random_data}
+\end{figure}
+\begin{figure}[h]
+	\centering %居中
+	\includegraphics[width=15cm,height=4cm]{assets/Non-IID}
+	\caption{Non-IID数据集分布情况}
+	\label{fig:non-iid}
 \end{figure}
 
 
@@ -368,7 +381,7 @@ FedAvg相比于FedSGD实质上是计算量与训练时间的权衡，FedAvg通�
 	不平衡：不同标签下的数据量分布不同。
 \end{itemize}
 \par
-本节关注FedAvg在不平衡的数据集下，训练模型达到目标准确率时的训练效率，并将其表现与在正常分布的数据集下训练的表现进行比较分析与讨论。
+本节关注FedAvg在不平衡的数据集下，训练模型达到目标准确率时的训练效率，并将其表现与在正常分布的数据集下训练的表现进行比较分析与讨论。为了进一步探讨上一节关于计算量与迭代轮次的联系，特别定义$u=En/(KB)$，表示算法在Client端的计算负载情况。参数$u$代表一轮模型迭代（round）中，Client端进行本地模型参数迭代的次数。
 
 \section{总结与展望}
 本文设计并实现了一个隐私保护的分布式机器学习框架原型，该框架采用三层架构设计，并为研究者提供了分布式系统的算法实现的快速解决方案。之后，本文基于该框架实现了Mnist数据集的图像分类任务学习的分布式学习算法，并拓展研究了FedAvg和FedSGD的实验，讨论了其各项表现。\par

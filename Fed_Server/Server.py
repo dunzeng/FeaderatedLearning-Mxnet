@@ -2,16 +2,16 @@ import sys
 path_base = "E:\\PythonProjects\\Mxnet_FederatedLearning"
 sys.path.append(path_base)
 import mxnet as mx
-from socket import socket
 import os
 import pickle
-from Fed_Server.Server_data_handler import Server_data_handler
 import json
-from Tools import utils
 import time
 from threading import Thread
-mx.random.seed(int(time.time()))
+from Tools import utils
+from socket import socket
+from Fed_Server.Server_data_handler import Server_data_handler
 from Fed_Server.Server_log import server_log
+mx.random.seed(int(time.time()))
 
 class Sever():
     # 网络服务器：
@@ -44,7 +44,7 @@ class Sever():
         self.log = server_log(path_base + "\\Fed_Server\\log")
         self.log.add_data(self.data_handler.get_model_info())
 
-        # for lr deacy
+        # 学习率衰减算法
         self.commu_rnd = 0
         self.decay_factor = decay_factor
 

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  4 MAY 2020 23:13
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  5 MAY 2020 21:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -802,18 +802,34 @@ File: assets/process.png Graphic file (type bmp)
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [10] [11]
+File: assets/LeNet.png Graphic file (type bmp)
+<assets/LeNet.png>
+
+Overfull \hbox (14.85083pt too wide) in paragraph at lines 264--265
+ [][] 
+ []
+
 File: assets/random_data.png Graphic file (type bmp)
 <assets/random_data.png>
- [12]
-Underfull \hbox (badness 10000) in paragraph at lines 288--306
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+File: assets/Non-IID.png Graphic file (type bmp)
+<assets/Non-IID.png>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 301--319
 [][]
  []
 
+[13]
 
-LaTeX Warning: Reference `tab:expFedAvg' on page 13 undefined on input line 310
+LaTeX Warning: Reference `tab:expFedAvg' on page 14 undefined on input line 323
 .
 
-[13] [14] [15] [16] (./main.bbl
+[14] [15] [16] (./main.bbl
 Underfull \hbox (badness 1158) in paragraph at lines 22--26
 []\TU/lmr/m/n/12.045 MCMAHAN H B, MOORE E, RAMAGE D, et al.  Communication-
  []
@@ -833,7 +849,7 @@ Underfull \hbox (badness 2538) in paragraph at lines 161--166
 [18]) [19]
 
 LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
-(Font)              using `TU/SimSun(1)/m/n' instead on input line 383.
+(Font)              using `TU/SimSun(1)/m/n' instead on input line 396.
 
 [20] [21] (./main.aux)
 
@@ -851,10 +867,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 11589 strings out of 479805
- 277747 string characters out of 5893180
- 570801 words of memory out of 5000000
- 28460 multiletter control sequences out of 15000+600000
+ 11613 strings out of 479805
+ 278143 string characters out of 5893180
+ 570823 words of memory out of 5000000
+ 28482 multiletter control sequences out of 15000+600000
  541275 words of font info for 107 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  63i,11n,70p,2554b,606s stack positions out of 5000i,500n,10000p,200000b,80000s

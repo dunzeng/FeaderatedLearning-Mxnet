@@ -1,22 +1,27 @@
 \contentsline {section}{\numberline {1}引言}{1}%
-\contentsline {section}{\numberline {2}神经网络}{2}%
-\contentsline {subsection}{\numberline {2.1}神经元模型}{2}%
+\contentsline {subsection}{\numberline {1.1}概述}{1}%
+\contentsline {subsection}{\numberline {1.2}面临的挑战}{1}%
+\contentsline {subsection}{\numberline {1.3}国内外研究现状}{2}%
+\contentsline {subsection}{\numberline {1.4}本文内容}{2}%
+\contentsline {section}{\numberline {2}神经网络}{3}%
+\contentsline {subsection}{\numberline {2.1}神经元模型}{3}%
 \contentsline {subsection}{\numberline {2.2}激活函数}{3}%
-\contentsline {subsection}{\numberline {2.3}感知机}{3}%
-\contentsline {subsection}{\numberline {2.4}训练方法}{4}%
-\contentsline {section}{\numberline {3}分布式学习}{5}%
+\contentsline {subsection}{\numberline {2.3}感知机}{4}%
+\contentsline {subsection}{\numberline {2.4}训练方法}{5}%
+\contentsline {section}{\numberline {3}分布式学习}{6}%
 \contentsline {subsection}{\numberline {3.1}隐私保护的基本要求}{6}%
 \contentsline {subsection}{\numberline {3.2}学习系统架构简述}{7}%
-\contentsline {subsection}{\numberline {3.3}分布式最优化算法}{7}%
-\contentsline {subsubsection}{\numberline {3.3.1}Federated SGD}{8}%
-\contentsline {subsubsection}{\numberline {3.3.2}Federated Averaging}{8}%
-\contentsline {section}{\numberline {4}系统架构}{9}%
-\contentsline {subsection}{\numberline {4.1}网络层}{10}%
-\contentsline {subsection}{\numberline {4.2}逻辑层}{11}%
-\contentsline {subsection}{\numberline {4.3}计算层和架构总结}{11}%
+\contentsline {subsection}{\numberline {3.3}分布式最优化算法}{8}%
+\contentsline {subsubsection}{\numberline {3.3.1}Federated SGD}{9}%
+\contentsline {subsubsection}{\numberline {3.3.2}Federated Averaging}{9}%
+\contentsline {section}{\numberline {4}系统架构}{10}%
+\contentsline {subsection}{\numberline {4.1}网络层}{11}%
+\contentsline {subsection}{\numberline {4.2}逻辑层}{12}%
+\contentsline {subsection}{\numberline {4.3}计算层和架构总结}{12}%
 \contentsline {section}{\numberline {5}实验与分析}{12}%
-\contentsline {subsection}{\numberline {5.1}Federated SGD}{12}%
-\contentsline {subsection}{\numberline {5.2}Federated Averaging}{14}%
-\contentsline {subsection}{\numberline {5.3}不平衡数据集}{15}%
-\contentsline {section}{\numberline {6}总结与展望}{16}%
+\contentsline {subsection}{\numberline {5.1}Federated SGD}{14}%
+\contentsline {subsection}{\numberline {5.2}Federated Averaging}{15}%
+\contentsline {subsection}{\numberline {5.3}不平衡数据集}{17}%
+\contentsline {subsection}{\numberline {5.4}局限性讨论}{18}%
+\contentsline {section}{\numberline {6}总结与展望}{19}%
 \contentsfinish 

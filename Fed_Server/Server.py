@@ -88,7 +88,7 @@ class Sever():
         # train_mode learning_rate input_shape
         with open(path_base+"\\Fed_Server\\client_train_param.json",'r') as f:
             json_data = json.load(f)
-        json_data["learning_rate"] = self.__learning_rate_decay(json_data["learning_rate"],self.decay_factor, 0.0001)
+        #json_data["learning_rate"] = self.__learning_rate_decay(json_data["learning_rate"],self.decay_factor, 0.0001)
         print("发送参数 ",json_data)
         utils.send_class(connection,json_data)
          
@@ -177,7 +177,7 @@ class Sever():
                         self.commu_rnd+=1
                         self.log.add_cummu_round()
                         self.log.record_acc(acc)
-                        if acc >= 0.97:
+                        if acc >= 0.98:
                             self.log.record_to_file()
                             break
                         if self.commu_rnd%10 == 0:

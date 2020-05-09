@@ -1,4 +1,4 @@
-\begin{thebibliography}{26}
+\begin{thebibliography}{27}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{#1}
 \providecommand{\href}[2]{\url{#2}}
@@ -29,6 +29,19 @@ MCMAHAN H~B, RAMAGE D.
 \newblock Federated learning: Collaborative machine learning without
   centralized training data\allowbreak[Z].
 \newblock [S.l.: s.n.], 2017.
+
+\bibitem[Shokri\ et~al.(2015)Shokri and Shmatikov]{shokri2015privacy}
+SHOKRI R, SHMATIKOV V.
+\newblock Privacy-preserving deep
+  learning\allowbreak[C]//\allowbreak{}Proceedings of the 22nd ACM SIGSAC
+  conference on computer and communications security.
+\newblock [S.l.: s.n.], 2015: 1310-1321.
+
+\bibitem[Lin\ et~al.(2017)Lin, Han, Mao, Wang, and Dally]{lin2017deep}
+LIN Y, HAN S, MAO H, et~al.
+\newblock Deep gradient compression: Reducing the communication bandwidth for
+  distributed training\allowbreak[J].
+\newblock arXiv preprint arXiv:1712.01887, 2017.
 
 \bibitem[Erlingsson\ et~al.(2014)Erlingsson, Pihur, and
   Korolova]{erlingsson2014rappor}
@@ -151,19 +164,6 @@ CHEN T, LI M, LI Y, et~al.
   heterogeneous distributed systems\allowbreak[J].
 \newblock arXiv preprint arXiv:1512.01274, 2015.
 
-\bibitem[Lin\ et~al.(2017)Lin, Han, Mao, Wang, and Dally]{lin2017deep}
-LIN Y, HAN S, MAO H, et~al.
-\newblock Deep gradient compression: Reducing the communication bandwidth for
-  distributed training\allowbreak[J].
-\newblock arXiv preprint arXiv:1712.01887, 2017.
-
-\bibitem[Shokri\ et~al.(2015)Shokri and Shmatikov]{shokri2015privacy}
-SHOKRI R, SHMATIKOV V.
-\newblock Privacy-preserving deep
-  learning\allowbreak[C]//\allowbreak{}Proceedings of the 22nd ACM SIGSAC
-  conference on computer and communications security.
-\newblock [S.l.: s.n.], 2015: 1310-1321.
-
 \bibitem[LeCun\ et~al.(2015)LeCun et~al.]{lecun2015lenet}
 LECUN Y, et~al.
 \newblock Lenet-5, convolutional neural networks\allowbreak[J].
@@ -175,5 +175,10 @@ HSIEH K, PHANISHAYEE A, MUTLU O, et~al.
 \newblock The non-iid data quagmire of decentralized machine
   learning\allowbreak[J].
 \newblock arXiv preprint arXiv:1910.00189, 2019.
+
+\bibitem[Peng\ et~al.(2019)Peng, Huang, Zhu, and Saenko]{peng2019federated}
+PENG X, HUANG Z, ZHU Y, et~al.
+\newblock Federated adversarial domain adaptation\allowbreak[J].
+\newblock arXiv preprint arXiv:1911.02054, 2019.
 
 \end{thebibliography}

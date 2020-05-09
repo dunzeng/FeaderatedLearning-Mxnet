@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  5 MAY 2020 21:48
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  9 MAY 2020 10:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -757,101 +757,89 @@ LaTeX Font Warning: Font shape `OMX/cmex/m/n' in size <10.53937> not available
 \tf@toc=\write3
 \openout3 = `main.toc'.
 
- [3] [1]
+ [3] [1] [2]
 File: assets/unit.png Graphic file (type bmp)
 <assets/unit.png>
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[2]
+ [3]
 File: assets/actfunc.png Graphic file (type bmp)
 <assets/actfunc.png>
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[3]
 File: assets/MLP.png Graphic file (type bmp)
 <assets/MLP.png>
- [4]
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[4] [5]
 File: assets/pserver.png Graphic file (type bmp)
 <assets/pserver.png>
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 File: assets/test.png Graphic file (type bmp)
 <assets/test.png>
-[5] [6]
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[6]
 File: assets/fed.png Graphic file (type bmp)
 <assets/fed.png>
- [7]
+
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[8]
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9]
+[7] [8] [9] [10]
 File: assets/process.png Graphic file (type bmp)
 <assets/process.png>
+ [11]
+File: assets/process2.png Graphic file (type bmp)
+<assets/process2.png>
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[10] [11]
-File: assets/LeNet.png Graphic file (type bmp)
-<assets/LeNet.png>
-
-Overfull \hbox (14.85083pt too wide) in paragraph at lines 264--265
- [][] 
- []
-
-File: assets/random_data.png Graphic file (type bmp)
-<assets/random_data.png>
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-File: assets/Non-IID.png Graphic file (type bmp)
-<assets/Non-IID.png>
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [12]
-Underfull \hbox (badness 10000) in paragraph at lines 301--319
-[][]
+File: assets/LeNet.png Graphic file (type bmp)
+<assets/LeNet.png>
+
+Overfull \hbox (14.85083pt too wide) in paragraph at lines 279--280
+ [][] 
  []
 
 [13]
+File: assets/random_data.png Graphic file (type bmp)
+<assets/random_data.png>
+File: assets/Non-IID.png Graphic file (type bmp)
+<assets/Non-IID.png>
+ [14]
+Underfull \hbox (badness 10000) in paragraph at lines 316--334
+[][]
+ []
 
-LaTeX Warning: Reference `tab:expFedAvg' on page 14 undefined on input line 323
+
+LaTeX Warning: Reference `tab:expFedAvg' on page 15 undefined on input line 338
 .
 
-[14] [15] [16] (./main.bbl
+[15] [16] [17] [18] [19] (./main.bbl
 Underfull \hbox (badness 1158) in paragraph at lines 22--26
 []\TU/lmr/m/n/12.045 MCMAHAN H B, MOORE E, RAMAGE D, et al.  Communication-
  []
 
 
-Underfull \hbox (badness 2359) in paragraph at lines 87--92
-[]\TU/lmr/m/n/12.045 WEBANK.  Webank and swiss re signed cooperation mou, 2019[
-J].
- []
-
-[17]
-Underfull \hbox (badness 2538) in paragraph at lines 161--166
+Underfull \hbox (badness 2538) in paragraph at lines 34--39
 []\TU/lmr/m/n/12.045 SHOKRI R, SHMATIKOV V.  Privacy-preserving deep learning[C
 ]//
  []
 
-[18]) [19]
+[20]
+Underfull \hbox (badness 2359) in paragraph at lines 100--105
+[]\TU/lmr/m/n/12.045 WEBANK.  Webank and swiss re signed cooperation mou, 2019[
+J].
+ []
+
+[21]) [22]
 
 LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
-(Font)              using `TU/SimSun(1)/m/n' instead on input line 396.
+(Font)              using `TU/SimSun(1)/m/n' instead on input line 464.
 
-[20] [21] (./main.aux)
+[23] [24] (./main.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.22pt have occurred.
@@ -867,12 +855,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 11613 strings out of 479805
- 278143 string characters out of 5893180
- 570823 words of memory out of 5000000
- 28482 multiletter control sequences out of 15000+600000
+ 11662 strings out of 479805
+ 280494 string characters out of 5893180
+ 570927 words of memory out of 5000000
+ 28530 multiletter control sequences out of 15000+600000
  541275 words of font info for 107 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  63i,11n,70p,2554b,606s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on main.pdf (26 pages).
+Output written on main.pdf (29 pages).

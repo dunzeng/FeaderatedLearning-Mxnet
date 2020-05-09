@@ -1,47 +1,47 @@
-This is BibTeX, Version 0.99d (TeX Live 2020/W32TeX)
+This is BibTeX, Version 0.99d (TeX Live 2019/W32TeX)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
 The style file: gbt7714-unsrt.bst
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: refer.bib
-You've used 26 entries,
+You've used 27 entries,
             3663 wiz_defined-function locations,
-            923 strings with 10979 characters,
-and the built_in function-call counts, 166636 in all, are:
-= -- 1536
-> -- 20054
-< -- 26387
-+ -- 7187
-- -- 243
-* -- 917
-:= -- 23241
-add.period$ -- 78
-call.type$ -- 26
-change.case$ -- 113
-chr.to.int$ -- 6528
-cite$ -- 26
-duplicate$ -- 527
-empty$ -- 1325
-format.name$ -- 510
-if$ -- 42696
+            927 strings with 11129 characters,
+and the built_in function-call counts, 171842 in all, are:
+= -- 1588
+> -- 20677
+< -- 27201
++ -- 7411
+- -- 252
+* -- 949
+:= -- 23975
+add.period$ -- 81
+call.type$ -- 27
+change.case$ -- 118
+chr.to.int$ -- 6729
+cite$ -- 27
+duplicate$ -- 547
+empty$ -- 1369
+format.name$ -- 530
+if$ -- 44024
 int.to.chr$ -- 1
-int.to.str$ -- 27
+int.to.str$ -- 28
 missing$ -- 0
-newline$ -- 139
-num.names$ -- 78
-pop$ -- 9515
+newline$ -- 144
+num.names$ -- 81
+pop$ -- 9807
 preamble$ -- 1
-purify$ -- 26
+purify$ -- 27
 quote$ -- 0
-skip$ -- 17082
+skip$ -- 17617
 stack$ -- 0
-substring$ -- 7046
-swap$ -- 79
-text.length$ -- 279
+substring$ -- 7254
+swap$ -- 83
+text.length$ -- 289
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 245
+type$ -- 256
 warning$ -- 0
-while$ -- 352
+while$ -- 364
 width$ -- 0
-write$ -- 372
+write$ -- 385

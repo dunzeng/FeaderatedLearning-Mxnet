@@ -23,8 +23,8 @@ RandomInit = False
 # 初始化模型文件
 InitModelFile = BASE_DIR + "init_model.params"
 
-
-
 # Client参数
 # 学习率
 LR = 0.01
+# Client端返回信息标志  weight：Client返回模型  gradient: Client返回梯度  defined： 自定义
+Mode = "weight"

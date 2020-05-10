@@ -1,5 +1,5 @@
 import sys
-path_base = "E:\\PythonProjects\\Mxnet_FederatedLearning"
+path_base = "D:\\Mxnet_FederatedLearning"
 sys.path.append(path_base)
 
 from Tools.log import log

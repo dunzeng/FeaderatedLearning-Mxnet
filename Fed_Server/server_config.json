@@ -1,5 +1,5 @@
 {
     "port":8080,
     "host":"localhost",
-    "update_model_path":"E:\\PythonProjects\\Mxnet_FederatedLearning\\Fed_Server\\current_model.params"
+    "update_model_path":"D:\\Mxnet_FederatedLearning\\Fed_Server\\current_model.params"
 }

@@ -1,7 +1,7 @@
 {
     "learning_rate":0.02,
-    "batch_size":600,
-    "epoch":20,
+    "batch_size":10,
+    "epoch":5,
     "train_mode":"FedAvg",
     "cla":10
 }

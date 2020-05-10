@@ -17,11 +17,11 @@
 \contentsline {section}{\numberline {4}系统架构}{10}%
 \contentsline {subsection}{\numberline {4.1}网络层}{11}%
 \contentsline {subsection}{\numberline {4.2}逻辑层}{12}%
-\contentsline {subsection}{\numberline {4.3}计算层和架构总结}{12}%
-\contentsline {section}{\numberline {5}实验与分析}{12}%
+\contentsline {subsection}{\numberline {4.3}计算层和架构总结}{13}%
+\contentsline {section}{\numberline {5}实验与分析}{13}%
 \contentsline {subsection}{\numberline {5.1}Federated SGD}{14}%
 \contentsline {subsection}{\numberline {5.2}Federated Averaging}{15}%
 \contentsline {subsection}{\numberline {5.3}不平衡数据集}{17}%
-\contentsline {subsection}{\numberline {5.4}局限性讨论}{18}%
-\contentsline {section}{\numberline {6}总结与展望}{19}%
+\contentsline {subsection}{\numberline {5.4}优点与局限性分析}{18}%
+\contentsline {section}{\numberline {6}总结与展望}{20}%
 \contentsfinish 

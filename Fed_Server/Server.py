@@ -41,11 +41,11 @@ class Sever():
             self.data_handler.activate_FedAvg(cla=client_train_param['cla'])
         
         # log类
-        self.log = server_log(path_base + "\\Fed_Server\\log")
+        self.log = server_log(path_base + "\\Fed_Server\\log\\extra_exp")
         self.log.add_data(self.data_handler.get_model_info())
 
+        self.commu_rnd = 1
         # 学习率衰减算法
-        self.commu_rnd = 0
         self.decay_factor = decay_factor
 
     def __send_model(self,connection,model_path=""):  #待重写

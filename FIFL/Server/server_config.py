@@ -11,7 +11,6 @@ print(BASE_DIR)
 # server端监听端口
 IP_PORT = ("localhost",8080)
 
-
 # 逻辑层参数
 
 # 模型输入数据形状

@@ -13,6 +13,8 @@ def single_process(data_idx=0):
     train_data = {}
     data = "D:\\Mxnet_FederatedLearning\\Fed_Client\\FedAvg_data_Non-IID\\train_data" + str(data_idx) + ".npy"
     label = "D:\\Mxnet_FederatedLearning\\Fed_Client\\FedAvg_data_Non-IID\\train_label" + str(data_idx) + ".npy"
+    #data = "D:\\Mxnet_FederatedLearning\\Fed_Client\\FedAvg_data_random\\train_data" + str(data_idx) + ".npy"
+    #label = "D:\\Mxnet_FederatedLearning\\Fed_Client\\FedAvg_data_random\\train_label" + str(data_idx) + ".npy"
     train_data['data'] = data
     train_data['label'] = label
     clinet_network = Client(model, input_shape=shape, train_data=train_data)

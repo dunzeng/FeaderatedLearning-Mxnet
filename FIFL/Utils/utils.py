@@ -21,19 +21,10 @@ def cut_bytes(data,block_size):
         idx += block_size 
     return ret
 
-def send_data(connect, data):
-    data = pickle.dumps(data)
-    connect.send(data)
-
-def recv_data(connect):
-    pass
-
-
 def send_class(connect, class_data):
     # 利用pickle模块将data序列化，并通过connect发送
     # connect参数为socket连接对象
     data = pickle.dumps(class_data)
-    #connect.sendall(data)
     data_list = cut_bytes(data,1024)
     list_size = len(data_list)
     msg = str(list_size).encode('utf-8')
@@ -44,7 +35,6 @@ def send_class(connect, class_data):
 
 def recv_class(connect):
     # 与send_class成对使用，从socket连接中接收数据
-    # 1024bit为1Byte
     tmp_data = connect.recv(1024)
     try:
         block_size = int(tmp_data.decode())

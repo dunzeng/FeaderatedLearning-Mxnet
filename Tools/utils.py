@@ -1,10 +1,27 @@
 import mxnet as mx
 import mxnet.ndarray as nd
+from mxnet import gluon
 import pickle
 from tqdm import tqdm
 import numpy as np
 import random
 import time
+
+
+def validata_data_by_Mnist(net):
+    mnist = mx.test_utils.get_mnist()
+    val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100)
+    ctx = try_all_gpus()
+    for batch in val_data:
+        data = gluon.utils.split_and_load(batch.data[0],ctx_list=ctx,batch_axis=0)
+        label = gluon.utils.split_and_load(batch.label[0],ctx_list=ctx,batch_axis=0)
+        outputs = []
+        metric = mx.metric.Accuracy()  
+        for x in data:
+            outputs.append(net(x))
+        metric.update(label,outputs)
+    _,acc = metric.get()
+    return acc
 
 def network_layers_filter(network):
     """

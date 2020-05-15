@@ -13,9 +13,12 @@ Data_Shape = (1,28,28)
 
 # 训练数据路径
 Train_Data_Path = BASE_DIR + "data\\data"
+Train_Label_Path = BASE_DIR + "data\\label"
 
 # 验证数据路径
 Val_Data_Path = BASE_DIR + "data\\val_data"
+Val_Label_Path = BASE_DIR + "data\\val_label"
+
 
 # SGD训练数据
 Batch_size = 100

@@ -6,6 +6,7 @@ from mxnet import autograd as ag
 from mxnet.gluon import nn
 from mxnet import gluon
 from copy import deepcopy
+
 class ClientHandler:
     def __init__(self, model):
         self.__net = model
@@ -47,7 +48,7 @@ class ClientHandler:
             except:
                 continue
     
-    def __train_data_loader(self, batch_size):
+    def __train_data_loader(self, batch_size=100):
         # pickle
         path = client_config.Train_Data_Path
         data,label = None,None

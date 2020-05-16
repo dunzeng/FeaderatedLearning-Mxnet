@@ -10,17 +10,16 @@ from copy import deepcopy
 class ClientHandler:
     def __init__(self, model):
         self.__net = model
+        self.__init_model_randomly()
         self.__ctx = utils.try_all_gpus()
         # 梯度列表
         self.grad_dict = {"weight":[],"bias":[]}
-        
+        self.__init_gradient_list()
+
     def __init_model_randomly(self):
         # 随机初始化用户自定义的模型
         self.__net.initialize(mx.init.Xavier(magnitude=2.24),ctx=self.__ctx)
         self.__net(nd.random.uniform(shape=client_config.Data_Shape,ctx=self.__ctx[0]))
-
-    def __load_model(self, model_path):
-        self.__net.load_parameters(model_path,ctx=self.__ctx)
 
     def __init_gradient_list(self):
         self.grad_dict['weight'].clear()
@@ -34,7 +33,7 @@ class ClientHandler:
             self.grad_dict['weight'].append(nd.zeros(shape=shape_w,ctx=self.__ctx[0]))
             self.grad_dict['bias'].append(nd.zeros(shape=shape_b,ctx=self.__ctx[0]))
 
-    def __updata_local_model(self):
+    def __collect_local_gradient(self):
         # 收集梯度信息
         batch_size = client_config.Batch_size
         idx = 0
@@ -55,6 +54,17 @@ class ClientHandler:
         train_data = mx.io.NDArrayIter(data,label,batch_size=batch_size,shuffle=True)
         return train_data
 
+    def get_model(self):
+        # 获得模型 上层调用
+        return deepcopy(self.__net)
+    
+    def get_gradient(self):
+        # 获得梯度 上层调用
+        return deepcopy(self.grad_dict)
+
+    def load_model(self, model_path):
+        self.__net.load_parameters(model_path,ctx=self.__ctx)
+    
     def local_train(self, epoch, learning_rate, batch_size):
         # 训练数据
         train_data = self.__train_data_loader(batch_size)
@@ -75,19 +85,12 @@ class ClientHandler:
                         loss = smc_loss(z,y)
                         loss.backward()
                         outputs.append(z)
-                metric.update(label,outputs)
+                self.__collect_local_gradient()
                 trainer.step(batch.data[0].shape[0])
+                metric.update(label,outputs)
             name, acc = metric.get()
             metric.reset()
             print('training acc at epoch %d/%d: %s=%f'%(i+1,epoch, name, acc))
             if acc>= 1:
                 # 过拟合 结束本地训练
                 break
-
-    def get_model(self):
-        # 获得模型 上层调用
-        return deepcopy(self.__net)
-    
-    def get_gradient(self):
-        # 获得梯度 上层调用
-        return deepcopy(self.grad_dict)

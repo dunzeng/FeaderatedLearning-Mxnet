@@ -1,15 +1,20 @@
 from Utils import utils
-import server_config
+from Server import server_config
 import mxnet as mx
 from mxnet import gluon
-from mxnet.gluon import ndarray as nd
+from mxnet import ndarray as nd
 
 
 class ServerHandler:
-    def __init__(self, model):
+    def __init__(self, model, init_model_randomly=True):
         self.__net = model
         self.__ctx = utils.try_all_gpus()
-        
+        if init_model_randomly is True:
+            self.__random_init_model()
+        else:
+            self.__load_init_model()
+        self.save_net2file(server_config.ModelSavePath)
+
     def __random_init_model(self):
         print("initializing networks randomly...")
         # 初始化用户自定义的模型

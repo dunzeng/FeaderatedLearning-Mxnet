@@ -12,18 +12,19 @@ print(BASE_DIR)
 IP_PORT = ("localhost",8080)
 
 # 逻辑层参数
-
 # 模型输入数据形状
 SHAPE = (1,28,28)
 # 模型保存路径
-ModelSavePath = BASE_DIR + "current_model.params"
+ModelSavePath = BASE_DIR + "\\demo\\current_model.params"
 # 模型初始化
 RandomInit = False
 # 初始化模型文件
-InitModelFile = BASE_DIR + "init_model.params"
+InitModelFile = BASE_DIR + "\\demo\\init_model.params"
 
 # Client参数
-# 学习率
-LR = 0.01
+# 训练参数 
+BatchSize = 100
+LR = 0.02
+Epoch = 5
 # Client端返回信息标志  weight：Client返回模型  gradient: Client返回梯度  defined： 自定义
 Mode = "weight"

@@ -1,17 +1,21 @@
+
 from Utils import utils
-import client_config
+from Client import client_config
 import mxnet as mx
-from mxnet.gluon import ndarray as nd
+from mxnet import ndarray as nd
 from mxnet import autograd as ag
 from mxnet.gluon import nn
 from mxnet import gluon
 from copy import deepcopy
+import numpy as np
+
 
 class ClientHandler:
     def __init__(self, model):
         self.__net = model
-        self.__init_model_randomly()
         self.__ctx = utils.try_all_gpus()
+        self.__init_model_randomly()
+        
         # 梯度列表
         self.grad_dict = {"weight":[],"bias":[]}
         self.__init_gradient_list()
@@ -47,10 +51,10 @@ class ClientHandler:
             except:
                 continue
     
-    def __train_data_loader(self, batch_size=100):
-        # pickle
-        path = client_config.Train_Data_Path
-        data,label = None,None
+    def train_data_loader(self, batch_size=100):
+        # 生成训练数据迭代器
+        data = np.load(client_config.Train_Data_Path)
+        label = np.load(client_config.Train_Label_Path)
         train_data = mx.io.NDArrayIter(data,label,batch_size=batch_size,shuffle=True)
         return train_data
 
@@ -67,7 +71,7 @@ class ClientHandler:
     
     def local_train(self, epoch, learning_rate, batch_size):
         # 训练数据
-        train_data = self.__train_data_loader(batch_size)
+        train_data = self.train_data_loader(batch_size)
         # 训练组件
         smc_loss = gluon.loss.SoftmaxCrossEntropyLoss()
         metric = mx.metric.Accuracy()

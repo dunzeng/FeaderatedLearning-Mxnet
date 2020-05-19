@@ -4,6 +4,22 @@ from tqdm import tqdm
 import time
 import os
 
+class client_serve():
+    def __init__(self):
+        self.sock = socket()
+
+    def send_code(self, msg_code):
+        pass
+
+    def recv_class(self, data):
+        pass
+
+    def recv_file(self, data):
+        pass
+
+    def send_class(self, data):
+        pass
+
 class serve():
     def __init__(self):
         self.sock = socket()
@@ -54,21 +70,24 @@ class serve():
         print("Socket: 结束")
         return class_info
         
-    def send_code(self, addr, msg_code=""):
-        # 创建socket连接，发送控制码
+    def send_code(self, addr, msg_code):
+        # client请求socket连接，发送控制码
         # socket连接将被保存在self.sock中
+        self.sock = socket()
         self.sock.connect(addr)
         self.sock.send(msg_code.encode('utf-8'))
-        print("Socket: 发送交流码 ",msg_code)
+        print("Socket: sending control code ",msg_code)
 
-    def recv_code(self):
+    def recv_code(self, connect):
+        # Server端接收控制码
         # 从socket中获得控制码信息
         # 控制码大小为4bit
-        msg_code = self.sock.recv(4).decode()
-        print("Socket: 收到交流码 ",msg_code)
+        msg_code = connect.recv(4).decode()
+        print("Socket: receive control code ",msg_code)
         return msg_code
 
     def send_file(self, connect, file_path):
+        # Server端下发模型
         print("Socket: 发送文件")
         # 将model模型文件发送至Client
         # 从文件中读取发送模型
@@ -84,6 +103,7 @@ class serve():
         print("Socket: 结束")
 
     def recv_file(self, save_path):
+        # Client端接收模型文件
         print("Socket: 接收文件")
         # 接收模型
         # 下载模型并写入文件
@@ -95,5 +115,4 @@ class serve():
             f.write(data)
             has_recv += len(data)
         f.close()
-        self.sock.close()
         print("Socket: 结束")

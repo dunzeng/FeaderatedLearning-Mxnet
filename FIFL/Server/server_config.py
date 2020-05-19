@@ -26,5 +26,5 @@ InitModelFile = BASE_DIR + "\\demo\\init_model.params"
 BatchSize = 100
 LR = 0.02
 Epoch = 5
-# Client端返回信息标志  weight：Client返回模型  gradient: Client返回梯度  defined： 自定义
-Mode = "weight"
+# Client端返回信息标志  Weight：Client返回模型  Gradient: Client返回梯度  Defined： 自定义
+Mode = "Weight"

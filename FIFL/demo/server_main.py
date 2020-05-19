@@ -36,10 +36,13 @@ class my_server(Fed_Server):
         train_params['mode'] = server_config.Mode
         return train_params
 
+    def get_val_data(self):
+        pass
+
     def message_handler(self, connect):
         # 重写响应函数
         # 1001 请求参数 1002 请求模型 1003 回传信息
-        code = self.recv_code()
+        code = self.recv_code(connect)
         if code == "1001":
             params = self.__get_train_params()
             self.send_class(connect, params)
@@ -49,12 +52,10 @@ class my_server(Fed_Server):
             data = self.recv_class(connect)
             self.handler.process_data_from_client(data)
             self.handler.save_net2file(self.current_model_path) #保存模型
-            self.handler.validata_model(self.val_data)
-            return True
+            #self.handler.validata_model(self.val_data)
         else:
             print("Invalid Communicate Code: ",code)
-        
-        return False
+        connect.close()
 
 if __name__ == "__main__":
     handler = my_handler(model)

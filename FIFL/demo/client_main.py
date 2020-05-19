@@ -23,7 +23,7 @@ class my_handler(ClientHandler):
 
 # 定义网络层协议
 class my_client(Client):
-    def __init(self, handler):
+    def __init__(self, handler):
         super(my_client,self).__init__(handler)
 
         self.server_ad = client_config.IP_PORT
@@ -38,20 +38,25 @@ class my_client(Client):
     def ask_params(self):
         self.send_code(self.server_ad, "1001")
         params = self.recv_class(self.sock)
+        print("Client: 同步参数 ", params)
         self.batch_size = params['batch_size']
         self.learning_rate = params['lr']
         self.epoch = params['epoch']
         self.mode = params['mode']
+        self.sock.close()
 
     def ask_model(self):
         self.send_code(self.server_ad, "1002")
         self.recv_file(self.model_path)
+        self.sock.close()
         self.handler.load_model(self.model_path)
+        
         
     def send_model(self):
         self.send_code(self.server_ad, "1003")
         net = self.handler.get_model()
-        self.handler.send_class(net)
+        self.send_class(self.sock,net)
+        self.sock.close()
 
     def process(self):
         # Client端流程 

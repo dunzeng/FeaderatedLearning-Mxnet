@@ -6,9 +6,9 @@ import os
 from threading import Thread
 from Utils.network_service import serve
 
-class Fed_Server(serve):
+class FedServer(serve):
     def __init__(self, server_handler):
-        super(Fed_Server,self).__init__()
+        super(FedServer,self).__init__()
         self.handler = server_handler
 
     def listen(self):
@@ -18,11 +18,9 @@ class Fed_Server(serve):
             print("listening port：",server_config.IP_PORT)
             connect,addr = self.sock.accept()
             print("received connect request：{}".format(addr))
-            stop_flag = self.message_handler(connect)
-            if stop_flag is True:
-                break
+            self.message_handler(connect)
     
-    def multithread_lisen(self):
+    def multithread_listen(self):
         self.sock.bind(server_config.IP_PORT)
         self.sock.listen(5)
         while True:
@@ -33,4 +31,4 @@ class Fed_Server(serve):
     def message_handler(self, connect):
     # 定义网络响应函数
     # 由使用者重写
-        return False
+        pass

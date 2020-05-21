@@ -14,12 +14,12 @@
 \department{信息科学与工程学院}{2016级计算机科学与技术}
 
 \cnabstractkeywords{
-基于神经网络的人工智能方法近年来取得巨大的成就， 但是人工智能技术往往是基于大数据，即大数据驱动的人工智能。 但是数据的匮乏在一定程度上限制了人工智能的发展，与此同时，数据源之间存在着难以打破的壁垒。一方面，人工智能所需数据来源广泛，遍及各领域，且各领域数据往往是以孤岛形式存在，整合各领域的数据也面临重重阻力。另一方面，随着大数据的发展，世界各国对用户数据隐私和安全管理也日趋严格。因此，要解决大数据的困境，就要保证数据隐私的同时，让机器学习系统高效和准确的利用各自的数据进行学习。我设计并实现了一个分布式机器学习系统的原型框架，使模型可利用多方数据信息协同学习，且保证了数据隐私安全以及无预测性能损失，并为研究者提供了可拓展的算法接口。在该框架基础上，实现了现有的分布式学习算法，基于实验对其优点和局限性进行分析和讨论。
+基于神经网络的人工智能方法近年来取得巨大的成就， 但是人工智能技术往往是基于大数据，即大数据驱动的人工智能。 但是数据的匮乏在一定程度上限制了人工智能的发展，与此同时，数据源之间存在着难以打破的壁垒。一方面，人工智能所需数据来源广泛，遍及各领域，且各领域数据往往是以孤岛形式存在，整合各领域的数据也面临重重阻力。另一方面，随着大数据的发展，世界各国对用户数据隐私和安全管理也日趋严格。因此，要解决大数据的困境，就要保证数据隐私的同时，让机器学习系统高效和准确的利用各自的数据进行学习。本文设计并实现了一个分布式机器学习系统的原型框架，使模型可利用多方数据信息协同学习，且保证了数据隐私安全以及无预测性能损失，并为研究者提供了可拓展的算法接口。在该框架基础上，实现了现有的分布式学习算法，基于实验对其优点和局限性进行分析和讨论。
 }{
 神经网络，分布式，隐私保护
 }
 \enabstractkeywords{
-Artificial intelligence method based on neural network has accomplished great achievements in recent years, and artificial intelligence technology is often based on big data, that is, big data-driven artificial intelligence. But the lack of data often limits the development of artificial intelligence. At the same time, there are barriers between data sources that are hard to break. On the one hand, AI needs a wide range of data sources, covering all fields, and the data in all fields are often in the form of isolated islands, so integrating the data in all fields also faces many obstacles. On the other hand, with the development of big data, the privacy and security management of user data are increasingly strict in the world. Therefore, in order to solve the dilemma of big data, it is necessary to ensure the privacy of data, at the same time, let the machine learning system efficiently and accurately use their own data for learning. I designed a basic model of distributed machine learning system, which can use multi-party data for model collaborative training, at the same time, ensure the data privacy security and no prediction accuracy loss, and provide researchers with scalable algorithm interface. And in the experiment, I use the current commonly used neural network and data set to test the effectiveness of the system.
+Artificial intelligence method based on neural network has accomplished great achievements in recent years, and artificial intelligence technology is often based on big data, that is, big data-driven artificial intelligence. But the lack of data often limits the development of artificial intelligence. At the same time, there are barriers between data sources that are hard to break. On the one hand, AI needs a wide range of data sources, covering all fields, and the data in all fields are often in the form of isolated islands, so integrating the data in all fields also faces many obstacles. On the other hand, with the development of big data, the privacy and security management of user data are increasingly strict in the world. Therefore, in order to solve the dilemma of big data, it is necessary to ensure the privacy of data, at the same time, let the machine learning system efficiently and accurately use their own data for learning. This paper proposes a basic model of distributed machine learning system, which can use multi-party data for model collaborative training, at the same time, ensure the data privacy security and no prediction accuracy loss, and provide researchers with scalable algorithm interface. And in the experiment, this paper uses the current commonly used neural network and data set to test the effectiveness of the system.
 }{
 neural network, distributed ML, privacy-preserving
 }
@@ -42,7 +42,7 @@ neural network, distributed ML, privacy-preserving
 % 建议使用 \input{<文件名>} 指令引用其他文件
 \section{引言}
 \subsection{概述}
-1956年，在由达特茅斯学院举办的一次会议上，计算机专家约翰·麦卡锡提出了“人工智能”一词。 1997年5月11日，IBM的计算机系统“深蓝”战胜了国际象棋世界冠军卡斯帕罗夫。2006年，Hinton在神经网络的深度学习领域取得突破\cite{hinton2006fast}，人类又一次看到机器赶超人类的希望,也是标志性的技术进步。2016~2017年，AlphaGo战胜围棋冠军。至今为止，深度学习已经取得了令人瞩目的成就，但当前的人工智能发展仍然受到很多限制。AlphaGo使用了超过300,000场棋局数据训练，才取得如此成绩，由此可见，训练数据的质量和数量是影响学习模型泛化效果的一大重要因素。\par
+1956年，在由达特茅斯学院举办的一次会议上，计算机专家约翰·麦卡锡提出了“人工智能”一词。 1997年5月11日，IBM的计算机系统“深蓝”战胜了国际象棋世界冠军卡斯帕罗夫。2006年，Hinton在神经网络的深度学习领域取得突破\cite{hinton2006fast}，人类又一次看到机器赶超人类的希望,也是标志性的技术进步。2016-2017年，AlphaGo多次战胜围棋冠军。至今为止，深度学习已经取得了令人瞩目的成就，但当前的人工智能发展仍然受到很多限制。AlphaGo使用了超过300,000场棋局数据训练，才取得如此成绩，由此可见，训练数据的质量和数量是影响学习模型泛化效果的一大重要因素。\par
 在这个信息爆炸的时代，人类社会中存有大量有用的数据，但是将如此庞大的分散数据集合起来所需要的资源开销极大。与此同时，世界各国和企业对隐私数据的保护和管理方面的意识日渐加强，例如，欧盟于2018年5月提出的the General Data Protection Regulation (GDPR)\cite{voigt2017eu}旨在保护用户的个人隐私和数据安全。中国于2017年颁布的《中华人民共和国网络安全法》和《中华人民共和国民法通则》要求，互联网企业不得泄露或篡改其收集的个人信息，在与第三方进行数据交易时，必须确保拟议的合同遵守法律规定的数据保护义务。使得社会中的大量数据不能被合法的收集起来（如用户手机上的数据），并使数据源之间形成壁垒，且领域间的数据以孤岛形式存在。这些法规的建立，显然将有助于建立一个更具公民性的社会，但也将对人工智能目前常用的数据交易程序提出新的挑战。\par
 现今，传统的人工智能学习方法往往是在单一机构下，使用已预处理好的大量数据训练模型，再将模型部署至应用。其中，数据的收集和预处理需要耗费大量的资源。诸多限制例如GDPR和《网络安全法》使得数据的收集和预处理面临诸多限制因素，如何在不违反相关法律法规、不泄露隐私的条件下，合理地利用处于数据孤岛状态的各方数据，训练出一个有效的模型，是现如今面临的问题和挑战。
 
@@ -64,7 +64,7 @@ neural network, distributed ML, privacy-preserving
 深度神经网络从大量高维数据中提取复杂特征，并且利用这些特征建立一个输入-输出模型。其结构往往含有多隐含神经网络层，从而实现一个将高维度输入映射至低纬度输出的一个方法。
 
 \subsection{神经元模型}
-神经元模型是神经网络中最基本的成分。在生物神经网络中，每个神经元与其他神经元相连，当它“兴奋”时，就会向相连的神经元发送化学物质，改变这些神经元的电位；如果某神经元的电位超过一个“阈值”，那么它会被激活，向其他神经元发送化学物质。将上述情形抽象描述为图\ref{fig:unit}所示的简单模型，称为“M-P神经元模型”。神经元接受来自$n$个其他神经元传递过来的输入信号，这些输入信号通过带权重的连接进行传递，神经元将接收到的总输入与神经元的阈值进行比较，然后通过“激活函数”处理以产生神经元的输出。
+神经网络中最基本的组成便是神经元模型。在生物神经网络中，每个神经元与其他神经元相连，当它被激活时，就会向相连的神经元发送化学物质，改变这些神经元的电位；如果某神经元的电位超过某一个“阈值”，那么它会被激活，向其他神经元发送信息。可将上述情形抽象描述为图\ref{fig:unit}所示的“M-P神经元模型”。单个神经元接受来自$n$个其他神经元传递过来的输入信号，这些输入信号通过带权重的连接进行传递，神经元将接收到的总输入与神经元的阈值$\theta$进行比较，然后将之输入激活函数$f$，以产生神经元的输出$y$。
 \begin{figure}[h]
 	\centering %居中
 	\includegraphics[scale=0.7]{assets/unit}
@@ -73,8 +73,8 @@ neural network, distributed ML, privacy-preserving
 \end{figure}
 
 \subsection{激活函数}
-激活函数的选择是构建神经网络过程中的重要环节。理想中的激活函数是阶跃函数，它将输入值映射为输出“0”或“1”，其中“1”对应神经元兴奋，“0”对应于神经元抑制。由于阶跃函数具有不连续、不太光滑等不好的性质，因而常选用其他函数作为激活函数。\par
-常用的激活函数如图\ref{fig:actfunc}，Sigmoid函数曾经被使用的很多，不过近年来，用它的人越来越少了。主要是因为它固有的一些缺点，即在深度神经网络中梯度反向传递时导致梯度爆炸和梯度消失，其中梯度爆炸发生的概率非常小，而梯度消失发生的概率比较大。Tanh解决了Sigmoid函数的不是zero-centered输出问题，然而，梯度消失的问题和幂运算的问题仍然存在。而ReLu函数其实就是一个取最大值函数。ReLU虽然简单，但却是近几年的重要成果，它有以下几大优点：在正区间解决了梯度消失问题；计算速度非常快，只需要判断输入是否大于0；收敛速度远快于sigmoid和tanh。Leaky ReLu为了解决ReLu存在的一些问题而提出并且理论上具有ReLu的所有优点，但是在实际操作当中，并没有完全证明Leaky ReLu总是好于ReLu。\par
+选择激活函数是设计神经网络的重要组成环节。理想的激活函数是阶跃函数，它将输入值映射为输出“0”或“1”，其中“1”对应神经元兴奋，“0”对应于神经元抑制。而由于阶跃函数具有不连续、不太光滑等不好的性质，因而常选用其他函数作为激活函数。\par
+常用的激活函数如图\ref{fig:actfunc}，Sigmoid函数曾作为被使用的最多的函数，但近年来用它的人越来越少了。主要是因为它在深度神经网络中梯度反向传递时容易导致梯度爆炸和梯度消失，其中梯度消失发生的概率比较大。Tanh虽然解决了Sigmoid函数的不是0值中心化输出问题，但是梯度消失的问题和幂运算的问题仍然存在。ReLu函数其实就是一个取最大值函数。ReLU虽然简单，但却是近几年的重要成果，它在正区间解决了梯度消失问题，而且计算速度非常快，只需要判断输入是否大于0，收敛速度远快于sigmoid和tanh。Leaky ReLu为了解决ReLu存在的一些问题而提出并且理论上具有ReLu的所有优点，但是在实际操作当中，并没有完全证明Leaky ReLu总是好于ReLu。\par
 \begin{figure}[h]
 	\centering %居中
 	\includegraphics[scale=0.8]{assets/actfunc}
@@ -140,7 +140,7 @@ W_j := W_j - \eta \frac{\partial E_i}{\partial W_j} \label{eqa:grad}
 为了描述方便，仅描述参数服务器与单个Client之间的算法流程关系。综合隐私保护的要求，即数据不能离开本地，与C/S架构的分布式系统，可将分布式学习过程抽象为：
 \begin{itemize}
 	\item [1)]
-	参数服务器随机初始化全局模型$W^{(global)}$，工作节点与参数服务器通信获得模型$W^{(local)}$，特别的，$W^{(global)} = W^{(local)}$。
+	参数服务器随机初始化全局模型$W^{(global)}$，工作节点与参数服务器通信获得模型$W^{(local)}$，此时，$W^{(global)} = W^{(local)}$。
 	\item [2)]
 	工作节点利用本地数据执行模型的学习过程，并更新本地模型$W^{(local)}$。
 	\item [3)]
@@ -266,7 +266,7 @@ FedAvg算法通过实现客户端的并行化计算，在保证模型收敛的�
 \end{figure}
 
 \subsection{逻辑层}
-网络通信优化、模型更新算法和优化算法方向仍是联邦学习重点研究方向之一。如何高效地利用数据孤岛状态下的各方数据协同学习并合理处理Non-IID数据带来的问题。Deep Gradient Compression\cite{lin2017deep}方法在保证模型精度的同时，大幅度降低了服务器与工作节点之间的通信资源消耗，论文中采用了多种方法，最核心的想法便是只传输重要的梯度信息来降低通信，可以简要概括为稀疏化更新。将梯度信息累积起来，知道当梯度值大于预设的阈值时，再将之发送至Server，同时采用多种方法解决了这些方法带来的精度损失问题。Selective SGD\cite{shokri2015privacy}算法在使Client之间通过可靠的Server分享部分信息，使得Client端的训练结果更可靠，并使用户可在模型准确率与数据隐私强度之间权衡。这两种方法的核心思想均是在模型信息上下传递通信前后，对模型信息进行处理，与本文框架的分层架构相对应的即为逻辑层。\par
+网络通信优化、模型更新算法和优化算法方向仍是联邦学习重点研究方向之一。如何高效地利用数据孤岛状态下的各方数据协同学习并合理处理Non-IID数据带来的问题。Deep Gradient Compression\cite{lin2017deep}方法在保证模型精度的同时，大幅度降低了服务器与工作节点之间的通信资源消耗，论文中采用了多种方法，最核心的想法便是只传输重要的梯度信息来降低通信，可以简要概括为稀疏化更新。将梯度信息累积起来，当梯度值大于预设的阈值时，再将之发送至Server，同时采用多种方法解决了这些方法带来的精度损失问题。Selective SGD\cite{shokri2015privacy}算法在使Client之间通过可靠的Server分享部分信息，使得Client端的训练结果更可靠，并使用户可在模型准确率与数据隐私强度之间权衡。这两种方法的核心思想均是在模型信息上下传递通信前后，对模型信息进行处理。该方面的功能实现与本文框架的分层架构相对应的即为逻辑层。\par
 通过对现有研究内容的分析与抽象，本文将逻辑层抽象为对数据信息的处理层，上文提到的两种方法的核心实现便对应本文框架的逻辑层。逻辑层作为网络层和计算层的中间层，负责处理上层往下传递的处理信号，以及处理计算层往上传递的计算结果，是整个系统架构的核心部分。逻辑层的可拓展性直接决定了框架的可拓展性。本文的框架中，为研究者提供了梯度或模型信息的流动接口，因此，研究者只需要关注如何对信息进行处理，即核心算法地实现与功能拓展。\par
 \subsection{计算层和架构总结}
 MXNet是amazon的一个轻量化分布式可移植深度学习计算平台，在本文中用于计算层实现的核心框架。MXNet提供强大的模型定义和自动求导机制，为计算层的实现提供了很多便利。计算层在MXNet框架下实现了模型定义、数据加载、模型训练、梯度计算等功能，负责模型的基本计算与维护。由于在本框架逻辑层中涉及对模型或梯度的处理，存在变形梯度或压缩梯度的情况，因此计算层为研究者提供了关于梯度和模型处理的一系列数据结构。\par
@@ -312,7 +312,7 @@ e(\mathcal{B}F_{mlp}+\frac{\mathcal{B}}{b}B_{mlp})
 \begin{equation}
 \frac{ne_{client}}{100}(\mathcal{B}F+\frac{\mathcal{B}}{b}B) = ne_{client}(\mathcal{B}_{client}F+\frac{\mathcal{B}_{client}}{b}B)
 \end{equation}
-因此，分别取集中式训练时的遍历数据集轮数$e$和分布式训练时的$\frac{ne_{client}}{100}$作为计算量对比数据，通过实验得表\ref{tab:experiment}。\par
+上式中$(\mathcal{B}F+\frac{\mathcal{B}}{b}B)$为集中式训练下，一个epoch所花费的计算量。因此，分别取集中式训练时的遍历数据集轮数$e$和分布式训练时的$\frac{ne_{client}}{100}$为计算量系数作为对比数据，通过实验得表\ref{tab:experiment}。\par
 %实验数据表格
 \begin{table}[!htbp] 
 \caption{\label{tab:experiment}数据集中式与分布式计算量对比}
@@ -497,11 +497,12 @@ FedAvg作为联邦学习领域的经典算法，相比于FedSGD在计算效率�
 \end{center}
 \par
 本科四年的学习时光流转，我的本科生活也将在画上最后一个句号。在毕业设计完成和论文的撰写过程中，感谢指导老师对我论文提出的宝贵的意见，最终如期完成毕业设计和论文。\par
-总结在海大的四年学习生活，感慨颇多。感谢海大的宽容，使我勇敢做出了改变一生的选择；感激海大的老师们，让我领略到学者的思考和知识的广袤；感概海大给予学生自由开放的学习环境，让我可以在大学中向我喜欢的方向发展；同时也感谢和我一起竞争、一同成长的同学们，你们激发了我对优秀的渴望，使我在学术的道路上越走越远。我还要感谢在每一个或在深夜未眠、或在伏案疾书、或在计算机前敲打键盘的自己，缺少了每一个瞬间，我都不会成为今天的我。\par
+总结在海大的四年学习生活，感慨颇多。感谢海大的宽容，使我勇敢做出了改变一生的选择；感激海大的老师们，让我领略到学者的思考和知识的广袤；感概海大给予学生自由开放的学习环境，让我可以在大学中向我喜欢的方向发展；同时也感谢和我一起竞争、一同成长的同学们，你们激发了我对优秀的渴望，使我在学术的道路上越走越远。我还要感谢在每一个或在深夜未眠、或在伏案疾书、或在计算机前敲打键盘的自己，缺少了每一个瞬间，我都不会成为现在的自己。\par
 本段的最后一个句号标志着我的本科生涯的结束，但我对知识边界的探索才刚刚开始。
 
-\newpage
-\begin{center}
-\zihao{3} \textbf{附录} \\
-\end{center}
+%\newpage
+%\begin{center}
+%\zihao{3} \textbf{附录} \\
+%\end{center}
+
 \end{document}

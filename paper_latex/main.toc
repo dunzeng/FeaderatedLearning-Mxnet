@@ -7,7 +7,7 @@
 \contentsline {subsection}{\numberline {2.1}神经元模型}{3}%
 \contentsline {subsection}{\numberline {2.2}激活函数}{3}%
 \contentsline {subsection}{\numberline {2.3}感知机}{4}%
-\contentsline {subsection}{\numberline {2.4}训练方法}{5}%
+\contentsline {subsection}{\numberline {2.4}训练方法}{4}%
 \contentsline {section}{\numberline {3}分布式学习}{6}%
 \contentsline {subsection}{\numberline {3.1}隐私保护的基本要求}{6}%
 \contentsline {subsection}{\numberline {3.2}学习系统架构简述}{7}%

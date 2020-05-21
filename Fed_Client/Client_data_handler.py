@@ -27,6 +27,7 @@ class Client_data_handler:
         self.__random_init_model()
         # 本地梯度维护
         self.local_gradient = {"weight":[],"bias":[]}
+        self.__init_gradient_list()
         # 本地训练数据路径
         self.train_data_path = train_data_path
         # log类
@@ -67,30 +68,54 @@ class Client_data_handler:
             self.local_gradient['weight'].append(nd.zeros(shape=shape_w,ctx=self.__ctx[0]))
             self.local_gradient['bias'].append(nd.zeros(shape=shape_b,ctx=self.__ctx[0]))
         
-    def __updata_local_model(self,learning_rate,batch_size, train_mode = "replace"):
+    def __updata_local_model(self, learning_rate, batch_size, train_mode="defined"):
         idx = 0
         for layer in self.__net:
             try:
                 grad_w = layer.weight.data().grad
                 grad_b = layer.bias.data().grad
                 # 模型更新
-                layer.weight.data()[:] -= grad_w*learning_rate/batch_size
-                layer.bias.data()[:] -= grad_b*learning_rate/batch_size
-                if train_mode == "gradient":
+                #layer.weight.data()[:] -= grad_w*learning_rate/batch_size
+                #layer.bias.data()[:] -= grad_b*learning_rate/batch_size
+                if train_mode=="gradient" or train_mode=="defined":
                     # 梯度收集
                     self.local_gradient["weight"][idx] += grad_w/batch_size
                     self.local_gradient["bias"][idx] += grad_b/batch_size
                 idx += 1
             except:
                 continue
-
-    def local_train(self,batch_size,learning_rate,train_data=None,epoch=10,train_mode='gradient'):
+    
+    def __direct_gradient(self, old_model, lr):
+        idx = 0
+        layer_id = 0
+        for layer in old_model:
+            try:
+                self.local_gradient["weight"][idx] = (layer.weight.data()[:]-self.__net[layer_id].weight.data()[:])/lr
+                self.local_gradient["bias"][idx] = (layer.bias.data()[:]-self.__net[layer_id].bias.data()[:])/lr
+                idx += 1
+            except:
+                layer_id += 1
+                continue
+            layer_id += 1
+        
+    def __collect_gradient(self, batch_size):
+        idx = 0
+        for layer in self.__net:
+            try:
+                grad_w = copy.deepcopy(layer.weight.data().grad)
+                grad_b = copy.deepcopy(layer.bias.data().grad)
+                self.local_gradient["weight"][idx] += grad_w/batch_size
+                self.local_gradient["bias"][idx] += grad_b/batch_size
+                idx += 1
+            except:
+                continue
+        
+    def local_train(self,batch_size, learning_rate, train_data=None,epoch=10,train_mode='defined'):
         # 可由用户重写
         # 利用本地数据训练模型
         # 返回神经网络梯度信息
         # 保留已训练好的模型
-        if train_mode=="gradient":
-            self.__init_gradient_list()
+        old_model = copy.deepcopy(self.__net)
         data,label = self.train_data_loader()
         print("本地训练 batch_size:%d - learning_rate:%f"%(batch_size,learning_rate))
         train_data = mx.io.NDArrayIter(data,label,batch_size=batch_size,shuffle=True)
@@ -110,13 +135,12 @@ class Client_data_handler:
                         loss.backward()
                         outputs.append(z)
                 metric.update(label,outputs)
-                #self.__updata_local_model(learning_rate,batch.data[0].shape[0])  # 手动更新模型
+                #self.__collect_gradient(batch_size)
                 trainer.step(batch.data[0].shape[0])
             name, acc = metric.get()
             metric.reset()
             print('training acc at epoch %d/%d: %s=%f'%(i+1,epoch, name, acc))
-            if acc>= 1:
-                break
+        self.__direct_gradient(old_model, learning_rate)
 
     def get_model(self):
         return copy.deepcopy(self.__net)
@@ -128,23 +152,3 @@ class Client_data_handler:
         self.local_gradient['weight'].clear()
         self.local_gradient['bias'].clear()
         return gradient
-
-    # test
-    def validate_current_model(self,val_data_set=None):
-        # 给定数据集测试模型性能
-        # 评估当前模型准确率
-        #val_x,val_y = val_data_set[0],val_data_set[1]
-        #val_data = mx.io.NDArrayIter(val_x,val_y,batch_size=100)
-        mnist = mx.test_utils.get_mnist()
-        val_data = mx.io.NDArrayIter(mnist['test_data'],mnist['test_label'],batch_size=100)
-        # 待通用化
-        for batch in val_data:
-            data = gluon.utils.split_and_load(batch.data[0],ctx_list=self.__ctx,batch_axis=0)
-            label = gluon.utils.split_and_load(batch.label[0],ctx_list=self.__ctx,batch_axis=0)
-            outputs = []
-            metric = mx.metric.Accuracy()  
-            for x in data:
-                outputs.append(self.__net(x))
-            metric.update(label,outputs)
-        name,acc = metric.get()
-        print('验证集准确率 validation acc:%s=%f'%(name,acc))

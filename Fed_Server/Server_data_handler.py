@@ -1,5 +1,5 @@
 import sys
-path_base = "E:\\PythonProjects\\Mxnet_FederatedLearning"
+path_base = "D:\\Mxnet_FederatedLearning"
 sys.path.append(path_base)
 from mxnet import ndarray as nd
 import mxnet as mx
@@ -44,7 +44,22 @@ class Server_data_handler():
             
         # 算法拓展
         self.fed_avg_tool = None
-    
+
+        # 共向梯度更新算法研究
+        self.grad = {'weight':[],'bias':[]}
+        self.grad_flag = False
+        self.client_cnt = 0
+        
+        for layer in model:
+            try:
+                shape_w = layer.weight.data().shape
+                shape_b = layer.bias.data().shape
+            except:
+                continue
+            self.grad['weight'].append(nd.zeros(shape=shape_w,ctx=self.__ctx[0]))
+            self.grad['bias'].append(nd.zeros(shape=shape_b,ctx=self.__ctx[0]))
+        
+
     def get_model_info(self):
         return str(self.__net)
 
@@ -154,12 +169,64 @@ class Server_data_handler():
                 return -1
         elif mode=='defined':
             # 自定义算法
-            self.defined_data_method(client_data)
+            self.postive_grad_method(client_data)
+            #self.defined_data_method(client_data)
+            self.client_cnt += 1
+            print("-----------------------------------------  %d/10 "%self.client_cnt)
+            if self.client_cnt == 10:
+                return self.grad_update()
+            else:
+                return -1    
         else:
             raise ValueError("Invalid mode %s. Options are replace, gradient and defined"&mode)
 
+    def grad_update(self):
+        self.grad_avg()
+        self.__update_gradient(self.grad)
+        self.save_current_model2file(self.updata_model_path)
+        self.grad_flag = False
+        self.client_cnt = 0
+        return self.validate_current_model()
+
     def defined_data_method(self,client_data):
-        # 用户可重写该函数算法使用处理Client数据
-        pass
-    
-    
+        #print(client_data["weight"][4])
+        if self.grad_flag is False:
+            self.grad = copy.deepcopy(client_data)
+            self.grad_flag = True
+        else:
+            grad_w = self.grad["weight"]
+            for i in range(len(grad_w)):
+                self.grad["weight"][i] += client_data["weight"][i]
+            grad_b = self.grad["bias"]
+            for i in range(len(grad_b)):
+                self.grad["bias"][i] += client_data["bias"][i]
+
+    def postive_grad_method(self,client_data):
+        if self.grad_flag is False:
+            self.grad = copy.deepcopy(client_data)
+            self.grad_flag = True
+        else:
+            grad_w = self.grad["weight"]
+            for i in range(len(grad_w)):
+                # postive grad
+                mask = (self.grad["weight"][i]>0)==(client_data["weight"][i]>0) #取相同符号的梯度值
+                zero_mask = self.grad["weight"][i]==0
+                self.grad["weight"][i] = (client_data["weight"][i]+self.grad["weight"][i])*mask
+                #self.grad["weight"][i] *= zero_mask
+            
+            grad_b = self.grad["bias"]
+            for i in range(len(grad_b)):
+                # postive grad
+                mask = (self.grad["bias"][i]>0)==(client_data["bias"][i]>0)
+                zero_mask = self.grad["bias"][i]!=0
+                self.grad["bias"][i] = (client_data["bias"][i]+self.grad["bias"][i])*mask
+                #self.grad["bias"][i] *= zero_mask
+
+    def grad_avg(self):
+        siz = len(self.grad["weight"])
+        for i in range(siz):
+            self.grad["weight"][i] /= 10
+            self.grad["bias"][i] /= 10
+        print(self.grad["weight"][2])
+        
+        

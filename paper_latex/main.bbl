@@ -1,4 +1,4 @@
-\begin{thebibliography}{27}
+\begin{thebibliography}{29}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{#1}
 \providecommand{\href}[2]{\url{#2}}
@@ -180,5 +180,16 @@ HSIEH K, PHANISHAYEE A, MUTLU O, et~al.
 PENG X, HUANG Z, ZHU Y, et~al.
 \newblock Federated adversarial domain adaptation\allowbreak[J].
 \newblock arXiv preprint arXiv:1911.02054, 2019.
+
+\bibitem[Li\ et~al.(2019)Li, Huang, Yang, Wang, and Zhang]{li2019convergence}
+LI X, HUANG K, YANG W, et~al.
+\newblock On the convergence of fedavg on non-iid data\allowbreak[J].
+\newblock arXiv preprint arXiv:1907.02189, 2019.
+
+\bibitem[Zhao\ et~al.(2018)Zhao, Li, Lai, Suda, Civin, and
+  Chandra]{zhao2018federated}
+ZHAO Y, LI M, LAI L, et~al.
+\newblock Federated learning with non-iid data\allowbreak[J].
+\newblock arXiv preprint arXiv:1806.00582, 2018.
 
 \end{thebibliography}

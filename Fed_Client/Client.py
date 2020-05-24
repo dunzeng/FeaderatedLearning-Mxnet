@@ -1,5 +1,5 @@
 import sys
-path_base = "E:\\PythonProjects\\Mxnet_FederatedLearning"
+path_base = "D:\\Mxnet_FederatedLearning"
 sys.path.append(path_base)
 import socket
 import copy
@@ -104,7 +104,7 @@ class Client:
             model_info = self.data_handler.get_model()
             self.__upload_information(model_info)
         elif self.train_mode=='defined':
-            defined_info = None
+            defined_info = self.data_handler.get_gradient()
             self.__upload_information(defined_info)
         else:
             raise ValueError("Invalid mode %s. Options are replace, gradient and defined"&mode)

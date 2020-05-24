@@ -1,15 +1,15 @@
-This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019/W32TeX) (preloaded format=xelatex 2020.3.14)  9 MAY 2020 10:46
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.4.29)  21 MAY 2020 19:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **main.tex
 (./main.tex
 LaTeX2e <2020-02-02> patch level 5
-L3 programming layer <2020-02-25> (./oucart.cls
+L3 programming layer <2020-04-06> (./oucart.cls
 Document Class: oucart 2015/05/20 OUC Undergraduate Thesis Template
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/base/article.cls
+(d:/texlive/2020/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/base/size11.clo
+(d:/texlive/2020/texmf-dist/tex/latex/base/size11.clo
 File: size11.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 )
 \c@part=\count163
@@ -24,41 +24,43 @@ File: size11.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 \belowcaptionskip=\skip48
 \bibindent=\dimen134
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/ctex.sty
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2020-02-25 L3 programming layer (loader) 
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/ctex.sty
+(d:/texlive/2020/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2020-04-06 L3 programming layer (loader) 
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/l3backend/l3backend-xdvipdfmx.def
-File: l3backend-xdvipdfmx.def 2020-02-23 L3 backend support: xdvipdfmx
+(d:/texlive/2020/texmf-dist/tex/latex/l3backend/l3backend-xdvipdfmx.def
+File: l3backend-xdvipdfmx.def 2020-03-12 L3 backend support: xdvipdfmx
 \g__graphics_track_int=\count171
 \l__pdf_internal_box=\box45
 \g__pdf_backend_object_int=\count172
 \g__pdf_backend_annotation_int=\count173
 ))
 Package: ctex 2019/05/29 v2.4.16 Chinese adapter in LaTeX (CTEX)
- (e:/TexLive/texlive/2019/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
-Package: xparse 2020-02-25 L3 Experimental document command parser
+
+(d:/texlive/2020/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2020-03-06 L3 Experimental document command parser
 \l__xparse_current_arg_int=\count174
 \g__xparse_grabber_int=\count175
 \l__xparse_m_args_int=\count176
 \l__xparse_v_nesting_int=\count177
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
-Package: l3keys2e 2020-02-25 LaTeX2e option processing using LaTeX3 keys
-) (e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/ctexhook.sty
+(d:/texlive/2020/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+Package: l3keys2e 2020-03-06 LaTeX2e option processing using LaTeX3 keys
+)
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/ctexhook.sty
 Package: ctexhook 2019/05/29 v2.4.16 Document and package hooks (CTEX)
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/ctexpatch.sty
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/ctexpatch.sty
 Package: ctexpatch 2019/05/29 v2.4.16 Patching commands (CTEX)
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/base/fix-cm.sty
+(d:/texlive/2020/texmf-dist/tex/latex/base/fix-cm.sty
 Package: fix-cm 2015/01/14 v1.1t fixes to LaTeX
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/base/ts1enc.def
+(d:/texlive/2020/texmf-dist/tex/latex/base/ts1enc.def
 File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding TS1 on input line 47.
 ))
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/ms/everysel.sty
+(d:/texlive/2020/texmf-dist/tex/latex/ms/everysel.sty
 Package: everysel 2011/10/28 v1.2 EverySelectfont Package (MS)
 )
 \l__ctex_tmp_int=\count178
@@ -67,17 +69,17 @@ Package: everysel 2011/10/28 v1.2 EverySelectfont Package (MS)
 \g__ctex_section_depth_int=\count179
 \g__ctex_font_size_int=\count180
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/config/ctexopts.cfg
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/config/ctexopts.cfg
 File: ctexopts.cfg 2019/05/29 v2.4.16 Option configuration file (CTEX)
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/engine/ctex-engine-xetex.def
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/engine/ctex-engine-xetex.def
 File: ctex-engine-xetex.def 2019/05/29 v2.4.16 XeLaTeX adapter (CTEX)
-(e:/TexLive/texlive/2019/texmf-dist/tex/xelatex/xecjk/xeCJK.sty
+
+(d:/texlive/2020/texmf-dist/tex/xelatex/xecjk/xeCJK.sty
 Package: xeCJK 2020/02/18 v3.8.2 Typesetting CJK scripts with XeLaTeX
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.st
-y
-Package: xtemplate 2020-02-25 L3 Experimental prototype document functions
+(d:/texlive/2020/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty
+Package: xtemplate 2020-03-06 L3 Experimental prototype document functions
 \l__xtemplate_tmp_dim=\dimen136
 \l__xtemplate_tmp_int=\count181
 \l__xtemplate_tmp_muskip=\muskip16
@@ -141,10 +143,11 @@ Package xtemplate Info: Declaring object type 'xeCJK/punctuation' taking 0
 \g__xeCJK_fam_allocation_int=\count191
 \l__xeCJK_verb_case_int=\count192
 \l__xeCJK_verb_exspace_skip=\skip55
- (e:/TexLive/texlive/2019/texmf-dist/tex/latex/fontspec/fontspec.sty
+
+(d:/texlive/2020/texmf-dist/tex/latex/fontspec/fontspec.sty
 Package: fontspec 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTeX
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+(d:/texlive/2020/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
 Package: fontspec-xetex 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTe
 X
 \l__fontspec_script_int=\count193
@@ -162,17 +165,17 @@ X
 \l__fontspec_tmpb_dim=\dimen166
 \l__fontspec_tmpc_dim=\dimen167
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/base/fontenc.sty
+(d:/texlive/2020/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
-(e:/TexLive/texlive/2019/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg
+(d:/texlive/2020/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+(d:/texlive/2020/texmf-dist/tex/xelatex/xecjk/xeCJK.cfg
 File: xeCJK.cfg 2020/02/18 v3.8.2 Configuration file for xeCJK package
 ))
-(e:/TexLive/texlive/2019/texmf-dist/tex/xelatex/xecjk/xeCJKfntef.sty
+(d:/texlive/2020/texmf-dist/tex/xelatex/xecjk/xeCJKfntef.sty
 Package: xeCJKfntef 2020/02/18 v3.8.2 xeCJK font effect
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/generic/ulem/ulem.sty
+(d:/texlive/2020/texmf-dist/tex/generic/ulem/ulem.sty
 \UL@box=\box48
 \UL@hyphenbox=\box49
 \UL@skip=\skip56
@@ -196,32 +199,31 @@ Package: ulem 2019/11/18
 )
 \l__ctex_ziju_dim=\dimen173
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/zhnumber/zhnumber.sty
+(d:/texlive/2020/texmf-dist/tex/latex/zhnumber/zhnumber.sty
 Package: zhnumber 2019/04/07 v2.7 Typesetting numbers with Chinese glyphs
 \l__zhnum_scale_int=\count271
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/zhnumber/zhnumber-utf8.cfg
+(d:/texlive/2020/texmf-dist/tex/latex/zhnumber/zhnumber-utf8.cfg
 File: zhnumber-utf8.cfg 2019/04/07 v2.7 Chinese numerals with UTF8 encoding
 ))
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/scheme/ctex-scheme-chinese.d
-ef
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/scheme/ctex-scheme-chinese.def
 File: ctex-scheme-chinese.def 2019/05/29 v2.4.16 Chinese scheme for generic (CT
 EX)
- (e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/config/ctex-name-utf8.cfg
+
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/config/ctex-name-utf8.cfg
 File: ctex-name-utf8.cfg 2019/05/29 v2.4.16 Caption with encoding UTF8 (CTEX)
-)) (e:/TexLive/texlive/2019/texmf-dist/tex/latex/tools/indentfirst.sty
+))
+(d:/texlive/2020/texmf-dist/tex/latex/tools/indentfirst.sty
 Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/ctex-cs4size.clo
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/ctex-cs4size.clo
 File: ctex-cs4size.clo 2019/05/29 v2.4.16 cs4size option (CTEX)
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/fontset/ctex-fontset-windows
-.def
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/fontset/ctex-fontset-windows.def
 File: ctex-fontset-windows.def 2019/05/29 v2.4.16 Windows fonts definition (CTE
 X)
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/fontset/ctex-fontset-windows
-new.def
+(d:/texlive/2020/texmf-dist/tex/latex/ctex/fontset/ctex-fontset-windowsnew.def
 File: ctex-fontset-windowsnew.def 2019/05/29 v2.4.16 Windows fonts definition f
 or Vista or later version (CTEX)
 
@@ -254,7 +256,7 @@ Package fontspec Info: Font family 'SimSun(0)' created for font 'SimSun' with
 (fontspec)             <->"KaiTi/OT:script=hani;language=dflt;"
 (fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.: 
 
-))) (e:/TexLive/texlive/2019/texmf-dist/tex/latex/ctex/config/ctex.cfg
+))) (d:/texlive/2020/texmf-dist/tex/latex/ctex/config/ctex.cfg
 File: ctex.cfg 2019/05/29 v2.4.16 Configuration file (CTEX)
 )
 
@@ -289,24 +291,24 @@ Package xeCJK Warning: Redefining CJKfamily `\CJKsfdefault' (Microsoft YaHei).
 
 Package xeCJK Warning: Redefining CJKfamily `\CJKttdefault' (FangSong).
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/amsmath/amsmath.sty
+(d:/texlive/2020/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2020/01/20 v2.17e AMS math features
 \@mathmargin=\skip60
 
 For additional information on amsmath, use the `?' option.
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/amsmath/amstext.sty
+(d:/texlive/2020/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/amsmath/amsgen.sty
+(d:/texlive/2020/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks16
 \ex@=\dimen174
 ))
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(d:/texlive/2020/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen175
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/amsmath/amsopn.sty
+(d:/texlive/2020/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
 \inf@bad=\count272
@@ -347,7 +349,7 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 LaTeX Info: Redefining \[ on input line 2859.
 LaTeX Info: Redefining \] on input line 2860.
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/booktabs/booktabs.sty
+(d:/texlive/2020/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \heavyrulewidth=\dimen183
 \lightrulewidth=\dimen184
@@ -367,14 +369,14 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@lastruleclass=\count287
 \@thisrulewidth=\dimen195
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/caption/caption.sty
+(d:/texlive/2020/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2020/01/03 v3.4h Customizing captions (AR)
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
+(d:/texlive/2020/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2020/01/03 v1.8h caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 61.
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/graphics/keyval.sty
+(d:/texlive/2020/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks21
 )
@@ -390,30 +392,30 @@ Package caption Info: Standard document class detected.
 \c@caption@flags=\count288
 \c@continuedfloat=\count289
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/graphics/graphicx.sty
+(d:/texlive/2020/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/graphics/graphics.sty
+(d:/texlive/2020/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/graphics/trig.sty
+(d:/texlive/2020/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+(d:/texlive/2020/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: xetex.def on input line 105.
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/graphics-def/xetex.def
+(d:/texlive/2020/texmf-dist/tex/latex/graphics-def/xetex.def
 File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
 ))
 \Gin@req@height=\dimen259
 \Gin@req@width=\dimen260
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/setspace/setspace.sty
+(d:/texlive/2020/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/subfigure/subfigure.sty
+(d:/texlive/2020/texmf-dist/tex/latex/subfigure/subfigure.sty
 Package: subfigure 2002/03/15 v2.1.5 subfigure package
 \subfigtopskip=\skip63
 \subfigcapskip=\skip64
@@ -429,11 +431,11 @@ Package: subfigure 2002/03/15 v2.1.5 subfigure package
 ****************************************
 * Local config file subfigure.cfg used *
 ****************************************
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/subfigure/subfigure.cfg)
+(d:/texlive/2020/texmf-dist/tex/latex/subfigure/subfigure.cfg)
 \subfig@top=\skip67
 \subfig@bottom=\skip68
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/titlesec/titlesec.sty
+(d:/texlive/2020/texmf-dist/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2019/10/16 v2.13 Sectioning titles
 \ttl@box=\box56
 \beforetitleunit=\skip69
@@ -445,18 +447,18 @@ Package: titlesec 2019/10/16 v2.13 Sectioning titles
 \titlewidthlast=\dimen266
 \titlewidthfirst=\dimen267
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/titlesec/titletoc.sty
+(d:/texlive/2020/texmf-dist/tex/latex/titlesec/titletoc.sty
 Package: titletoc 2019/10/16 v2.13 TOC entries
 \ttl@leftsep=\dimen268
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/geometry/geometry.sty
+(d:/texlive/2020/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/generic/iftex/ifvtex.sty
+(d:/texlive/2020/texmf-dist/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/generic/iftex/iftex.sty
-Package: iftex 2019/11/07 v1.0c TeX engine tests
+(d:/texlive/2020/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
 \Gm@cnth=\count294
 \Gm@cntv=\count295
@@ -471,7 +473,7 @@ Package: iftex 2019/11/07 v1.0c TeX engine tests
 \Gm@layoutvoffset=\dimen276
 \Gm@dimlist=\toks23
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+(d:/texlive/2020/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 Package: fancyhdr 2019/01/31 v3.10 Extensive control of page headers and footer
 s
 \f@nch@headwidth=\skip71
@@ -489,7 +491,7 @@ Package: assets/cover 2015/05/20 Cover Page
 ) (./assets/abstractkeywords.sty
 Package: assets/abstractkeywords 2015/05/20 Abstract and Keyword Page
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/abstract/abstract.sty
+(d:/texlive/2020/texmf-dist/tex/latex/abstract/abstract.sty
 Package: abstract 2009/06/08 v1.2a configurable abstracts
 \abstitleskip=\skip80
 \absleftindent=\skip81
@@ -505,30 +507,30 @@ LaTeX Warning: You have requested package `assets/gbt7714',
                but the package provides `gbt7714'.
 
 Package: gbt7714 2018/05/12 v1.0.7 GB/T 7714-2015 BibTeX Style
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/natbib/natbib.sty
+(d:/texlive/2020/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip85
 \bibsep=\skip86
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count297
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+(d:/texlive/2020/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2019/09/21 v2.5h e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count298
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/url/url.sty
+(d:/texlive/2020/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip18
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 ))
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/newfloat/newfloat.sty
+(d:/texlive/2020/texmf-dist/tex/latex/newfloat/newfloat.sty
 Package: newfloat 2019/09/02 v1.1l Defining new floating environments (AR)
 ))
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/algorithms/algorithm.sty
+(d:/texlive/2020/texmf-dist/tex/latex/algorithms/algorithm.sty
 Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
 Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
 nment
 
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/float/float.sty
+(d:/texlive/2020/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count299
 \float@exts=\toks24
@@ -536,13 +538,13 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks25
 \@floatcapt=\box58
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/base/ifthen.sty
+(d:/texlive/2020/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 \@float@every@algorithm=\toks26
 \c@algorithm=\count300
 )
-(e:/TexLive/texlive/2019/texmf-dist/tex/latex/algorithms/algorithmic.sty
+(d:/texlive/2020/texmf-dist/tex/latex/algorithms/algorithmic.sty
 Invalid UTF-8 byte or sequence at line 11 replaced by U+FFFD.
 Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
 \c@ALC@unique=\count301
@@ -551,8 +553,7 @@ Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
 \c@ALC@depth=\count304
 \ALC@tlm=\skip87
 \algorithmicindent=\skip88
-)
-(./main.aux
+) (./main.aux
 
 LaTeX Warning: Label `fig:MLP' multiply defined.
 
@@ -788,18 +789,17 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 [7] [8] [9] [10]
 File: assets/process.png Graphic file (type bmp)
 <assets/process.png>
- [11]
 File: assets/process2.png Graphic file (type bmp)
 <assets/process2.png>
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[12]
+[11] [12]
 File: assets/LeNet.png Graphic file (type bmp)
 <assets/LeNet.png>
 
-Overfull \hbox (14.85083pt too wide) in paragraph at lines 279--280
+Overfull \hbox (14.85083pt too wide) in paragraph at lines 282--283
  [][] 
  []
 
@@ -809,15 +809,30 @@ File: assets/random_data.png Graphic file (type bmp)
 File: assets/Non-IID.png Graphic file (type bmp)
 <assets/Non-IID.png>
  [14]
-Underfull \hbox (badness 10000) in paragraph at lines 316--334
+Underfull \hbox (badness 10000) in paragraph at lines 319--337
 [][]
  []
 
 
-LaTeX Warning: Reference `tab:expFedAvg' on page 15 undefined on input line 338
+LaTeX Warning: Reference `tab:expFedAvg' on page 15 undefined on input line 341
 .
 
-[15] [16] [17] [18] [19] (./main.bbl
+[15] [16] [17]
+File: assets/avg.png Graphic file (type bmp)
+<assets/avg.png>
+
+Overfull \hbox (24.76132pt too wide) in paragraph at lines 457--458
+ [][] 
+ []
+
+[18]
+File: assets/200.png Graphic file (type bmp)
+<assets/200.png>
+File: assets/600.png Graphic file (type bmp)
+<assets/600.png>
+File: assets/1400.png Graphic file (type bmp)
+<assets/1400.png>
+ [19] [20] (./main.bbl
 Underfull \hbox (badness 1158) in paragraph at lines 22--26
 []\TU/lmr/m/n/12.045 MCMAHAN H B, MOORE E, RAMAGE D, et al.  Communication-
  []
@@ -828,18 +843,18 @@ Underfull \hbox (badness 2538) in paragraph at lines 34--39
 ]//
  []
 
-[20]
+[21]
 Underfull \hbox (badness 2359) in paragraph at lines 100--105
 []\TU/lmr/m/n/12.045 WEBANK.  Webank and swiss re signed cooperation mou, 2019[
 J].
  []
 
-[21]) [22]
+[22]) [23]
 
 LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
-(Font)              using `TU/SimSun(1)/m/n' instead on input line 464.
+(Font)              using `TU/SimSun(1)/m/n' instead on input line 496.
 
-[23] [24] (./main.aux)
+[24] (./main.aux)
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.22pt have occurred.
@@ -855,12 +870,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 11662 strings out of 479805
- 280494 string characters out of 5893180
- 570927 words of memory out of 5000000
- 28530 multiletter control sequences out of 15000+600000
+ 11681 strings out of 479417
+ 278183 string characters out of 5888071
+ 571651 words of memory out of 5000000
+ 28927 multiletter control sequences out of 15000+600000
  541275 words of font info for 107 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 63i,11n,70p,2554b,606s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 64i,11n,72p,2554b,606s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on main.pdf (29 pages).

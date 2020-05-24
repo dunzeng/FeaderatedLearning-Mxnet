@@ -31,11 +31,11 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {2-2}{\ignorespaces 常用激活函数\relax }}{4}\protected@file@percent }
 \newlabel{fig:actfunc}{{2-2}{4}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}感知机}{4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}训练方法}{4}\protected@file@percent }
 \citation{周志华2016机器学习}
 \citation{murphy2012machine}
 \@writefile{lof}{\contentsline {figure}{\numberline {2-3}{\ignorespaces 多层感知机\relax }}{5}\protected@file@percent }
 \newlabel{fig:MLP}{{2-3}{5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}训练方法}{5}\protected@file@percent }
 \newlabel{eqa:grad}{{2.1}{5}}
 \citation{ho2013more}
 \citation{xing2015petuum}
@@ -71,12 +71,12 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {4-1}{\ignorespaces 架构示意图：箭头为信息流动情况，完整的一次模型更新过程为一个round\relax }}{11}\protected@file@percent }
 \newlabel{fig:process}{{4-1}{11}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}网络层}{11}\protected@file@percent }
-\citation{lecun2015lenet}
+\@writefile{lof}{\contentsline {figure}{\numberline {4-2}{\ignorespaces 框架拓展示意图\relax }}{12}\protected@file@percent }
+\newlabel{fig:frame}{{4-2}{12}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}逻辑层}{12}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}计算层和架构总结}{12}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}实验与分析}{12}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4-2}{\ignorespaces 框架拓展示意图\relax }}{13}\protected@file@percent }
-\newlabel{fig:frame}{{4-2}{13}}
+\citation{lecun2015lenet}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}计算层和架构总结}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}实验与分析}{13}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {5-1}{\ignorespaces LeNet-5\relax }}{13}\protected@file@percent }
 \newlabel{fig:lenet}{{5-1}{13}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5-2}{\ignorespaces 随机数据集分布情况\relax }}{14}\protected@file@percent }
@@ -88,19 +88,25 @@
 \@writefile{lot}{\contentsline {table}{\numberline {5-1}{\ignorespaces 数据集中式与分布式计算量对比\relax }}{15}\protected@file@percent }
 \newlabel{tab:experiment}{{5-1}{15}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Federated Averaging}{15}\protected@file@percent }
-\citation{hsieh2019non}
 \@writefile{lot}{\contentsline {table}{\numberline {5-2}{\ignorespaces FedAvg与FedSGD实验结果数据\relax }}{16}\protected@file@percent }
 \newlabel{tab:expFedAvg1}{{5-2}{16}}
 \@writefile{lot}{\contentsline {table}{\numberline {5-3}{\ignorespaces FedAvg迭代轮次与E的关系\relax }}{16}\protected@file@percent }
 \newlabel{tab:expFedAvg2}{{5-3}{16}}
+\citation{hsieh2019non}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}不平衡数据集}{17}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {5-4}{\ignorespaces FedSGD在Non-IID数据集的表现\relax }}{17}\protected@file@percent }
 \newlabel{tab:sgdnoniid}{{5-4}{17}}
 \citation{peng2019federated}
+\citation{li2019convergence}
+\citation{zhao2018federated}
 \@writefile{lot}{\contentsline {table}{\numberline {5-5}{\ignorespaces FedAvg在Non-IID数据集的表现\relax }}{18}\protected@file@percent }
 \newlabel{tab:avgnoniid}{{5-5}{18}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}局限性讨论}{18}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}总结与展望}{19}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}优点与局限性分析}{18}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5-4}{\ignorespaces 模型合并示意图\relax }}{18}\protected@file@percent }
+\newlabel{fig:wavg}{{5-4}{18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5-5}{\ignorespaces 准确率与迭代轮次的关系，数据与表5-5\hbox {}相同\relax }}{19}\protected@file@percent }
+\newlabel{fig:curve}{{5-5}{19}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}总结与展望}{20}\protected@file@percent }
 \bibdata{refer}
 \bibcite{hinton2006fast}{{1}{2006}{{Hinton\ et~al.}}{{Hinton, Osindero, and Teh}}}
 \bibcite{voigt2017eu}{{2}{2017}{{Voigt\ et~al.}}{{Voigt and Von~dem Bussche}}}
@@ -129,4 +135,6 @@
 \bibcite{lecun2015lenet}{{25}{2015}{{LeCun\ et~al.}}{{LeCun et~al.}}}
 \bibcite{hsieh2019non}{{26}{2019}{{Hsieh\ et~al.}}{{Hsieh, Phanishayee, Mutlu, and Gibbons}}}
 \bibcite{peng2019federated}{{27}{2019}{{Peng\ et~al.}}{{Peng, Huang, Zhu, and Saenko}}}
+\bibcite{li2019convergence}{{28}{2019}{{Li\ et~al.}}{{Li, Huang, Yang, Wang, and Zhang}}}
+\bibcite{zhao2018federated}{{29}{2018}{{Zhao\ et~al.}}{{Zhao, Li, Lai, Suda, Civin, and Chandra}}}
 \ttl@finishall

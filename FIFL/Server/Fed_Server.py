@@ -1,42 +1,34 @@
 
 from socket import socket
 # 配置信息
-import server_config
+from Server import server_config
 import os
+from threading import Thread
+from Utils.network_service import serve
 
-class Server():
-
-    def __init__(self, handler):
-        self.handler = handler
-        self.server_socket = socket()
-    
-
-    def __send_file(self, connect, model_path):
-        # 将model_path指向的文件通过connect.send()发送
-        file_size = os.path.getsize(model_path)
-        print("发送模型大小：",file_size)
-        connect.send(str(file_size).encode('utf-8'))
-        sent_size = 0
-        f = open(model_path,'rb')
-        while sent_size != file_size:
-            data = f.read(1024)
-            connect.send(data)
-            sent_size += len(data)
-        f.close()
-    
-    def __recieve_file(self, connect, ):
-        # 
-        pass
-
-    def message_handler(self, connect):
-    # 定义网络响应
-        pass
+class FedServer(serve):
+    def __init__(self, server_handler):
+        super(FedServer,self).__init__()
+        self.handler = server_handler
 
     def listen(self):
-        self.server_socket.bind(server_config.IP_PORT)
+        self.sock.bind(server_config.IP_PORT)
+        self.sock.listen(5)
         while True:
-            print("监听端口：",server_config.IP_PORT)
-            connect,addr = self.server_socket.accept()
-            print("收到连接请求：{}".format(addr))
+            print("listening port：",server_config.IP_PORT)
+            connect,addr = self.sock.accept()
+            print("received connect request：{}".format(addr))
             self.message_handler(connect)
     
+    def multithread_listen(self):
+        self.sock.bind(server_config.IP_PORT)
+        self.sock.listen(5)
+        while True:
+            new_sock ,client_info = self.sock.accept()
+            p = Thread(target=self.message_handler, args=(new_sock,client_info))
+            p.start()
+
+    def message_handler(self, connect):
+    # 定义网络响应函数
+    # 由使用者重写
+        pass

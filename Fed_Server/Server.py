@@ -1,5 +1,5 @@
 import sys
-path_base = "E:\\PythonProjects\\Mxnet_FederatedLearning"
+path_base = "D:\\Mxnet_FederatedLearning"
 sys.path.append(path_base)
 import mxnet as mx
 import os
@@ -44,8 +44,8 @@ class Sever():
         self.log = server_log(path_base + "\\Fed_Server\\log")
         self.log.add_data(self.data_handler.get_model_info())
 
+        self.commu_rnd = 1
         # 学习率衰减算法
-        self.commu_rnd = 0
         self.decay_factor = decay_factor
 
     def __send_model(self,connection,model_path=""):  #待重写
@@ -168,20 +168,15 @@ class Sever():
                 print('******Client端请求上传信息******')
                 data_from_client = self.__recv_data(connect)
                 acc = self.data_handler.process_data_from_client(data_from_client,mode=self.train_mode)
-                if self.train_mode!='FedAvg':
+                if acc!= -1:
+                    self.commu_rnd += 1
                     self.log.add_cummu_round()
                     self.log.record_acc(acc)
-                else:
-                    if acc != -1:
-                        print("当前迭代轮次：",self.commu_rnd)
-                        self.commu_rnd+=1
-                        self.log.add_cummu_round()
-                        self.log.record_acc(acc)
-                        if acc >= 0.98:
-                            self.log.record_to_file()
-                            break
-                        if self.commu_rnd%10 == 0:
-                            self.log.record_to_file()
+                    if acc>=0.97:
+                        self.log.record_to_file()
+                        break
+                    if self.commu_rnd%10 == 0:
+                        self.log.record_to_file()
             elif message=='6666':
                 # 待修改 结束循环并将日志信息存入log
                 self.log.record_to_file()

@@ -1,6 +1,8 @@
 # FeaderatedLearning-Mxnet
 毕业设计，联邦学习基础框架设计与实现，欢迎交流！
 
+毕业设计项目已完成，抽象后的框架请移步[FIFL](https://github.com/KevinZzeng/FIFL-Fast-Implementation-of-Federated-Learning)。
+
 ## 架构：
 
 整体采用C/S架构，联邦学习分为Server端和Client端。

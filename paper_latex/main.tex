@@ -1,10 +1,12 @@
 \documentclass[zihao = -4,cn]{oucart}
+
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{booktabs}
 \usepackage{url}
+
 
 \title{隐私保护的分布式机器学习系统原型设计与实现}
 \entitle{Prototype design and implementation of distributed machine learning system for privacy protection}
@@ -13,26 +15,32 @@
 \advisor{*}
 \department{*}{*}
 
+
+
 \cnabstractkeywords{
-基于神经网络的人工智能方法近年来取得巨大的成就， 但是人工智能技术往往是基于大数据，即大数据驱动的人工智能。 但是数据的匮乏在一定程度上限制了人工智能的发展，与此同时，数据源之间存在着难以打破的壁垒。一方面，人工智能所需数据来源广泛，遍及各领域，且各领域数据往往是以孤岛形式存在，整合各领域的数据也面临重重阻力。另一方面，随着大数据的发展，世界各国对用户数据隐私和安全管理也日趋严格。因此，要解决大数据的困境，就要保证数据隐私的同时，让机器学习系统高效和准确的利用各自的数据进行学习。本文设计并实现了一个分布式机器学习系统的原型框架，使模型可利用多方数据信息协同学习，且保证了数据隐私安全以及无预测性能损失，并为研究者提供了可拓展的算法接口。在该框架基础上，实现了现有的分布式学习算法，基于实验对其优点和局限性进行分析和讨论。
+\thispagestyle{plain}
+基于神经网络的人工智能近年来取得巨大的成就， 但其往往是基于大数据的，即大数据驱动的人工智能。 因此，数据的匮乏在一定程度上限制了人工智能的发展。一方面，人工智能所需数据来源广泛，遍及各领域，且各领域数据往往是以孤岛形式存在，整合各领域的数据面临重重阻力。另一方面，世界各国对用户数据隐私和安全管理也日趋严格。因此，要解决大数据的困境，就要在保证数据隐私的同时，让机器学习系统高效和准确的利用各自的数据进行学习。本文设计并实现了一个分布式机器学习系统的原型框架，在保证数据隐私安全以及无预测性能损失的前提下，使模型可以利用多方数据信息协同学习，并且为研究者提供了可拓展的算法接口。在该框架基础上，实现了一个现有的图像分类任务的分布式学习算法，基于实验对其优点和局限性进行分析和讨论。
 }{
-神经网络，分布式，隐私保护
+机器学习，神经网络，分布式系统，隐私保护
 }
 \enabstractkeywords{
-Artificial intelligence method based on neural network has accomplished great achievements in recent years, and artificial intelligence technology is often based on big data, that is, big data-driven artificial intelligence. But the lack of data often limits the development of artificial intelligence. At the same time, there are barriers between data sources that are hard to break. On the one hand, AI needs a wide range of data sources, covering all fields, and the data in all fields are often in the form of isolated islands, so integrating the data in all fields also faces many obstacles. On the other hand, with the development of big data, the privacy and security management of user data are increasingly strict in the world. Therefore, in order to solve the dilemma of big data, it is necessary to ensure the privacy of data, at the same time, let the machine learning system efficiently and accurately use their own data for learning. This paper proposes a basic model of distributed machine learning system, which can use multi-party data for model collaborative training, at the same time, ensure the data privacy security and no prediction accuracy loss, and provide researchers with scalable algorithm interface. And in the experiment, this paper uses the current commonly used neural network and data set to test the effectiveness of the system.
+\thispagestyle{plain}
+Artificial intelligence based on neural networks has made great achievements in recent years, but it is often based on big data, that is, artificial intelligence driven by big data. Therefore, the lack of data limits the development of artificial intelligence to a certain extent. On the one hand, artificial intelligence needs a wide range of data sources, covering all fields, and data in various fields often exist in the form of islands, and the integration of data in various fields faces many obstacles. On the other hand, the privacy and security management of user data is becoming stricter in all countries. Therefore, to solve the dilemma of big data, it is necessary to ensure the privacy of data while allowing machine learning systems to efficiently and accurately use their respective data for learning. This paper designs and implements a prototype framework of a distributed machine learning system. Under the premise of ensuring data privacy and security and without predictive performance loss, the model can use multi-party data information to learn collaboratively, and provides researchers with an extensible algorithm interface. Based on the framework, this paper implements an existing distributed learning algorithm for image classification task. Advantages and limitations of the algorithm are analyzed and discussed based on experiments.
 }{
-neural network, distributed ML, privacy-preserving
+machine learning, neural network, distributed system, privacy-preserving
 }
 
 \begin{document}
 
 \makecover
-
 \makesignature
 
 \makeabstract
 
-\thispagestyle{tableofcontents}  
+
+% 目录页眉
+%\thispagestyle{tableofcontents}
+\thispagestyle{plain}
 \tableofcontents
 
 \newpage
@@ -60,6 +68,7 @@ neural network, distributed ML, privacy-preserving
 \subsection{本文内容}
 本文基于Python和深度学习框架MXNet设计了一个分布式学习系统原型框架，提供了隐私保护、分布式部署、多方网络交流模块等功能，并为用户提供基础联邦学习算法研究的快速实现方案。文章前半部分主要讨论了神经网络和分布式学习的理论实现基础，后半部分讨论了如何架构和设计一个分布式学习系统，最后在设计实现的分布式系统框架基础上，完成一个图像分类任务的分布式学习算法，并探究和讨论现有联邦学习算法的优点和局限性。\par
 
+\newpage
 \section{神经网络}
 深度神经网络从大量高维数据中提取复杂特征，并且利用这些特征建立一个输入-输出模型。其结构往往含有多隐含神经网络层，从而实现一个将高维度输入映射至低纬度输出的一个方法。
 
@@ -77,7 +86,7 @@ neural network, distributed ML, privacy-preserving
 常用的激活函数如图\ref{fig:actfunc}，Sigmoid函数曾作为被使用的最多的函数，但近年来用它的人越来越少了。主要是因为它在深度神经网络中梯度反向传递时容易导致梯度爆炸和梯度消失，其中梯度消失发生的概率比较大。Tanh虽然解决了Sigmoid函数的不是0值中心化输出问题，但是梯度消失的问题和幂运算的问题仍然存在。ReLu函数其实就是一个取最大值函数。ReLU虽然简单，但却是近几年的重要成果，它在正区间解决了梯度消失问题，而且计算速度非常快，只需要判断输入是否大于0，收敛速度远快于sigmoid和tanh。Leaky ReLu为了解决ReLu存在的一些问题而提出并且理论上具有ReLu的所有优点，但是在实际操作当中，并没有完全证明Leaky ReLu总是好于ReLu。\par
 \begin{figure}[h]
 	\centering %居中
-	\includegraphics[scale=0.8]{assets/actfunc}
+	\includegraphics[scale=0.6]{assets/actfunc}
 	\caption{常用激活函数}
 	\label{fig:actfunc}
 \end{figure}
@@ -115,6 +124,7 @@ W_j := W_j - \eta \frac{\partial E_i}{\partial W_j} \label{eqa:grad}
 \end{itemize}
 \par
 
+\newpage
 \section{分布式学习}
 大规模分布式机器学习系统为解决怎样协调和利用大量的GPU集群，来快速且高效地完成深度学习模型的训练任务并达到较好的收敛结果。 分布式机器学习在如何分配训练任务，调配计算资源，协调各个功能模块，以达到训练速度与精度的平衡方面，已经有了较为成熟的研究成果\cite{ho2013more}\cite{xing2015petuum}\cite{wei2015managed}。模型并行和数据并行是实现分布式机器学习的基本思想，论文\cite{dean2012large}提出的DownpourSGD结构的参数服务器\ref{fig:pserver}很容易实现分布式深度学习，这种方式很适合大量数据和较小模型的训练。总之，现有的分布式机器学习方法主要是为了解决训练数据集太大或模型规模太大的问题，数据集仍然是集中于集群系统之中，传统的分布式学习便面临着数据收集和储存的成本问题，以及数据孤岛和隐私风险的限制。
 
@@ -242,6 +252,7 @@ FedAvg算法通过实现客户端的并行化计算，在保证模型收敛的�
 	\end{algorithmic}
 \end{algorithm}
 
+\newpage
 \section{系统架构}
 良好的系统架构使得系统具有高性能、高可用和可扩展性。该系统原型设计旨在为该方向研究者提供便捷的系统部署，即Server和Client的部署，并提供良好的网络通信策略，使研究者可以专注于算法的快速实现和想法的验证。\par
 在系统架构层面，本文讨论的分布式学习系统需要广泛的点对点通信，即Server与Client之间的模型或梯度信息交流，并结合论文\cite{dean2012large}中参数服务器的思想，采取C/S架构是非常合理且自然的。基于计算机网络分层次的架构思想，本文将该分布式学习系统分为Client端和Server端两个部分，并将每个部分以功能划分为三层结构：网络层、逻辑层、计算层，见图\ref{fig:process}。其中计算层负责模型的维护，即模型定义，梯度计算，权值更新等功能，主要基于深度学习框架MXNet\cite{chen2015mxnet}实现。
@@ -272,7 +283,7 @@ FedAvg算法通过实现客户端的并行化计算，在保证模型收敛的�
 MXNet是amazon的一个轻量化分布式可移植深度学习计算平台，在本文中用于计算层实现的核心框架。MXNet提供强大的模型定义和自动求导机制，为计算层的实现提供了很多便利。计算层在MXNet框架下实现了模型定义、数据加载、模型训练、梯度计算等功能，负责模型的基本计算与维护。由于在本框架逻辑层中涉及对模型或梯度的处理，存在变形梯度或压缩梯度的情况，因此计算层为研究者提供了关于梯度和模型处理的一系列数据结构。\par
 综合三层架构，本文的分布式学习系统可由三部分定义：通信算法、模型处理算法、模型结构，分别对应三层结构的用户自定义内容\ref{fig:frame}。框架为使用者提供了实现一个隐私保护的分布式系统需具备的基本功能模块。\par
 
-
+\newpage
 \section{实验与分析}
 本章在上述框架基础上开发一个基础的隐私保护的分布式学习系统，在其上拓展实现FedAvg算法并完成一个图像分类任务，讨论现有算法的优势与局限性。在体现框架可用性的同时，并分析未来的研究难点与方向。\par
 实验中，本文选择了常用的数据集MNIST，MNIST数据集包括60,000张图像的训练集和10,000张图像的验证集，每一张图片为0-9中的一个手写数字并带有标签。模型选取了简单的感知机模型（带有两个隐藏层，分别有128和64个神经元，并选取ReLu作为激活函数,下文称2NN）和卷积神经网络LeNet-5\cite{lecun2015lenet}，在Mnist数据集上训练模型完成分类任务。\par
@@ -482,14 +493,17 @@ FedAvg作为联邦学习领域的经典算法，相比于FedSGD在计算效率�
 
 在本文的实验中，FedAvg在Non-IID的表现虽然有效但不够高效。在Client端训练时，数据分布不平衡使得模型在本地学习时容易过拟合，当多个过拟合后的模型在Server端合并更新时，Server端模型往往会表现在验证集上准确率下降，而宏观来看，会表现为全局模型在验证集上准确率的抖动，见图\ref{fig:curve}。图\ref{fig:wavg}为多模型权值合并示意图，本文认为，在Non-IID数据集下，FedSGD算法退化为搜索算法，而FedAvg是带有一定信息的解空间随机搜索，使得FedAvg有极大概率能够收敛到最优解，但在收敛过程中在验证集上表现为抖动收敛。因此，FedAvg仍有明显的可改进空间，即存在更好的最优化算法使得收敛曲线更平滑，该方向为未来的研究工作之一。\par
 
+\newpage
 \section{总结与展望}
 本文设计并实现了一个隐私保护的分布式机器学习框架原型，该框架采用三层架构设计，并为研究者提供了分布式系统的算法实现的快速解决方案。并基于已设计实现的框架实现了Mnist数据集的图像分类任务学习的分布式学习算法，并拓展研究了FedSGD和FedAvg算法在平衡和不平衡数据集上训练的表现和分析。\par
 当前关于联邦学习的研究，主要集中在Non-IID数据的处理，信息安全和针对不同应用场景的算法设计。在Non-IID数据集下的算法和理论研究一直是该方向关注的重点。即便都是处于数据孤岛状态下的数据，应用场景也有所不同，针对数据中心和移动设备边缘计算的联邦学习算法设计也是研究重点。此外，对于系统鲁棒性的提升，即如何处理不稳定的参与者、对外部攻击的防御、恶意参与者的检测与防范仍是该方向的重要课题。\par
 在数据隐私安全与数据交易限制的挑战下，联邦学习作为结合了人工智能和信息安全的全新领域，在实际应用场景有广阔的前景和研究潜力。
 
 \newpage
-%\bibliographystyle{unsrt}
-\bibliography{refer}
+%\clearpage
+%\phantomsection
+%\bibliographystyle{splncs}
+\bibliography{main}
 
 \newpage
 \begin{center}
@@ -497,12 +511,8 @@ FedAvg作为联邦学习领域的经典算法，相比于FedSGD在计算效率�
 \end{center}
 \par
 本科四年的学习时光流转，我的本科生活也将在画上最后一个句号。在毕业设计完成和论文的撰写过程中，感谢指导老师对我论文提出的宝贵的意见，最终如期完成毕业设计和论文。\par
-总结在海大的四年学习生活，感慨颇多。感谢海大的宽容，使我勇敢做出了改变一生的选择；感激海大的老师们，让我领略到学者的思考和知识的广袤；感概海大给予学生自由开放的学习环境，让我可以在大学中向我喜欢的方向发展；同时也感谢和我一起竞争、一同成长的同学们，你们激发了我对优秀的渴望，使我在学术的道路上越走越远。我还要感谢在每一个或在深夜未眠、或在伏案疾书、或在计算机前敲打键盘的自己，缺少了每一个瞬间，我都不会成为现在的自己。\par
+总结在海大的四年学习生活，感慨颇多。感谢海大的宽容，使我勇敢做出了改变一生的选择；感激海大的老师们，让我领略到学者的思考和知识的广袤；感概海大给予学生自由开放的学习环境，让我可以在大学中向我喜欢的方向发展；同时也感谢和我一起竞争、一同成长的同学们，你们激发了我对优秀的渴望，使我在学术的道路上越走越远。我还要感谢在每一个或在深夜未眠、或在伏案疾书、或在计算机前敲打键盘的自己，缺少了每一个瞬间，我都不会成为现在的我。\par
 本段的最后一个句号标志着我的本科生涯的结束，但我对知识边界的探索才刚刚开始。
 
-%\newpage
-%\begin{center}
-%\zihao{3} \textbf{附录} \\
-%\end{center}
 
 \end{document}

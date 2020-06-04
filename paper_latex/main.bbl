@@ -161,10 +161,10 @@ Hsieh, K., Phanishayee, A., Mutlu, O., Gibbons, P.B.:
 \newblock The non-iid data quagmire of decentralized machine learning.
 \newblock arXiv preprint arXiv:1910.00189 (2019)
 
-\bibitem{peng2019federated}
-Peng, X., Huang, Z., Zhu, Y., Saenko, K.:
-\newblock Federated adversarial domain adaptation.
-\newblock arXiv preprint arXiv:1911.02054 (2019)
+\bibitem{li2019fair}
+Li, T., Sanjabi, M., Beirami, A., Smith, V.:
+\newblock Fair resource allocation in federated learning.
+\newblock arXiv preprint arXiv:1905.10497 (2019)
 
 \bibitem{li2019convergence}
 Li, X., Huang, K., Yang, W., Wang, S., Zhang, Z.:

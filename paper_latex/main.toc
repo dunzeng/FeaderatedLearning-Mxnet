@@ -24,4 +24,6 @@
 \contentsline {subsection}{\numberline {5.3}不平衡数据集}{18}%
 \contentsline {subsection}{\numberline {5.4}优点与局限性分析}{20}%
 \contentsline {section}{\numberline {6}总结与展望}{22}%
+\contentsline {section}{参考文献}{23}%
+\contentsline {section}{致谢}{26}%
 \contentsfinish 
